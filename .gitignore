@@ -1,0 +1,16 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Local agent / tooling artifacts
+.claude/
+*.log
+
+# Audit output (generated reports stay local unless intentionally committed)
+*-AUDIT-REPORT.md
+SECURITY-AUDIT.md
+security-audit.html
+findings.json
