@@ -54,6 +54,9 @@ every recommendation immediately actionable.
 | 🗄️ [`data-audit`](audit-prompts/data-audit-master-prompt.md) | Data & database: schema/modeling, types, constraints, migration safety, transactions, integrity, lifecycle, backup/DR | Normalization, ACID/CAP, RLS, expand/contract | Entity-risk map + safe migration plan |
 | ☁️ [`infrastructure-audit`](audit-prompts/infrastructure-audit-master-prompt.md) | Infra/DevOps/SRE: IaC, cloud security, IAM, secrets, containers, k8s, CI/CD integrity, HA, DR, observability, cost | CIS Benchmarks, Well-Architected, SLSA, DORA, 12-Factor | Blast-radius map + roadmap |
 | 🤖 [`ai-llm-audit`](audit-prompts/ai-llm-audit-master-prompt.md) | AI/LLM features: prompt injection, jailbreaks, output handling, agent/tool safety, RAG quality, hallucination, evals, cost, governance | OWASP LLM Top 10, NIST AI RMF | Trust-boundary map + guardrail/eval tracks |
+| ⚖️ [`compliance-privacy-audit`](audit-prompts/compliance-privacy-audit-master-prompt.md) | Privacy & compliance: lawful basis, consent/cookies, data-subject rights, retention, transfers, processors, breach readiness, profiling | GDPR/DSGVO, ePrivacy/TTDSG, EU AI Act, CCPA, HIPAA/PCI | RoPA/data-flow map + article-mapped roadmap |
+| ♿ [`accessibility-audit`](audit-prompts/accessibility-audit-master-prompt.md) | Deep a11y: semantics, keyboard, focus, screen reader, contrast, forms, zoom/reflow, motor, motion, cognitive | WCAG 2.2 AA/AAA, EAA 2025, EN 301 549, ADA/508, ARIA APG | WCAG conformance table + VPAT-ready roadmap |
+| 📚 [`documentation-audit`](audit-prompts/documentation-audit-master-prompt.md) | Docs & DX: onboarding, doc–code drift, code samples, completeness, navigation, API reference, runbooks, maintainability | Diátaxis, docs-as-code, time-to-first-success | Drift register + reader-journey map |
 
 All templates are **stack-, framework-, and product-agnostic** and share one methodology, so
 findings compose cleanly when you run several against the same target.
@@ -96,6 +99,29 @@ Phase 4  Benchmark           → compare against named best-in-class references 
 Phase 5  Synthesis           → exec summary, scorecard, findings register, roadmap, appendices
 ```
 
+```mermaid
+flowchart LR
+    P0["🔍 Phase 0<br/>Recon &<br/>Surface Map"] --> P1
+
+    subgraph P1["⚡ Phase 1 — Parallel Specialist Swarm"]
+        direction TB
+        A1["Specialist A"]
+        A2["Specialist B"]
+        A3["Specialist C"]
+        A4["Specialist …N"]
+    end
+
+    P1 --> P2["🔗 Phase 2<br/>Merge ·<br/>Dedupe ·<br/>Compound"]
+
+    P2 --> P3{"⚔️ Phase 3<br/>Adversarial<br/>Verify · ≥2/3?"}
+    P3 -- "refuted" --> KILL["🗑️ Killed<br/>(appendix +<br/>refutation)"]
+    P3 -- "survives" --> P4["📐 Phase 4<br/>Benchmark vs<br/>best-in-class"]
+
+    P4 --> P5["📊 Phase 5<br/>Report ·<br/>Scorecard ·<br/>30/60/90 Roadmap"]
+
+    P5 -. "blind-spot critic:<br/>what did we miss?" .-> P1
+```
+
 **Severity is standardized** (P0 critical → P3 polish, or KRITISCH→NIEDRIG in the German
 security template), each finding carries an **effort estimate** and an **ICE/priority score**,
 and the roadmap is always **Quick Wins → 30 → 60 → 90 days**, dependency-aware, with finding
@@ -129,14 +155,17 @@ Use these only on systems you own or are authorized to assess.
 auditor/
 ├── README.md                  ← you are here
 └── audit-prompts/
-    ├── security-audit-master-prompt.md        🔐 (Deutsch)
-    ├── repo-audit-master-prompt.md            🏗️
-    ├── frontend-audit-master-prompt.md        🎨
-    ├── api-audit-master-prompt.md             🔌
-    ├── performance-audit-master-prompt.md     ⚡
-    ├── data-audit-master-prompt.md            🗄️
-    ├── infrastructure-audit-master-prompt.md  ☁️
-    └── ai-llm-audit-master-prompt.md          🤖
+    ├── security-audit-master-prompt.md            🔐 (Deutsch)
+    ├── repo-audit-master-prompt.md                🏗️
+    ├── frontend-audit-master-prompt.md            🎨
+    ├── api-audit-master-prompt.md                 🔌
+    ├── performance-audit-master-prompt.md         ⚡
+    ├── data-audit-master-prompt.md                🗄️
+    ├── infrastructure-audit-master-prompt.md      ☁️
+    ├── ai-llm-audit-master-prompt.md              🤖
+    ├── compliance-privacy-audit-master-prompt.md  ⚖️
+    ├── accessibility-audit-master-prompt.md       ♿
+    └── documentation-audit-master-prompt.md       📚
 ```
 
 ---
