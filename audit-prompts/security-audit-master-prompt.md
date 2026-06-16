@@ -137,8 +137,11 @@ Für JEDES Finding aus Phase 2:
 - Erstelle Coverage-Matrix: Domäne × Use-Case × Status (geprüft/teilweise/blind).
 
 ## PHASE 6 — AUSGABE: ISSUES ({{LANG}}) + DASHBOARD
-Erzeuge die unten definierten Artefakte. Issues nur für bestätigte Findings;
-Hypothesen klar getrennt.
+Erzeuge die unten definierten Artefakte nach dem **verbindlichen Issue-Ausgabe-Standard**
+([`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md)): **zuerst ein Tracking-Issue**
+(Index aller Befunde, nach Priorität sortiert, mit Management-Summary, Scorecard und Roadmap),
+**dann pro bestätigtem Finding ein Issue** — jeweils mit eigener Management-Summary. Issues nur
+für bestätigte Findings; Hypothesen klar getrennt. Erst Vorschau, Anlegen nur bei Freigabe.
 
 ## PHASE 7 — REMEDIATION-ROADMAP (TIMELINE)
 Top-Down-Zeitplan: Sofort (≤7 Tage, kritisch) → Kurzfristig (≤30 Tage) →
@@ -166,11 +169,17 @@ Mittelfristig (≤90 Tage) → Strategisch. Mit Abhängigkeiten & Quick-Wins mar
 }
 
 # ARTEFAKTE (am Ende erzeugen)
-1) GITHUB-ISSUES in {{LANG}} nach {{ISSUE_TARGET}} — pro bestätigtem Finding ein
-   Issue mit: Titel `[SEVERITY][Domäne] Kurzbeschreibung`, Body = Finding-Schema
-   in lesbarem Markdown, Labels: `security`, `sev:kritisch|hoch|...`, `domäne:Dxx`,
-   `aufwand:S|M|L`. (Erst Trockenlauf/Vorschau; tatsächliches Anlegen nur bei
-   ausdrücklicher Freigabe und vorhandenem Repo-Zugriff.)
+1) GITHUB-ISSUES in {{LANG}} nach {{ISSUE_TARGET}} — gemäß
+   [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md):
+   1a) **Tracking-Issue zuerst** — Titel `[AUDIT] Security — Befund-Tracker & Roadmap`,
+       Body = Management-Summary + Scorecard + nach Priorität (P0→P3) sortierte Checkliste mit
+       Verweis auf jedes Sub-Issue + Roadmap. Labels: `audit`, `tracking`, `security`.
+   1b) **Pro bestätigtem Finding ein Issue** — Titel `[SEVERITY][Domäne] Kurzbeschreibung`,
+       Body beginnt mit **Management-Summary** (2–3 Sätze), dann das Finding-Schema in lesbarem
+       Markdown (inkl. Vorher/Nachher-Empfehlung). Labels: `audit`, `sev:kritisch|hoch|...`,
+       `domäne:Dxx`, `aufwand:S|M|L`; Rückverweis aufs Tracking-Issue.
+   (Erst Sub-Issues anlegen, Nummern sammeln, dann Tracking-Issue. Erst Trockenlauf/Vorschau;
+   tatsächliches Anlegen nur bei ausdrücklicher Freigabe und vorhandenem Repo-Zugriff.)
 2) DASHBOARD `SECURITY-AUDIT.md` (+ optional `security-audit.html`):
    - Executive Summary (3–5 Sätze, für Leitung lesbar)
    - Risiko-Heatmap: Schweregrad × Anzahl, Top-5-Risiken

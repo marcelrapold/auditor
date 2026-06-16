@@ -342,6 +342,27 @@ was actually inspected). C: Assumptions registry from Phase 0.
 
 ---
 
+## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
+
+After Phase 3 verification, turn surviving findings into GitHub issues — **German by default**
+(`OUTPUT_LANG`); preview/dry-run first, created only on explicit authorization + repo access.
+Two-part contract:
+
+1. **Tracking issue first** — `[AUDIT] Frontend — Befund-Tracker & Roadmap`. Body: a management
+   summary (verdict, biggest lever, realistic ceiling), the scorecard, a **priority-sorted
+   checklist** (P0→P3, then ICE) where each line links its child issue, and the 30/60/90 roadmap.
+   Labels: `audit`, `tracking`, `frontend`.
+2. **One issue per surviving finding** — top-notch, German, each opening with its own
+   **management summary** (2–3 sentences: what, impact, one-line recommendation), then the full
+   finding (severity + ICE, principle violated, surfaces, evidence, harm chain, concrete
+   before/after fix, effort, expected impact). Labels: `audit`, `sev:p0…p3`, `domain:<x>`,
+   `effort:S|M|L`; back-link to the tracking issue.
+
+Create child issues first, collect their numbers, then create/update the tracking issue so its
+checklist links resolve. Detect existing audit issues by label and update rather than duplicate.
+
+---
+
 ## Shared finding schema (all agents)
 
 ```json

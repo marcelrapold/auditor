@@ -196,14 +196,35 @@ A final synthesis agent (with a completeness-critic pass) produces, in `OUTPUT_L
 6. **Remediation roadmap:** Quick Wins (≤ 1 day) → 30 / 60 / 90 days, dependency-aware,
    referencing finding IDs. Separate the **breaking-change-required** items explicitly.
 7. **Re-audit criteria:** measurable exit conditions per P0/P1.
-8. **Issue export (optional):** if a repo/tracker is in scope and the user authorizes it,
-   emit one ticket per confirmed finding (title `[Px][Axx] …`, body = finding schema,
-   labels `api`, `sev:…`, `effort:…`). Dry-run/preview first; create only on explicit
-   approval.
+8. **GitHub issues (mandatory):** per the *Issue output* section below and
+   [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md) — tracking issue first, then one
+   issue per finding (German by default); preview-first, created only on explicit approval.
 
 ### Appendices
 A: killed findings + refutations. B: coverage map (every operation × every agent).
 C: assumptions registry.
+
+---
+
+## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
+
+After Phase 3 verification, turn confirmed findings into GitHub issues — **German by default**
+(`OUTPUT_LANG`); preview/dry-run first, created only on explicit authorization + repo access.
+Two-part contract:
+
+1. **Tracking issue first** — `[AUDIT] API — Befund-Tracker & Roadmap`. Body: a management
+   summary (verdict, grade, biggest risk), the scorecard, a **priority-sorted checklist**
+   (P0→P3, then effort/ICE) where each line links its child issue, and the 30/60/90 roadmap.
+   Labels: `audit`, `tracking`, `api`.
+2. **One issue per confirmed finding** — top-notch, German, each opening with its own
+   **management summary** (2–3 sentences: what, impact, one-line recommendation), then the full
+   finding (severity + score, standard mapping, location, evidence, impact, concrete
+   before/after fix, effort, re-audit criterion). Labels: `audit`, `sev:p0…p3`, `domain:<x>`,
+   `effort:S|M|L`; back-link to the tracking issue.
+
+Create child issues first, collect their numbers, then create/update the tracking issue so its
+checklist links resolve. Detect existing audit issues by label and update rather than duplicate.
+Never include real secrets or PII — cite location and redact.
 
 ---
 

@@ -185,6 +185,27 @@ Produce the final report as a single Markdown document titled `REPO-AUDIT-REPORT
 
 ---
 
+## ISSUE OUTPUT — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
+
+Beyond the report, turn verified findings into GitHub issues — **German by default**; preview/
+dry-run first, created only on explicit authorization + repo access. Two-part contract:
+
+1. **Tracking issue first** — `[AUDIT] Repo Engineering — Befund-Tracker & Roadmap`. Body: a
+   management summary (overall grade, biggest consistency risk), the scorecard, a
+   **priority-sorted checklist** (P0→P3, then effort) where each line links its child issue, and
+   the Quick-Wins/30/60/90 roadmap. Labels: `audit`, `tracking`, `repo`.
+2. **One issue per verified finding** — top-notch, German, each opening with its own
+   **management summary** (2–3 sentences: what, impact, one-line recommendation), then the full
+   finding (severity, dimension, evidence `file:line`, impact, concrete before/after fix, effort,
+   confidence). Labels: `audit`, `sev:p0…p3`, `dimension:<x>`, `effort:S|M|L`; back-link to the
+   tracking issue.
+
+Create child issues first, collect their numbers, then create/update the tracking issue so its
+checklist links resolve. Detect existing audit issues by label and update rather than duplicate.
+Never include real secrets — cite location and redact.
+
+---
+
 ## DEFINITION OF DONE (self-check before delivering)
 
 - [ ] All 10 dimensions were audited and graded; none skipped silently.

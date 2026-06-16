@@ -1,31 +1,38 @@
 # Documentation & Developer Experience Audit — Master Orchestration Prompt
 
-> **Mission:** Subject the target's documentation and developer experience to a rigorous audit
-> at the standard of a top-tier DevRel + docs-engineering team (Stripe / Diátaxis grade).
-> Deploy a swarm of specialist agents to find where docs are missing, wrong, drifted from the
-> code, hard to navigate, or fail their reader's actual job. Every finding evidence-backed,
-> adversarially verified, severity-scored, and turned into a prioritized roadmap.
+> **Mission:** Challenge any repository's documentation against the project's normative
+> [`DOCUMENTATION-STANDARD.md`](../DOCUMENTATION-STANDARD.md) (Google-grade) and turn every gap
+> into a concrete, German GitHub issue. Deploy a swarm of specialist agents to find where docs
+> are missing, wrong, drifted from the code, hard to navigate, weakly written, inaccessible, or
+> fail their reader's actual job. Every finding is evidence-backed, adversarially verified,
+> **scored against the standard's 0–100 rubric**, and filed per
+> [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md).
 >
-> **Universality:** Stack- and audience-agnostic. Applies to product/API docs, SDK references,
-> open-source READMEs, internal engineering docs, runbooks, and onboarding material. The
-> central test is **doc–reality fidelity** and **time-to-success** for the reader. Phase 0
-> decides which doc types and audiences are in scope; non-applicable mandates are logged,
-> never skipped silently.
+> **Universality:** Stack- and audience-agnostic. Works on a **local path or a GitHub URL**
+> (fetch via `gh repo clone` / `gh api` when a URL is given). Applies to product/API docs, SDK
+> references, open-source READMEs, internal engineering docs, runbooks, and onboarding material.
+> The central tests are **conformance to the standard**, **doc–reality fidelity**, and
+> **time-to-success**. Phase 0 detects the repo **profile** (library / application / service /
+> CLI / monorepo) and scopes accordingly; non-applicable mandates are logged, never skipped
+> silently.
 
 ---
 
 ## How to use this prompt
 
 ```
-TARGET:       <repo path and/or docs site URL>
+TARGET:       <local repo path OR GitHub URL — fetch via gh repo clone / gh api when a URL>
+PROFILE:      <auto-detect (default) | library | application | service | cli | monorepo>
 DOC_TYPES:    <README | API ref | SDK | guides/tutorials | runbooks | internal eng docs>
 AUDIENCE:     <external devs | internal engineers | end users | mixed>
-PRODUCT:      <what the thing does, if known — else Phase 0 infers>
 DATA_ACCESS:  <can run the documented commands / call the API to verify? or read-only>
-OUTPUT_LANG:  <English (default) | Deutsch | ...>
+OUTPUT_LANG:  <Deutsch (default) | English | ...>
+STANDARD:     <DOCUMENTATION-STANDARD.md (default) | path to a custom standard>
+ISSUE_TARGET: <owner/repo for gh issue creation — preview-first, create only on approval>
 ```
 
-If unknown, Phase 0 infers audience and intent from the docs themselves and states assumptions.
+If unknown, Phase 0 infers the profile, audience, and intent from the repo itself and states its
+assumptions. The standard is the yardstick; the rubric in it produces the score.
 
 ---
 
@@ -46,6 +53,10 @@ If unknown, Phase 0 infers audience and intent from the docs themselves and stat
 6. **Praise what is excellent.** Each specialist returns its top 3 "protect this" items.
 7. **Fix-forward.** Every confirmed finding ships a concrete remediation: the corrected
    command, the missing section outlined, the rewritten passage, the link fixed.
+8. **Score against the standard.** Grade every rubric dimension of
+   [`DOCUMENTATION-STANDARD.md`](../DOCUMENTATION-STANDARD.md) (0–100) with per-dimension
+   evidence, and apply the standard's own style rules to your *own* output: no emojis in
+   headings, GitHub alerts instead of emoji, sentence-case, second person, present/active.
 
 ### Severity scale
 
@@ -62,6 +73,16 @@ Each finding gets **effort (S/M/L/XL)** and **priority = impact × confidence ÷
 
 ## Phase 0 — Reconnaissance (run first, feeds every agent)
 
+- **Fetch (if URL):** `gh repo clone <owner/repo>` or read via `gh api` to obtain the README,
+  docs, and community-health files. Record the default branch and last-commit date.
+- **Profile detection:** classify the repo as library / application / service / CLI / monorepo
+  (from manifests, entry points, structure). The profile sets which standard sections are
+  required vs not-applicable and re-weights the rubric.
+- **Head-matter inventory:** does the README have a one-line value proposition, a badge row, a
+  management summary, an architecture diagram (Mermaid), and a table of contents? Record what is
+  present, missing, or weak — this is the highest-leverage area of the standard.
+- **Community-health inventory:** LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY.md,
+  CHANGELOG.md, issue/PR templates, ARCHITECTURE.md/ADRs, repo description + topics.
 - **Doc inventory:** every doc artifact (README, CONTRIBUTING, docs site pages, ADRs, API
   reference, inline doc-comments, CHANGELOG, runbooks) and the **doc type** of each (Diátaxis).
 - **Reader & job map:** who reads this and what they're trying to accomplish — the 3–5
@@ -69,7 +90,7 @@ Each finding gets **effort (S/M/L/XL)** and **priority = impact × confidence ÷
   "deploy to prod", "resolve incident X"). These get double coverage.
 - **Reality sources:** the code, scripts, config, and API the docs describe — the ground truth
   every claim is checked against.
-- **Reference bar:** 2–3 best-in-class docs for this product category to benchmark against.
+- **Reference bar:** 2–3 best-in-class docs for this profile to benchmark against.
 
 Output: a structured brief distributed to all Phase 1 agents.
 
@@ -139,6 +160,27 @@ Runbooks for incidents, on-call guides, deployment/rollback procedures, and arch
 dependency docs that an engineer needs at 3am. Accuracy here is checked against the actual
 infra/CI. A wrong rollback step is P0.
 
+### W12 — Repo head-matter (the standard's highest-leverage area)
+Against `DOCUMENTATION-STANDARD.md` §1: is there a title with a one-line value proposition (and
+**no emoji**)? A grouped badge row (5–10: CI, coverage, version, license, language, docs,
+last-commit — and not over-badged)? A **management summary** a non-specialist can read? An
+**architecture/overview diagram (Mermaid)** that renders and is caption-first? A table of
+contents (for long READMEs)? Each missing head element is a finding; missing management summary
+or required architecture diagram is P1.
+
+### W13 — Writing quality vs the Google rules
+Against `DOCUMENTATION-STANDARD.md` §4: sentence-case headings (not title case), second person
+("you", not "we"), present tense, active voice, parallel list structure, scope + audience stated
+up front, consistent terminology (one term per concept), abbreviations spelled out on first use,
+code blocks language-tagged. Flag each systematic violation with a representative example.
+
+### W14 — Accessibility & emoji policy
+Against `DOCUMENTATION-STANDARD.md` §5: alt text on informative images, no information conveyed
+by image/color/emoji alone, no directional language ("above/below"), sufficient contrast, and the
+**emoji policy** — no emojis in titles/headings, no decorative emoji rows, GitHub alerts
+(`> [!NOTE]`) instead of emoji callouts. Emoji-policy violations without information loss are P3;
+information-only-via-emoji is P2.
+
 Each agent returns a **dimension grade (A–F)** + justification and a **top-3 "protect this"**.
 
 ---
@@ -171,8 +213,12 @@ In `OUTPUT_LANG`:
 
 1. **Executive summary** (≤ 1 page): docs-health verdict, the single biggest reader-blocker,
    onboarding time today vs achievable, ceiling after remediation.
-2. **Scorecard:** grade per dimension (W1–W11) + finding counts; overall weighted grade
-   (Onboarding, Doc–code drift, Completeness count double).
+2. **Rubric scorecard (0–100):** score each dimension of `DOCUMENTATION-STANDARD.md` §6
+   (Head-matter 20, Getting started 15, Usage & reference 15, Writing quality 15, Diátaxis 10,
+   Repo-health 10, Maintainability 10, Accessibility & style 5), re-weighted for the detected
+   profile, with per-dimension evidence. Report the total and the **grade band**
+   (Gold 90–100 / Silver 75–89 / Bronze 60–74 / Needs-work 40–59 / Inadequate <40). Map the
+   W1–W14 specialist findings onto these dimensions.
 3. **Reader-journey map:** each critical journey annotated with where it currently breaks.
 4. **Drift register:** every doc–code mismatch with both citations (the highest-value table).
 5. **Verified findings register:** standard schema, sorted by priority; skeptic note on P0/P1.
@@ -181,12 +227,34 @@ In `OUTPUT_LANG`:
    30/60/90 days, dependency-aware (fix drift before expanding), referencing IDs.
 8. **Re-audit criteria:** measurable exit conditions per P0/P1 (e.g., "newcomer reaches green
    test in < 15 min using only docs").
-9. **Issue export (optional):** one ticket per confirmed finding on explicit authorization;
-   dry-run/preview first.
+9. **GitHub issues (mandatory)** per [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md) —
+   see the dedicated section below.
 
 ### Appendices
 A: killed findings + refutations. B: coverage map (doc × reader journey × agent). C: assumptions
 registry. D: list of commands/samples actually executed vs reasoned.
+
+---
+
+## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
+
+This audit's primary deliverable is GitHub issues — **German by default** (`OUTPUT_LANG`);
+preview/dry-run first, created only on explicit authorization + repo access. Two-part contract:
+
+1. **Tracking issue first** — `[AUDIT] Docs — Befund-Tracker & Roadmap`. Body: a management
+   summary (rubric score + grade band, biggest reader-blocker), the rubric scorecard, a
+   **priority-sorted checklist** (P0→P3, then effort) where each line links its child issue, and
+   the Quick-Wins/30/60/90 roadmap. Labels: `audit`, `tracking`, `docs`.
+2. **One issue per confirmed finding** — top-notch, German, each opening with its own
+   **management summary** (2–3 sentences: what, impact, one-line recommendation), then the full
+   finding (severity, standard section / Diátaxis job, doc + code locations, evidence, concrete
+   **before/after** fix, effort, re-audit criterion). Labels: `audit`, `sev:p0…p3`,
+   `dimension:<x>`, `effort:S|M|L`; back-link to the tracking issue.
+
+For a low-scoring README, optionally attach a **ready-to-merge improved README draft** (built
+from `templates/README.template.md`) to the tracking issue or open it as a PR. Create child
+issues first, collect their numbers, then create/update the tracking issue so its checklist links
+resolve. Detect existing audit issues by label and update rather than duplicate.
 
 ---
 
@@ -213,11 +281,20 @@ registry. D: list of commands/samples actually executed vs reasoned.
 
 ## Definition of done (self-check before delivering)
 
+- [ ] The repo profile was detected and the rubric was scored 0–100 with per-dimension evidence.
+- [ ] Head-matter was checked against the standard (value line, badges, management summary,
+      architecture diagram, ToC); each gap is a finding.
+- [ ] Writing-quality (Google rules) and accessibility/emoji policy were checked, with examples.
 - [ ] Every critical reader journey was walked end-to-end with docs only; none skipped silently.
 - [ ] Documented commands, env vars, and code samples were *actually verified* against reality.
 - [ ] `.env.example`-vs-code and command-vs-script drift were actively tested, not assumed.
 - [ ] Each doc was judged against its Diátaxis job and audience.
 - [ ] The drift register cites both doc and code locations for every mismatch.
+- [ ] Issues follow `ISSUE-OUTPUT-STANDARD.md`: tracking issue first (priority-sorted, with
+      management summary), then one German issue per finding, each with its own management
+      summary; preview-first.
+- [ ] My own output honors the standard's style: no emojis in headings, GitHub alerts, sentence
+      case, second person.
 - [ ] Coverage and "executed vs reasoned" appendices are complete and honest.
 - [ ] The target was left unmodified; any executed commands were read-only/safe and authorized.
 ```
