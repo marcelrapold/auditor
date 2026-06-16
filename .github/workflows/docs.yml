@@ -42,5 +42,6 @@ jobs:
             --accept 200..=299,403,429
             --exclude-path web/node_modules
             --exclude-path templates
+            --exclude auditor\.rapold\.io
             './**/*.md'
           fail: true
