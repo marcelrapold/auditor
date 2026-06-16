@@ -43,5 +43,6 @@ jobs:
             --exclude-path web/node_modules
             --exclude-path templates
             --exclude auditor\.rapold\.io
+            --exclude makeareadme\.com
             './**/*.md'
           fail: true
