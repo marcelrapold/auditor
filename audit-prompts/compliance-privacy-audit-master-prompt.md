@@ -194,7 +194,8 @@ In `OUTPUT_LANG` (default to the data subjects' language for user-facing fixes):
 A: killed findings + refutations. B: coverage map (data category × agent). C: assumptions &
 which regimes were applied. D: article-to-finding index.
 
-> ⚠️ This audit identifies risks and cites the relevant law; it is **not legal advice**. Route
+> [!IMPORTANT]
+> This audit identifies risks and cites the relevant law; it is **not legal advice**. Route
 > P0/P1 findings to qualified counsel/DPO before acting.
 
 ---

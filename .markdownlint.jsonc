@@ -1,0 +1,12 @@
+{
+  // Lenient defaults: this repo is prose-heavy master prompts, not code docs.
+  "default": true,
+  "MD013": false, // line length — prompts use long evidence lines
+  "MD033": false, // inline HTML — used for Mermaid, <details>, alerts
+  "MD041": false, // first line need not be a top-level heading
+  "MD024": { "siblings_only": true }, // repeated sub-headings across sections are fine
+  "MD026": false, // trailing punctuation in headings
+  "MD036": false, // emphasis used as heading (intentional in places)
+  "MD040": false, // allow fenced blocks without a language
+  "no-hard-tabs": true
+}

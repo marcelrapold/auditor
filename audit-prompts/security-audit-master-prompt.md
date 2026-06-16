@@ -1,4 +1,4 @@
-# 🛡️ MASTER-PROMPT — Ultimative Security-Durchleuchtung (v1.0)
+# Master-Prompt — ultimative Security-Durchleuchtung (v1.0)
 
 > **Zweck:** Ein einziger, generischer Master-Prompt für die maximal tiefe, parallelisierte Sicherheitsanalyse eines **Repositories / einer App / einer Webseite / einer Applikation**. Viele Agenten arbeiten use-case-bezogen, challengen sich gegenseitig (adversariell), decken blinde Flecken auf und liefern ein standardisiertes, reproduzierbares Ergebnis: **deutsche GitHub-Issues mit konkreten Handlungsempfehlungen** plus ein **übersichtliches Top-Down-Timeline-Dashboard** in Google-Grade-Qualität.
 >
@@ -6,7 +6,7 @@
 
 ---
 
-## ⚙️ Konfiguration (vor dem Lauf ausfüllen)
+## Konfiguration (vor dem Lauf ausfüllen)
 
 | Variable | Beschreibung | Beispiel |
 |---|---|---|
@@ -19,7 +19,8 @@
 | `{{LANG}}` | Sprache der Findings | `Deutsch` |
 | `{{DEPTH}}` | `quick` / `standard` / `exhaustive` | `exhaustive` |
 
-> ⚠️ **Rechtlicher Gate (verpflichtend):** Aktive/dynamische Tests (DAST, Exploitation, Netzwerk-Scans gegen Live-Systeme) nur bei **dokumentierter Autorisierung** des Eigentümers. Ohne Freigabe: ausschließlich **statische, lesende Analyse** des Codes/der Artefakte. Keine destruktiven Techniken, kein DoS, keine Exfiltration. Im Zweifel statisch bleiben und im Report kennzeichnen.
+> [!WARNING]
+> **Rechtlicher Gate (verpflichtend):** Aktive/dynamische Tests (DAST, Exploitation, Netzwerk-Scans gegen Live-Systeme) nur bei **dokumentierter Autorisierung** des Eigentümers. Ohne Freigabe: ausschließlich **statische, lesende Analyse** des Codes/der Artefakte. Keine destruktiven Techniken, kein DoS, keine Exfiltration. Im Zweifel statisch bleiben und im Report kennzeichnen.
 
 ---
 
@@ -210,7 +211,7 @@ mit PHASE 0 und gib nach jeder Phase einen kurzen Fortschrittsstatus aus.
 
 ---
 
-## 🤖 Optional: Als Workflow-Skript ausführen (maximale Parallelität)
+## Optional: als Workflow-Skript ausführen (maximale Parallelität)
 
 Wenn dein Orchestrator das `Workflow`-Tool hat, lässt sich Phase 2+3 als echte Fan-Out-Pipeline fahren. Skizze:
 
@@ -238,7 +239,7 @@ const bestaetigt = results.flat().filter(Boolean)
 
 ---
 
-## 📋 Mitgelieferte Sub-Schemata
+## Mitgelieferte Sub-Schemata
 
 ```jsonc
 // VERDICT_SCHEMA (Refuter-Urteil)

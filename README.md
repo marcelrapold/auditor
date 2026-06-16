@@ -4,6 +4,7 @@ Master prompts that turn any AI coding agent into a swarm of specialist auditors
 engineering, frontend, API, performance, data, infrastructure, AI/LLM, compliance, accessibility,
 and documentation.
 
+[![Release](https://img.shields.io/github/v/release/marcelrapold/auditor)](https://github.com/marcelrapold/auditor/releases)
 [![License](https://img.shields.io/github/license/marcelrapold/auditor)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/marcelrapold/auditor)](https://github.com/marcelrapold/auditor/commits)
 [![Audits](https://img.shields.io/badge/audits-11-blue)](audit-prompts)
@@ -26,6 +27,9 @@ and documentation.
 > am Ende **GitHub-Issues auf Deutsch** — zuerst ein nach Priorität sortiertes Tracking-Issue,
 > dann pro Befund ein Ticket mit eigener Management-Summary.
 
+*Figure 1. How auditor works: a standard plus a template guide an AI agent swarm over a target,
+producing a scored report and German GitHub issues.*
+
 ```mermaid
 flowchart LR
     Standards["Standards<br/>(documentation,<br/>issue-output)"] --> Prompt
@@ -34,9 +38,6 @@ flowchart LR
     Agent --> Report["Report +<br/>scorecard"]
     Agent --> Issues["GitHub issues<br/>(tracker + findings, DE)"]
 ```
-
-*Figure 1. How auditor works: a standard plus a template guide an AI agent swarm over a target,
-producing a scored report and German GitHub issues.*
 
 ---
 
@@ -96,15 +97,34 @@ compose cleanly when you run several against the same target.
 | [`accessibility`](audit-prompts/accessibility-audit-master-prompt.md) | Deep a11y: semantics, keyboard, focus, screen reader, contrast, forms, zoom, motor, motion, cognitive | WCAG 2.2 AA/AAA, EAA 2025, EN 301 549, ADA/508 | WCAG conformance table + roadmap |
 | [`documentation`](audit-prompts/documentation-audit-master-prompt.md) | Docs quality vs the standard: head-matter, onboarding, doc–code drift, writing, Diátaxis, repo-health | DOCUMENTATION-STANDARD.md, Diátaxis, Google style | Rubric scorecard + German issues |
 
+> [!NOTE]
+> **Acronyms.** DX = developer experience · CRO = conversion-rate optimization · IA = information
+> architecture · RLS = row-level security · FinOps = cloud-cost engineering · RoPA = Records of
+> Processing Activities · DAST = dynamic application security testing.
+
 ## Quickstart
 
 > [!TIP]
 > Claude Code with `ultracode` or Workflow mode unlocks the real multi-agent parallelism. Any
 > capable agent also works single-threaded — it runs the same phases sequentially.
 
+**Prerequisites:** a capable AI coding agent; the [GitHub CLI](https://cli.github.com) (`gh`)
+installed and authenticated if you target a GitHub URL or want the audit to file issues; and write
+access to the target repository for the issue phase.
+
 1. **Open your AI coding agent** in the target's working directory, or give it a GitHub URL.
-2. **Paste the chosen master prompt** in full and fill in the small config block at the top
-   (target, scope, stack, output language, and — for active testing — your authorization).
+2. **Paste the chosen master prompt** in full (open the file on GitHub and use "Copy raw file"),
+   then fill in the small config block at its top — every prompt starts with one:
+
+   ```text
+   TARGET:       <local repo path or GitHub URL>
+   SCOPE:        <whole repo | specific flows/paths>
+   STACK:        <languages, frameworks, cloud — or let Phase 0 infer>
+   AUDIENCE:     <who the target serves, if known>
+   DATA_ACCESS:  <can run / active-test? or read-only>
+   OUTPUT_LANG:  <Deutsch (default) | English | ...>
+   ISSUE_TARGET: <owner/repo for issues — preview-first, on approval>
+   ```
 3. **Let it run.** It builds a fact sheet, fans out specialist agents, cross-pollinates and
    dedupes, adversarially verifies every serious finding, benchmarks against best-in-class, then
    synthesizes the report and roadmap.
@@ -127,6 +147,9 @@ Phase 3  Adversarial verify  independent skeptics try to REFUTE each P0/P1; ≥2
 Phase 4  Benchmark           compare against named best-in-class references & standards
 Phase 5  Synthesis           report, scorecard, issues, 30/60/90 roadmap
 ```
+
+*Figure 2. The six-phase method: parallel specialists, then adversarial verification before
+anything reaches the report.*
 
 ```mermaid
 flowchart LR
@@ -201,16 +224,20 @@ Use these only on systems you own or are authorized to assess.
 ```
 auditor/
 ├── README.md                       you are here
+├── ARCHITECTURE.md                 monorepo structure + design decisions
 ├── DOCUMENTATION-STANDARD.md       the doc standard (German, canonical)
 ├── DOCUMENTATION-STANDARD.en.md    the doc standard (English mirror)
 ├── ISSUE-OUTPUT-STANDARD.md        mandatory issue output for all audits
 ├── CONTRIBUTING.md                 how to contribute templates and docs
+├── CODE_OF_CONDUCT.md              Contributor Covenant
+├── SECURITY.md                     how to report a vulnerability
 ├── CHANGELOG.md                    Keep a Changelog format
 ├── templates/
 │   └── README.template.md          canonical README skeleton
 ├── .github/
-│   └── ISSUE_TEMPLATE/
-│       └── doc-quality-finding.md  issue template for audit findings
+│   ├── workflows/docs.yml          docs CI (markdown lint, link-check, emoji guard)
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── ISSUE_TEMPLATE/             findings + new-template + chooser config
 ├── web/                            landing page (Next.js 16) → auditor.rapold.io
 └── audit-prompts/
     ├── security-audit-master-prompt.md            (Deutsch)
@@ -225,6 +252,9 @@ auditor/
     ├── accessibility-audit-master-prompt.md
     └── documentation-audit-master-prompt.md
 ```
+
+The landing page lives in `web/` — its stack, local development, and deployment are documented in
+[`web/README.md`](web/README.md).
 
 ## Contributing
 

@@ -31,8 +31,13 @@ Neue Vorlagen folgen dem Hausschema, damit sie mit den übrigen zusammenpassen:
 Halte Vorlagen provider-agnostisch, mappe Befunde auf anerkannte Standards und mache jede
 Empfehlung sofort umsetzbar.
 
-## Pull Requests
+## Pull-Requests
 
 - Ein PR pro thematischer Änderung; aussagekräftige Commit-Nachrichten.
 - Aktualisiere [`CHANGELOG.md`](CHANGELOG.md) unter `[Unreleased]`.
 - Versionierung nach [SemVer](https://semver.org/).
+
+## Verhalten und Sicherheit
+
+- Es gilt der [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) (Contributor Covenant).
+- Schwachstellen bitte **vertraulich** melden — siehe [`SECURITY.md`](SECURITY.md), nicht als öffentliches Issue.

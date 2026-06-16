@@ -1,0 +1,46 @@
+name: docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Markdown lint
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: |
+            **/*.md
+            !web/node_modules
+            !**/node_modules
+
+      - name: No emojis in Markdown headings (DOCUMENTATION-STANDARD §5)
+        run: |
+          set -euo pipefail
+          # Fail if any Markdown heading line contains an emoji.
+          if grep -rPln '^#{1,6}\s.*[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{2190}-\x{21FF}\x{2300}-\x{23FF}\x{FE0F}\x{200D}]' \
+              --include='*.md' --exclude-dir=node_modules .; then
+            echo "::error::Emoji found in a Markdown heading — see DOCUMENTATION-STANDARD.md §5."
+            exit 1
+          fi
+          echo "OK: no emojis in headings."
+
+      - name: Link check
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --max-retries 2
+            --accept 200..=299,403,429
+            --exclude-mail
+            --exclude-path web/node_modules
+            './**/*.md'
+          fail: true

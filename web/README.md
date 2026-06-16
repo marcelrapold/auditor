@@ -44,17 +44,26 @@ npm run typecheck  # tsc --noEmit
 ```
 web/
 ├── app/
-│   ├── globals.css     design tokens (HSL) + Tailwind v4 @theme mapping
-│   ├── layout.tsx      fonts (Inter, JetBrains Mono), metadata, ThemeProvider
-│   └── page.tsx        the landing page (server component + client islands)
+│   ├── globals.css        design tokens (HSL) + Tailwind v4 @theme mapping + reveal CSS
+│   ├── layout.tsx         fonts, metadata (canonical, OG), ThemeProvider
+│   ├── page.tsx           the landing page (server component + client islands) + JSON-LD
+│   ├── not-found.tsx      branded 404
+│   ├── icon.svg           favicon (ShieldCheck mark)
+│   ├── apple-icon.tsx     180×180 apple-touch-icon (next/og)
+│   ├── opengraph-image.tsx  1200×630 social card (next/og)
+│   ├── manifest.ts        PWA web app manifest
+│   ├── robots.ts          robots.txt
+│   └── sitemap.ts         sitemap.xml
 ├── components/
-│   ├── reveal.tsx          scroll-in motion (reduced-motion aware)
+│   ├── reveal.tsx          scroll-in reveal (CSS + IntersectionObserver, reduced-motion aware)
 │   ├── theme-provider.tsx  next-themes wrapper
 │   ├── theme-toggle.tsx    light/dark toggle
+│   ├── mobile-nav.tsx      mobile disclosure navigation
 │   ├── icons.tsx           inline GitHub mark
-│   └── ui/                 button, badge (cva)
+│   └── ui/                 button (buttonVariants), badge (cva)
 └── lib/
-    ├── content.ts      audits, principles, phases, standards (single source)
+    ├── content.ts      audits, principles, phases, standards, nav (single source)
+    ├── site.ts         SITE_URL, TITLE, DESCRIPTION (shared by metadata/robots/sitemap)
     └── utils.ts        cn()
 ```
 
