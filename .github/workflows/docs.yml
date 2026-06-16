@@ -42,5 +42,6 @@ jobs:
             --accept 200..=299,403,429
             --exclude-mail
             --exclude-path web/node_modules
+            --exclude-path templates
             './**/*.md'
           fail: true

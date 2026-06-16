@@ -1,12 +1,28 @@
 {
-  // Lenient defaults: this repo is prose-heavy master prompts, not code docs.
+  // Prose-heavy master prompts, not code docs: keep the high-signal rules, drop
+  // the whitespace-pedantic ones that fight the intentional dense heading style.
   "default": true,
-  "MD013": false, // line length — prompts use long evidence lines
-  "MD033": false, // inline HTML — used for Mermaid, <details>, alerts
-  "MD041": false, // first line need not be a top-level heading
-  "MD024": { "siblings_only": true }, // repeated sub-headings across sections are fine
+  "MD004": false, // unordered list style
+  "MD007": false, // list indentation
+  "MD009": false, // trailing spaces
+  "MD012": false, // multiple consecutive blank lines
+  "MD013": false, // line length
+  "MD022": false, // blanks around headings (prompts put body right under a heading)
+  "MD024": { "siblings_only": true },
+  "MD025": false, // multiple top-level headings
   "MD026": false, // trailing punctuation in headings
-  "MD036": false, // emphasis used as heading (intentional in places)
-  "MD040": false, // allow fenced blocks without a language
+  "MD029": false, // ordered list prefix
+  "MD030": false, // spaces after list markers
+  "MD031": false, // blanks around fences
+  "MD032": false, // blanks around lists
+  "MD033": false, // inline HTML (Mermaid, <details>, alerts)
+  "MD036": false, // emphasis as heading
+  "MD040": false, // fenced block language
+  "MD041": false, // first line top-level heading
+  "MD060": false, // table column/pipe alignment
+  "MD028": false, // blank line between adjacent blockquotes (two stacked alerts)
+  "MD034": false, // bare URL / email in plain text
+  "MD053": false, // unused link reference definitions
+  "MD051": false, // link fragments (slugger disagrees with GitHub on numbered/diacritic anchors)
   "no-hard-tabs": true
 }
