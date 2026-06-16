@@ -9,6 +9,7 @@ and documentation.
 [![Audits](https://img.shields.io/badge/audits-11-blue)](audit-prompts)
 [![Docs standard](https://img.shields.io/badge/docs%20standard-Google--grade-success)](DOCUMENTATION-STANDARD.md)
 [![Issue output](https://img.shields.io/badge/issues-DE%20%2B%20tracker-informational)](ISSUE-OUTPUT-STANDARD.md)
+[![Website](https://img.shields.io/badge/website-auditor.rapold.io-10b981)](https://auditor.rapold.io)
 
 > [!NOTE]
 > **Management summary.** `auditor` is a library of 11 reusable "master prompt" audit templates
@@ -210,6 +211,7 @@ auditor/
 ├── .github/
 │   └── ISSUE_TEMPLATE/
 │       └── doc-quality-finding.md  issue template for audit findings
+├── web/                            landing page (Next.js 16) → auditor.rapold.io
 └── audit-prompts/
     ├── security-audit-master-prompt.md            (Deutsch)
     ├── repo-audit-master-prompt.md

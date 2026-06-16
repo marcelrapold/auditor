@@ -7,6 +7,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- `web/`: ZVV-Atlas-conformant Next.js 16 landing page (Tailwind v4, shadcn/ui, next-themes,
+  framer-motion) with auditor's own brand and no ZVV assets. Deployed to `auditor.rapold.io`.
+
 ## [0.3.0] - 2026-06-16
 
 ### Added
