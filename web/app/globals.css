@@ -20,7 +20,7 @@
   --popover: 0 0% 100%;
   --popover-foreground: 0 0% 9%;
 
-  --primary: 160 84% 32%;
+  --primary: 160 84% 27%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 0 0% 96%;
@@ -37,7 +37,7 @@
 
   --border: 0 0% 90%;
   --input: 0 0% 90%;
-  --ring: 160 84% 32%;
+  --ring: 160 84% 27%;
 }
 
 .dark {
@@ -118,12 +118,43 @@
     background-color: hsl(var(--foreground));
     color: hsl(var(--background));
   }
+
+  /* Consistent visible focus on every interactive element (WCAG 2.2 SC 2.4.7). */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: var(--radius-md);
+  }
 }
 
 @layer utilities {
   html {
     scrollbar-gutter: stable;
     scroll-behavior: smooth;
+    /* Sticky header is h-16 (64px); keep anchored sections clear of it. */
+    scroll-padding-top: 5rem;
+  }
+
+  /* Scroll-reveal (CSS-only; replaces framer-motion). The .reveal element starts
+     hidden and animates in when JS sets data-revealed="true". */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.5s cubic-bezier(0.21, 0.47, 0.32, 0.98),
+      transform 0.5s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+  }
+  .reveal[data-revealed="true"] {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 
   /* Subtle dotted grid backdrop for hero / sections. */

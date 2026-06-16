@@ -1,24 +1,25 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { DESCRIPTION, SITE_URL, TITLE } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   variable: "--font-inter",
   display: "swap",
 });
 
+// Mono is only used for small labels (eyebrows/badges/footer), never the LCP
+// element — keep it off the critical preload path.
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
+  weight: ["400", "600"],
   variable: "--font-jetbrains",
   display: "swap",
+  preload: false,
 });
-
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://auditor.rapold.io";
-const TITLE = "auditor — multi-agent audit master prompts";
-const DESCRIPTION =
-  "Master prompts that turn any AI coding agent into a swarm of specialist auditors: security, engineering, frontend, API, performance, data, infrastructure, AI/LLM, compliance, accessibility, and documentation. Evidence-bound, adversarially verified, with a German GitHub issue tracker.";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -43,9 +44,13 @@ export const metadata: Metadata = {
     "OWASP",
     "documentation standard",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
-    url: SITE_URL,
+    url: "/",
+    locale: "en_US",
     title: TITLE,
     description: DESCRIPTION,
     siteName: "auditor",

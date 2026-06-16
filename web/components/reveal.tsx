@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 /**
- * Fade + rise on scroll into view. Respects prefers-reduced-motion
- * (motion is disabled, content stays fully visible) per the a11y rule
- * in DOCUMENTATION-STANDARD.md §5.
+ * Fade + rise on scroll into view, CSS-only (no animation library in the bundle).
+ * Respects prefers-reduced-motion: the .reveal CSS keeps content fully visible and
+ * disables the transition (DOCUMENTATION-STANDARD.md §5 / WCAG SC 2.3.3).
  */
 export function Reveal({
   children,
@@ -17,16 +17,42 @@ export function Reveal({
   delay?: number;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setRevealed(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setRevealed(true);
+            io.disconnect();
+          }
+        }
+      },
+      { rootMargin: "-80px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <motion.div
-      className={className}
-      initial={reduce ? false : { opacity: 0, y: 16 }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+    <div
+      ref={ref}
+      className={cn("reveal", className)}
+      data-revealed={revealed}
+      style={delay ? { transitionDelay: `${delay}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
