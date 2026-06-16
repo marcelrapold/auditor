@@ -11,15 +11,11 @@ export const buttonVariants = cva(
           "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
         outline:
           "border border-border bg-background hover:bg-accent hover:text-accent-foreground",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
       },
       size: {
         default: "h-10 px-5 py-2",
         sm: "h-9 px-3",
         lg: "h-11 px-7 text-base",
-        icon: "size-10",
       },
     },
     defaultVariants: {

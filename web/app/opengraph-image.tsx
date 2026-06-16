@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { SHIELD_CHECK_PATH, SHIELD_PATH } from "@/lib/brand";
+import { AUDIT_COUNT } from "@/lib/content";
 
 export const alt = "auditor — multi-agent audit master prompts";
 export const size = { width: 1200, height: 630 };
@@ -40,8 +42,8 @@ export default function OpengraphImage() {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-            <path d="m9 12 2 2 4-4" />
+            <path d={SHIELD_PATH} />
+            <path d={SHIELD_CHECK_PATH} />
           </svg>
           auditor
         </div>
@@ -57,7 +59,7 @@ export default function OpengraphImage() {
           Turn any AI agent into a swarm of specialist auditors
         </div>
         <div style={{ fontSize: 28, marginTop: 28, color: "#a3a3a3" }}>
-          11 audits · evidence-bound · adversarially verified
+          {`${AUDIT_COUNT} audits · evidence-bound · adversarially verified`}
         </div>
       </div>
     ),

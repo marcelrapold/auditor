@@ -29,6 +29,7 @@ export type Audit = {
   blurb: string;
   mapsTo: string;
   icon: LucideIcon;
+  /** Language the prompt FILE is written in — not the output language (every audit defaults to German output). */
   lang?: "DE";
 };
 
@@ -123,6 +124,9 @@ export const AUDITS: Audit[] = [
     icon: BookText,
   },
 ];
+
+/** Number of audits — derive UI copy from this, never hardcode. */
+export const AUDIT_COUNT = AUDITS.length;
 
 export type Principle = { title: string; body: string; icon: LucideIcon };
 

@@ -1,4 +1,4 @@
-# Master-Prompt — ultimative Security-Durchleuchtung (v1.0)
+# Master-Prompt — ultimative Security-Durchleuchtung
 
 > **Zweck:** Ein einziger, generischer Master-Prompt für die maximal tiefe, parallelisierte Sicherheitsanalyse eines **Repositories / einer App / einer Webseite / einer Applikation**. Viele Agenten arbeiten use-case-bezogen, challengen sich gegenseitig (adversariell), decken blinde Flecken auf und liefern ein standardisiertes, reproduzierbares Ergebnis: **deutsche GitHub-Issues mit konkreten Handlungsempfehlungen** plus ein **übersichtliches Top-Down-Timeline-Dashboard** in Google-Grade-Qualität.
 >

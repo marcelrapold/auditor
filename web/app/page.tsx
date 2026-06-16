@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { DESCRIPTION, SITE_URL } from "@/lib/site";
 import {
   AUDITS,
+  AUDIT_COUNT,
   NAV,
   PHASES,
   PRINCIPLES,
@@ -117,7 +118,7 @@ function Hero() {
         <Reveal>
           <Badge className="mx-auto">
             <span className="size-1.5 rounded-full bg-primary" />
-            11 audits · MIT · copy &amp; paste
+            {AUDIT_COUNT} audits · MIT · copy &amp; paste
           </Badge>
         </Reveal>
         <Reveal delay={0.05}>

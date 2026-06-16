@@ -34,6 +34,13 @@ Phase 5  Synthesis           report, scorecard, issues, 30/60/90 roadmap
 
 Each prompt also shares a severity scale (P0–P3), a finding schema, and a mandatory issue output.
 
+> [!NOTE]
+> **Documented exceptions.** Two prompts deviate by design. `security-audit-master-prompt.md` is
+> written in German with an extended phase set (threat modeling, triage, roadmap) and a five-level
+> severity vocabulary (KRITISCH–INFO). `repo-audit-master-prompt.md` uses a condensed structure
+> (benchmark and synthesis folded together, single-skeptic verification). The other nine prompts
+> follow the canonical Phase 0–5 pipeline and the shared P0–P3 finding schema exactly.
+
 ## Standards vs templates
 
 - A **standard** is a yardstick (`DOCUMENTATION-STANDARD.md`, `ISSUE-OUTPUT-STANDARD.md`).

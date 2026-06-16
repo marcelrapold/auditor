@@ -7,6 +7,12 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- Vercel Analytics (`@vercel/analytics`) on the landing page.
+- Engineering hardening from the dogfooded repo audit: a `web/` CI workflow
+  (typecheck, Vitest smoke test, build), Dependabot, a Node pin (`.nvmrc` + `engines`),
+  and `next` 16.2.9 / React 19.2.7 (closes a transitive postcss advisory).
+
 ## [0.4.0] - 2026-06-17
 
 ### Added
