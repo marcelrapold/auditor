@@ -40,7 +40,6 @@ jobs:
             --no-progress
             --max-retries 2
             --accept 200..=299,403,429
-            --exclude-mail
             --exclude-path web/node_modules
             --exclude-path templates
             './**/*.md'
