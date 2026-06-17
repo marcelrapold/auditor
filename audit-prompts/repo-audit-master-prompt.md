@@ -12,7 +12,7 @@ You are a **Principal Engineer conducting a formal engineering audit** of this r
 
 This audit is expected to be **exhaustive**. Invest as much runtime, tool calls, and parallelism as your environment allows. Depth and correctness take absolute priority over speed and brevity.
 
-### Non-negotiable principles
+## Operating principles
 
 1. **Evidence or it didn't happen.** Every finding MUST cite concrete evidence: `path/to/file.ext:line` (or a file path plus quoted snippet). Findings without evidence are discarded. Never report from assumption, file names alone, or general knowledge of "how projects like this usually look."
 2. **Read-only.** You change nothing: no file edits, no formatting, no dependency installs that mutate lockfiles, no git writes. Commands you run must be inspection-only (`git log`, linters in check mode, dependency listing, etc.).
@@ -25,12 +25,26 @@ This audit is expected to be **exhaustive**. Invest as much runtime, tool calls,
 
 ## EXECUTION MODEL
 
-If your harness supports **parallel sub-agents / multi-agent workflows**, you MUST use them: run Phase 0 inline, fan out Phase 1's audit dimensions as parallel specialist agents, run Phase 2 market research in parallel with late Phase 1 agents, then run Phase 3 adversarial verification as independent skeptic agents per finding. If the harness is single-threaded, execute the same phases sequentially without skipping any.
+If your harness supports **parallel sub-agents / multi-agent workflows**, you MUST use them: run Phase 0 inline, fan out Phase 1's audit dimensions as parallel specialist agents, run the Phase 4 benchmark in parallel with late Phase 1, dedupe in Phase 2, then run Phase 3 adversarial verification as independent skeptic agents per finding. If the harness is single-threaded, execute the same phases sequentially without skipping any.
 
 Scale to repo size:
 - **Small repo** (< ~20k LOC): every dimension still runs, agents may read most files.
 - **Medium repo** (~20k–200k LOC): agents read all configuration/entry-point/public-API files fully and sample module internals systematically (not randomly — cover every top-level module).
 - **Large repo / monorepo** (> ~200k LOC): audit per workspace/package; produce per-package scores plus a cross-package consistency analysis (shared tooling, version alignment, duplicated utilities across packages). Declare any package not deep-dived.
+
+---
+
+## How to use this prompt
+
+```
+TARGET:       <local repo path or GitHub URL>
+SCOPE:        <whole repo | specific packages/paths>
+DATA_ACCESS:  <read-only static analysis (default) | tools available>
+OUTPUT_LANG:  <Deutsch (default) | English | ...>
+ISSUE_TARGET: <owner/repo for issues — preview-first, on approval>
+```
+
+No arguments are strictly required — Phase 0 infers the stack. The audit is **read-only**.
 
 ---
 
@@ -131,18 +145,11 @@ Spawn one specialist agent per dimension (parallel where possible). Each agent r
 
 ---
 
-## PHASE 2 — MARKET COMPARE & BEST-PRACTICE BENCHMARK
+## PHASE 2 — CROSS-POLLINATION & DEDUPE
 
-Run in parallel with late Phase 1. Requires web research; if web access is unavailable, benchmark against your knowledge and **flag the cutoff date as a limitation**.
-
-1. For each major stack component identified in Phase 0 (framework, language version, build tool, test stack, CI approach), research the **current (this year's) industry-standard way** to use it: official current recommendations, widely adopted community standards, and what top-tier reference repositories do (pick 2–3 respected open-source projects with a comparable stack as comparators and name them in the report).
-2. Classify every notable pattern in this repo as:
-   - **Industry Standard** — current best practice,
-   - **Acceptable** — fine, slightly behind the curve, no action needed,
-   - **Outdated** — superseded approach with a known migration path (name it),
-   - **Anti-Pattern** — actively harmful by current consensus (cite why).
-3. Check stack lifecycle: EOL or near-EOL runtimes/frameworks (e.g., language versions past end of support), deprecated major APIs in use, ecosystem direction (is this stack gaining or losing support?).
-4. Output a **Benchmark Table**: `Component | This repo | Industry standard 2026 | Classification | Migration note`.
+Pool all Phase 1 findings; **deduplicate** across dimensions (the same root cause reported by two
+dimension agents = one finding, strongest evidence kept) and surface **compound findings** (two
+P2s that interact into a P1). The deduplicated set feeds Phase 3.
 
 ---
 
@@ -150,7 +157,7 @@ Run in parallel with late Phase 1. Requires web research; if web access is unava
 
 No finding reaches the report unverified.
 
-1. Pool all Phase 1 + Phase 2 findings; **deduplicate** across dimensions (same root cause reported by two agents = one finding, strongest evidence kept).
+1. Take the deduplicated findings from Phase 2 (one entry per root cause).
 2. For every finding of severity P0–P2, dispatch an **independent skeptic** (separate agent if possible) whose explicit job is to **refute** it: re-open the cited files, check whether the evidence is real, current, in non-generated code, not a false positive (e.g., a "hardcoded secret" that is a documented test fixture; a "missing test" that exists under another name). Skeptics default to *refuted* when evidence is weak.
 3. Findings survive only if the skeptic confirms the evidence. Refuted findings are dropped; partially confirmed ones are downgraded with a note. P3 findings get a lighter pass: spot-check at least a third of them; extrapolate honestly.
 4. After verification, run one **completeness critic**: "Given the Fact Sheet, what would a top-tier auditor expect to see flagged that isn't here? Which dimension looks suspiciously clean?" Feed anything credible back through a quick verification round.
@@ -164,7 +171,22 @@ No finding reaches the report unverified.
 
 ---
 
-## PHASE 4 — SYNTHESIS & REPORT
+## PHASE 4 — BENCHMARK: MARKET COMPARE & BEST PRACTICE
+
+Runs in parallel with late Phase 1 (it does not depend on the other phases). Requires web research;
+if unavailable, benchmark against your knowledge and **flag the cutoff date as a limitation**.
+
+1. For each major stack component from Phase 0 (framework, language version, build tool, test stack,
+   CI approach), research the **current industry-standard way** to use it: official recommendations,
+   widely adopted community standards, and what 2–3 named top-tier reference repos do.
+2. Classify every notable pattern: **Industry Standard** / **Acceptable** / **Outdated** (name the
+   migration path) / **Anti-Pattern** (cite why).
+3. Check stack lifecycle: EOL/near-EOL runtimes/frameworks, deprecated major APIs, ecosystem direction.
+4. Output a **Benchmark Table**: `Component | This repo | Industry standard | Classification | Migration note`.
+
+---
+
+## PHASE 5 — SYNTHESIS & REPORT
 
 Produce the final report as a single Markdown document titled `REPO-AUDIT-REPORT.md` content (output it in chat; only write a file if the user asks). Structure — exactly these sections:
 
@@ -172,7 +194,7 @@ Produce the final report as a single Markdown document titled `REPO-AUDIT-REPORT
 2. **Scorecard:** table of all 10 dimensions × grade (A–F) × one-line justification × finding counts by severity. Plus an **Overall Engineering Grade** (weighted: Security, Testing, Architecture count double).
 3. **Repository Fact Sheet** (from Phase 0).
 4. **Consistency Matrix:** the cross-cutting view — declared standard vs. actual practice per area (docs say / config enforces / code does), with drift highlighted.
-5. **Benchmark Table** (from Phase 2) + named reference repositories used as comparators.
+5. **Benchmark Table** (from Phase 4) + named reference repositories used as comparators.
 6. **Verified Findings Register:** every surviving finding in the standard schema, ordered by severity then effort; include the skeptic's confirmation note on P0/P1 items.
 7. **Strengths:** what this repo does well — be specific and evidence-based here too.
 8. **Remediation Roadmap:**
@@ -203,6 +225,28 @@ dry-run first, created only on explicit authorization + repo access. Two-part co
 Create child issues first, collect their numbers, then create/update the tracking issue so its
 checklist links resolve. Detect existing audit issues by label and update rather than duplicate.
 Never include real secrets — cite location and redact.
+
+---
+
+## Shared finding schema (all agents)
+
+```json
+{
+  "id": "REPO-012",
+  "dimension": "testing",
+  "title": "Critical path X has no automated test",
+  "severity": "P1",
+  "confidence": 0.9,
+  "effort": "S",
+  "evidence": "path/to/file.ext:line — quoted snippet",
+  "standard": "the violated principle / declared standard",
+  "fix": "concrete before/after remediation",
+  "expected_impact": "what the fix achieves"
+}
+```
+
+This is the same core schema every audit in the library emits (P0–P3 severity, evidence, fix), so
+findings compose across audits in the orchestrator.
 
 ---
 

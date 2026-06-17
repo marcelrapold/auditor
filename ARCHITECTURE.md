@@ -35,11 +35,12 @@ Phase 5  Synthesis           report, scorecard, issues, 30/60/90 roadmap
 Each prompt also shares a severity scale (P0–P3), a finding schema, and a mandatory issue output.
 
 > [!NOTE]
-> **Documented exceptions.** Two prompts deviate by design. `security-audit-master-prompt.md` is
-> written in German with an extended phase set (threat modeling, triage, roadmap) and a five-level
-> severity vocabulary (KRITISCH–INFO). `repo-audit-master-prompt.md` uses a condensed structure
-> (benchmark and synthesis folded together, single-skeptic verification). The other nine prompts
-> follow the canonical Phase 0–5 pipeline and the shared P0–P3 finding schema exactly.
+> **Enforced consistency (interoperability).** All 11 audit prompts share the canonical structure —
+> `How to use this prompt`, `Operating principles`, Phase 0–5, `Issue output — mandatory`,
+> `Shared finding schema`, `Definition of done` — plus the P0–P3 severity scale, so their findings
+> compose in the orchestrator. A CI gate (`scripts/check-prompts.mjs`, the `prompts` workflow)
+> fails the build if any prompt drifts. `full-audit-master-prompt.md` is the orchestrator and is
+> exempt from the per-audit structure.
 
 ## Standards vs templates
 

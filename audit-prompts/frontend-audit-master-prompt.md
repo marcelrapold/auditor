@@ -385,6 +385,18 @@ checklist links resolve. Detect existing audit issues by label and update rather
 
 ---
 
+## Definition of done (self-check before delivering)
+
+- [ ] Every in-scope surface and the critical user journeys were inspected; any sampling was logged.
+- [ ] Every surviving finding cites concrete evidence and survived (or was downgraded by) the Phase 3 gauntlet.
+- [ ] Each finding names the law/heuristic/guideline it violates and ships a concrete fix.
+- [ ] WCAG failures are mapped to their SC numbers; performance findings carry an estimated metric gain.
+- [ ] The "do not touch" / protected-excellence inventory is included.
+- [ ] Coverage map and assumptions appendices are complete and honest.
+- [ ] The target was left unmodified.
+
+---
+
 ## Execution notes for the orchestrator
 
 - Phase 1 agents run **fully parallel**; Phases 2–3 pipeline per-finding (verify each
