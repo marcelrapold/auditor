@@ -139,7 +139,7 @@ function Hero({ lang }: { lang: Lang }) {
     <section id="top" className="relative overflow-hidden border-b border-border/60">
       <div className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
       <div className="pointer-events-none absolute -top-40 left-1/2 size-[min(40rem,90vw)] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
-      <div className="relative mx-auto max-w-6xl px-5 py-24 text-center md:py-32">
+      <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-12 text-center md:py-32">
         <Reveal>
           <Badge className="mx-auto">
             <span className="size-1.5 rounded-full bg-primary" />
