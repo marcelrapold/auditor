@@ -10,10 +10,26 @@ export function MobileNav({
   items: { href: string; label: string }[];
 }) {
   const [open, setOpen] = React.useState(false);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  // Escape closes the disclosure and returns focus to the toggle (it is a simple
+  // disclosure, not a modal dialog, so no focus trap is needed).
+  React.useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
     <div className="md:hidden">
       <button
+        ref={buttonRef}
         type="button"
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}

@@ -12,15 +12,20 @@ export function Reveal({
   children,
   delay = 0,
   className,
+  immediate = false,
 }: {
   children: React.ReactNode;
   delay?: number;
   className?: string;
+  /** Render revealed from the first paint — use for above-the-fold/LCP content
+   *  so it does not wait on hydration or an IntersectionObserver tick. */
+  immediate?: boolean;
 }) {
   const ref = React.useRef<HTMLDivElement>(null);
-  const [revealed, setRevealed] = React.useState(false);
+  const [revealed, setRevealed] = React.useState(immediate);
 
   React.useEffect(() => {
+    if (immediate) return;
     const el = ref.current;
     if (!el) return;
     if (
@@ -43,7 +48,7 @@ export function Reveal({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [immediate]);
 
   return (
     <div

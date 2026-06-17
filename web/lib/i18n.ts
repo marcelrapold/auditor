@@ -22,7 +22,7 @@ export const ui = {
     agentCmdVerb: "Audit",
     agentCmdUsing: "using",
     agentExplain:
-      "The orchestrator then asks: output language (Deutsch / English), which of the 11 audits (or the full repo), and whether to create issues — then runs them and opens a priority-sorted tracker.",
+      "The orchestrator then asks: output language (Deutsch / English), which of the {count} audits (or the full repo), and whether to create issues — then runs them and opens a priority-sorted tracker.",
     agentNotePre: "AI agents: fetch",
     agentNotePost: "and act as the audit orchestrator (ask language + scope, then run).",
     prinEyebrow: "Why it is different",
@@ -66,7 +66,7 @@ export const ui = {
     agentCmdVerb: "Audit",
     agentCmdUsing: "using",
     agentExplain:
-      "Der Orchestrator fragt dann: Ausgabesprache (Deutsch / English), welche der 11 Audits (oder das ganze Repo) und ob Issues erstellt werden dürfen — dann führt er sie aus und öffnet einen nach Priorität sortierten Tracker.",
+      "Der Orchestrator fragt dann: Ausgabesprache (Deutsch / English), welche der {count} Audits (oder das ganze Repo) und ob Issues erstellt werden dürfen — dann führt er sie aus und öffnet einen nach Priorität sortierten Tracker.",
     agentNotePre: "KI-Agenten: hole",
     agentNotePost: "und agiere als Audit-Orchestrator (Sprache + Umfang erfragen, dann ausführen).",
     prinEyebrow: "Warum es anders ist",

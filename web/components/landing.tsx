@@ -140,13 +140,13 @@ function Hero({ lang }: { lang: Lang }) {
       <div className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
       <div className="pointer-events-none absolute -top-40 left-1/2 size-[min(40rem,90vw)] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
       <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-12 text-center md:py-32">
-        <Reveal>
+        <Reveal immediate>
           <Badge className="mx-auto">
             <span className="size-1.5 rounded-full bg-primary" />
             {AUDIT_COUNT} {tt.heroBadge}
           </Badge>
         </Reveal>
-        <Reveal delay={0.05}>
+        <Reveal immediate>
           <h1 className="mx-auto mt-6 max-w-4xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
             {tt.heroTitle}
           </h1>
@@ -224,7 +224,9 @@ function AgentEntry({ lang }: { lang: Lang }) {
           <span className="text-foreground">github.com/your/repo</span> {tt.agentCmdUsing}{" "}
           <span className="text-foreground">auditor.rapold.io</span>
         </p>
-        <p className="mt-4 text-sm text-muted-foreground">{tt.agentExplain}</p>
+        <p className="mt-4 text-sm text-muted-foreground">
+          {tt.agentExplain.replace("{count}", String(AUDIT_COUNT))}
+        </p>
         <p className="mt-4 border-t border-border/60 pt-4 font-mono text-xs text-muted-foreground/80">
           {tt.agentNotePre}{" "}
           <a href="/llms.txt" className="text-primary underline-offset-2 hover:underline">

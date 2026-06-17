@@ -136,6 +136,14 @@
     scroll-padding-top: 5rem;
   }
 
+  /* Anchor navigation (skip link, in-page nav) must not animate scrolling for
+     users who asked to reduce motion (WCAG 2.2 SC 2.3.3). */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   /* Scroll-reveal (CSS-only; replaces framer-motion). The .reveal element starts
      hidden and animates in when JS sets data-revealed="true". */
   .reveal {

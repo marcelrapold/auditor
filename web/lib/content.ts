@@ -146,7 +146,7 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "Actionable issue tracker",
-    body: "Output is German GitHub issues led by a single priority-sorted tracking issue, each with a management summary and a before/after fix.",
+    body: "Output is GitHub issues — German or English — led by a single priority-sorted tracking issue, each with a management summary and a before/after fix.",
     icon: GitBranch,
   },
 ];
