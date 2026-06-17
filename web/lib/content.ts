@@ -18,6 +18,7 @@ export const REPO = "https://github.com/marcelrapold/auditor";
 export const PROMPTS = `${REPO}/blob/main/audit-prompts`;
 
 export const NAV = [
+  { href: "#use", label: "Use it" },
   { href: "#audits", label: "Audits" },
   { href: "#how", label: "How it works" },
   { href: "#standards", label: "Standards" },

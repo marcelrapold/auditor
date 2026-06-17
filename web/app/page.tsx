@@ -44,6 +44,7 @@ export default function Home() {
       <Header />
       <main id="main">
         <Hero />
+        <AgentEntry />
         <Principles />
         <Audits />
         <HowItWorks />
@@ -162,6 +163,40 @@ function Hero() {
         </Reveal>
       </div>
     </section>
+  );
+}
+
+function AgentEntry() {
+  return (
+    <Section
+      id="use"
+      eyebrow="Run it"
+      title="Point your AI agent at auditor.rapold.io"
+      lead="No install. Tell your AI coding agent to audit a repo using auditor.rapold.io — it fetches the orchestrator, asks your language and which audits to run, then files the issues."
+    >
+      <div className="rounded-xl border border-border bg-card p-6">
+        <p className="font-mono text-sm text-muted-foreground">
+          <span className="text-primary">$</span> Audit{" "}
+          <span className="text-foreground">github.com/your/repo</span> using{" "}
+          <span className="text-foreground">auditor.rapold.io</span>
+        </p>
+        <p className="mt-4 text-sm text-muted-foreground">
+          The orchestrator then asks: output language (Deutsch / English), which of the 11 audits
+          (or the full repo), and whether to create issues — then runs them and opens a
+          priority-sorted tracker.
+        </p>
+        <p className="mt-4 border-t border-border/60 pt-4 font-mono text-xs text-muted-foreground/80">
+          AI agents: fetch{" "}
+          <a
+            href="/llms.txt"
+            className="text-primary underline-offset-2 hover:underline"
+          >
+            auditor.rapold.io/llms.txt
+          </a>{" "}
+          and act as the audit orchestrator (ask language + scope, then run).
+        </p>
+      </div>
+    </Section>
   );
 }
 
