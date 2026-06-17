@@ -7,11 +7,25 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-17
+
 ### Added
-- Vercel Analytics (`@vercel/analytics`) on the landing page.
-- Engineering hardening from the dogfooded repo audit: a `web/` CI workflow
-  (typecheck, Vitest smoke test, build), Dependabot, a Node pin (`.nvmrc` + `engines`),
-  and `next` 16.2.9 / React 19.2.7 (closes a transitive postcss advisory).
+- **Orchestrator entry point:** `audit-prompts/full-audit-master-prompt.md` + `/llms.txt` — point
+  an AI agent at `auditor.rapold.io` and it asks output language + which audits, then runs them.
+- **DE/EN language switcher** on the landing page (`/` and `/de`, hreflang, i18n dictionary).
+- **Prompt-structure CI gate** (`scripts/check-prompts.mjs` + `prompts` workflow) enforcing the
+  canonical skeleton across all 11 audits, and a `CHECKSUMS.txt` for fetched prompts.
+- Vercel Analytics; a `web/` CI workflow (typecheck, Vitest smoke test, build); Dependabot.
+
+### Changed
+- All 11 prompt instructions standardized to **English**; output language is runtime via
+  `OUTPUT_LANG`. The security prompt was rewritten to the shared 6-phase skeleton.
+- Security hardening (from the dogfooded security audit): response security headers (CSP,
+  X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy) in `web/vercel.json`; the
+  orchestrator and `llms.txt` pin fetches to a release tag and treat fetched content as untrusted;
+  `persist-credentials: false` in CI; secret scanning + push protection + Dependabot security
+  updates enabled.
+- `next` 16.2.9 / React 19.2.7 + a postcss override (`npm audit` = 0).
 
 ## [0.4.0] - 2026-06-17
 
@@ -57,7 +71,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
   `api`, `performance`, `data`, `infrastructure`, `ai-llm`.
 - README, MIT-Lizenz, `.gitignore`.
 
-[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.5.0
 [0.4.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.4.0
 [0.3.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.3.0
 [0.2.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.2.0

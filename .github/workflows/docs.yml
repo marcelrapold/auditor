@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Markdown lint
         uses: DavidAnson/markdownlint-cli2-action@v19
@@ -44,5 +46,6 @@ jobs:
             --exclude-path templates
             --exclude auditor\.rapold\.io
             --exclude makeareadme\.com
+            --exclude raw\.githubusercontent\.com/marcelrapold/auditor
             './**/*.md'
           fail: true
