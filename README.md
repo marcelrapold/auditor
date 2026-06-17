@@ -85,7 +85,7 @@ compose cleanly when you run several against the same target.
 
 | Template | Audits | Maps to | Output |
 |---|---|---|---|
-| [`security`](audit-prompts/security-audit-master-prompt.md) | Security across 14 domains: injection, authN/authZ, secrets, supply chain, IaC, CI/CD, API, business logic, privacy, LLM | OWASP Top 10 / API / ASVS / LLM, CWE-25, MITRE ATT&CK, CIS, GDPR | German — issues + dashboard |
+| [`security`](audit-prompts/security-audit-master-prompt.md) | Security across 14 domains: injection, authN/authZ, secrets, supply chain, IaC, CI/CD, API, business logic, privacy, LLM | OWASP Top 10 / API / ASVS / LLM, CWE-25, MITRE ATT&CK, CIS, GDPR | Issues + scorecard (DE/EN) |
 | [`repo`](audit-prompts/repo-audit-master-prompt.md) | Whole-repo engineering: architecture, stack consistency, docs, tests, deps, CI/CD, observability, git hygiene | Google Eng Practices, SRE, SLSA, OWASP | Board-ready report |
 | [`frontend`](audit-prompts/frontend-audit-master-prompt.md) | 16-agent frontend sweep: usability, psychology, visual design, a11y, performance, SEO, copy, CRO, IA, forms, trust | Nielsen, WCAG 2.2, Core Web Vitals | Prioritized backlog + scorecard |
 | [`api`](audit-prompts/api-audit-master-prompt.md) | API design: resource modeling, HTTP semantics, error model, versioning, idempotency, rate limits, schema, DX | RFC 9110/9457, OpenAPI 3.1, GraphQL, Google AIP | Contract-drift matrix + roadmap |
@@ -101,6 +101,18 @@ compose cleanly when you run several against the same target.
 > **Acronyms.** DX = developer experience · CRO = conversion-rate optimization · IA = information
 > architecture · RLS = row-level security · FinOps = cloud-cost engineering · RoPA = Records of
 > Processing Activities · DAST = dynamic application security testing.
+
+## Run it from your AI agent
+
+Point any capable agent at the live entry point — no install:
+
+> Audit `github.com/your/repo` using **auditor.rapold.io**
+
+The agent fetches the orchestrator
+([`full-audit-master-prompt.md`](audit-prompts/full-audit-master-prompt.md), surfaced at
+[`auditor.rapold.io/llms.txt`](https://auditor.rapold.io/llms.txt)), asks your output language
+(Deutsch / English) and which audits to run (or the full repo), then files a consolidated,
+priority-sorted issue backlog.
 
 ## Quickstart
 
@@ -240,7 +252,8 @@ auditor/
 │   └── ISSUE_TEMPLATE/             findings + new-template + chooser config
 ├── web/                            landing page (Next.js 16) → auditor.rapold.io
 └── audit-prompts/
-    ├── security-audit-master-prompt.md            (Deutsch)
+    ├── full-audit-master-prompt.md                (orchestrator)
+    ├── security-audit-master-prompt.md
     ├── repo-audit-master-prompt.md
     ├── frontend-audit-master-prompt.md
     ├── api-audit-master-prompt.md

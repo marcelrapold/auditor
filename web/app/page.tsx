@@ -273,14 +273,7 @@ function Audits() {
               rel="noreferrer"
               className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/50 hover:bg-accent/40 focus-visible:border-primary/50 focus-visible:bg-accent/40"
             >
-              <div className="flex items-center justify-between">
-                <a.icon aria-hidden className="size-5 text-primary" />
-                {a.lang ? (
-                  <Badge variant="outline" className="text-[10px]">
-                    {a.lang}
-                  </Badge>
-                ) : null}
-              </div>
+              <a.icon aria-hidden className="size-5 text-primary" />
               <h3 className="mt-4 font-mono text-sm font-semibold">{a.name}</h3>
               <p className="mt-2 flex-1 text-sm text-muted-foreground">{a.blurb}</p>
               <p className="mt-4 font-mono text-xs text-muted-foreground">{a.mapsTo}</p>

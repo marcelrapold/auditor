@@ -30,8 +30,6 @@ export type Audit = {
   blurb: string;
   mapsTo: string;
   icon: LucideIcon;
-  /** Language the prompt FILE is written in — not the output language (every audit defaults to German output). */
-  lang?: "DE";
 };
 
 export const AUDITS: Audit[] = [
@@ -42,7 +40,6 @@ export const AUDITS: Audit[] = [
       "14 domains: injection, authN/Z, secrets, supply chain, IaC, CI/CD, business logic, privacy, LLM.",
     mapsTo: "OWASP · CWE · MITRE · CIS",
     icon: ShieldCheck,
-    lang: "DE",
   },
   {
     name: "repo",

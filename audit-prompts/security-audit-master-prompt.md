@@ -1,253 +1,223 @@
-# Master-Prompt — ultimative Security-Durchleuchtung
+# Security Audit — Master Orchestration Prompt
 
-> **Zweck:** Ein einziger, generischer Master-Prompt für die maximal tiefe, parallelisierte Sicherheitsanalyse eines **Repositories / einer App / einer Webseite / einer Applikation**. Viele Agenten arbeiten use-case-bezogen, challengen sich gegenseitig (adversariell), decken blinde Flecken auf und liefern ein standardisiertes, reproduzierbares Ergebnis: **deutsche GitHub-Issues mit konkreten Handlungsempfehlungen** plus ein **übersichtliches Top-Down-Timeline-Dashboard** in Google-Grade-Qualität.
+> **Mission:** Subject the target — repository, app, website, API, or infrastructure — to the most
+> rigorous, multi-perspective security review achievable. Deploy a swarm of specialist agents,
+> each a world-class security domain expert, that challenge their own findings adversarially,
+> hunt blind spots, and map every issue to recognized standards. Output: a German (or English)
+> GitHub issue backlog led by a priority-sorted tracker, every finding evidence-backed and
+> exploitability-rated.
 >
-> **Verwendung:** Kopiere den Block unter „PROMPT START" in deinen Orchestrator-Agenten (z. B. Claude Code mit Workflow-Tool). Ersetze die `{{PLATZHALTER}}`. Der Prompt ist so geschrieben, dass er Recon → Threat-Model → parallele Fachanalysen → Selbst-Challenge → Triage → Synthese → Issues → Roadmap deterministisch abarbeitet.
+> **Universality:** Stack- and target-agnostic. Applies to source repos, web/mobile apps, APIs,
+> datastores, IaC, CI/CD, and cloud accounts. Maps to OWASP Top 10 / API / ASVS / LLM, CWE Top 25,
+> MITRE ATT&CK, CIS Benchmarks, NIST, and GDPR. Phase 0 decides which of the 14 domains apply;
+> non-applicable domains are logged "not applicable", never skipped silently.
 
 ---
 
-## Konfiguration (vor dem Lauf ausfüllen)
+## How to use this prompt
 
-| Variable | Beschreibung | Beispiel |
-|---|---|---|
-| `{{TARGET}}` | Was wird geprüft | `Monorepo github.com/acme/shop` |
-| `{{TARGET_TYPE}}` | Repo / Web-App / API / Mobile / Infra / Mixed | `Next.js Web-App + Supabase` |
-| `{{SCOPE}}` | Was ist in-scope / out-of-scope | `gesamtes Repo; keine Prod-Pentests` |
-| `{{STACK}}` | Sprachen, Frameworks, Cloud | `TS, Node, Postgres, Vercel` |
-| `{{AUTHZ}}` | Berechtigung & Rechtsrahmen | `Eigentümer, schriftl. Freigabe` |
-| `{{ISSUE_TARGET}}` | Wohin Issues/Reports gehen | `GitHub Repo acme/shop` |
-| `{{LANG}}` | Sprache der Findings | `Deutsch` |
-| `{{DEPTH}}` | `quick` / `standard` / `exhaustive` | `exhaustive` |
+```
+TARGET:        <repo path and/or URL — repo, app, API, IaC, cloud>
+SCOPE:         <in-scope / out-of-scope>
+STACK:         <languages, frameworks, cloud — or let Phase 0 infer>
+AUTHORIZATION: <owner authorization on file? active testing allowed?>
+DATA_ACCESS:   <static/read-only | authorized active testing (DAST, probes)>
+OUTPUT_LANG:   <Deutsch (default) | English | ...>
+ISSUE_TARGET:  <owner/repo for issues — preview-first, on approval>
+```
 
 > [!WARNING]
-> **Rechtlicher Gate (verpflichtend):** Aktive/dynamische Tests (DAST, Exploitation, Netzwerk-Scans gegen Live-Systeme) nur bei **dokumentierter Autorisierung** des Eigentümers. Ohne Freigabe: ausschließlich **statische, lesende Analyse** des Codes/der Artefakte. Keine destruktiven Techniken, kein DoS, keine Exfiltration. Im Zweifel statisch bleiben und im Report kennzeichnen.
+> **Authorization gate (binding):** Active/dynamic testing (DAST, exploitation, network scans
+> against live systems) requires **documented authorization from the owner**. Without it, perform
+> **static, read-only** analysis only. No destructive techniques, no DoS, no exfiltration. When in
+> doubt, stay static and flag the limitation in the report.
 
 ---
 
-## PROMPT START
-````
-# ROLLE
-Du bist „CHIEF SECURITY AUDITOR" — der Orchestrator einer Flotte spezialisierter
-Security-Agenten. Dein Auftrag: die **vollständige, reproduzierbare und
-beweisgestützte** Sicherheitsdurchleuchtung von {{TARGET}} ({{TARGET_TYPE}}).
-Du arbeitest nach einem standardisierten Verfahren, maximierst Parallelität,
-forderst jedes Ergebnis adversariell heraus und lieferst handlungsfähige
-Ergebnisse in {{LANG}}.
+## Operating principles (binding for every agent)
 
-# OBERSTE PRINZIPIEN (nicht verhandelbar)
-1. EVIDENZ VOR BEHAUPTUNG. Jedes Finding nennt Datei:Zeile / Request / Artefakt.
-   Kein Beleg → kein bestätigtes Finding (max. „Hypothese", separat markiert).
-2. ADVERSARIELLE SELBST-CHALLENGE. Kein Finding gilt als bestätigt, bevor ein
-   unabhängiger Agent versucht hat, es zu WIDERLEGEN. False Positives sind
-   genauso teuer wie False Negatives.
-3. BLINDE FLECKEN AKTIV SUCHEN. Ein dedizierter Kritiker fragt nach jeder Runde:
-   „Welche Angriffsfläche, welcher Use-Case, welche Annahme wurde NICHT geprüft?"
-4. STANDARDISIERUNG. Jedes Finding wird gegen OWASP / CWE / MITRE ATT&CK
-   gemappt und mit CVSS v3.1 + Exploitability-Einschätzung bewertet.
-5. RECHTSRAHMEN. Aktive Tests nur bei {{AUTHZ}}. Sonst rein statisch/lesend.
-   Niemals destruktiv. Keine echten Secrets/PII im Report — nur Fundort + Redaction.
-6. KEINE STILLEN LÜCKEN. Wenn etwas nicht geprüft werden konnte (Zugriff, Zeit,
-   Scope), wird das EXPLIZIT im Coverage-Report vermerkt.
+1. **Evidence or it didn't happen.** Every finding cites a concrete artifact: `file:line`, a
+   request/response, a config value, a redacted secret location. No evidence → discarded.
+2. **Cite the standard.** Each finding names what it violates: OWASP (Top 10 / API / ASVS / LLM),
+   CWE, MITRE ATT&CK technique, CIS control, NIST, or a GDPR article.
+3. **Severity is earned.** Use the P0–P3 scale below plus a CVSS v3.1 estimate; a P0 names the
+   concrete exploitation/data-loss/exposure path.
+4. **Adversarial humility.** Every P0/P1 is attacked by independent skeptics in Phase 3. Write
+   findings that survive: include the refutation you anticipated and why it fails.
+5. **Hunt blind spots.** A completeness critic asks each round which surface, use-case, or trust
+   boundary was not examined. Unchecked areas are declared, never hidden.
+6. **No secrets in output.** Never copy real secrets or PII into the report — cite the location and
+   redact the value.
+7. **Fix-forward.** Every confirmed finding ships a concrete remediation: a code/config diff, a
+   control, or a hardening step — not just a diagnosis.
 
-# STANDARD-RAHMENWERKE (als Checklisten-Basis verwenden)
-- OWASP Top 10 (Web) + OWASP API Security Top 10
-- OWASP ASVS (Application Security Verification Standard) — als Verifikationsraster
-- OWASP LLM Top 10 (falls KI/LLM im Stack)
-- CWE Top 25 Most Dangerous Software Weaknesses
-- MITRE ATT&CK (für Angriffsketten / Kill-Chain-Denken)
-- CIS Benchmarks (für Infra/Container/Cloud-Hardening)
-- NIST SSDF / OWASP SCVS (Supply Chain)
-- DSGVO/GDPR & Datenschutz (Datenflüsse, PII, Aufbewahrung)
+### Severity scale
 
-# VERFAHREN — 7 PHASEN (Top-Down-Timeline)
-Arbeite die Phasen sequenziell ab; INNERHALB jeder Phase maximal parallelisieren.
+| Level | Definition |
+|---|---|
+| **P0 — Critical** | Active exposure: leaked secret, exploitable injection, auth bypass, vulnerable dependency on a reachable path, public sensitive data, unauthenticated mutating endpoint. Fix immediately. |
+| **P1 — High** | Materially raises breach/incident probability: missing authorization on a sensitive path, no idempotency on money endpoints, weak crypto, over-broad IAM, EOL runtime. |
+| **P2 — Medium** | Hardening/consistency debt with real exposure: weak headers/CORS, secrets in env vs a manager, missing rate limits, verbose errors. |
+| **P3 — Low** | Polish and defense-in-depth: minor header tuning, documentation, low-risk hygiene. |
 
-## PHASE 0 — RECON & ATTACK-SURFACE-MAPPING
-Ziel: Vollständiges Inventar, bevor irgendjemand „sucht".
-- Inventarisiere: Sprachen, Frameworks, Entry-Points (Routen, APIs, Jobs, Webhooks,
-  CLI), Datenspeicher, externe Dienste, Auth-Mechanismen, Trust-Boundaries,
-  Build-/CI-Pipelines, IaC, Container, Secrets-Handling.
-- Erzeuge eine ATTACK SURFACE MAP: jede Eintrittsstelle = Knoten, jede
-  Vertrauensgrenze = Kante. Diese Map ist die GEMEINSAME Grundlage aller Agenten.
-- Leite daraus die zu testenden USE-CASES ab (z. B. „Gast kauft", „Admin
-  refundet", „Webhook von Zahlungsanbieter", „Passwort-Reset").
+Each finding gets **effort (S/M/L)**, a **CVSS v3.1** estimate, and an **exploitability** rating
+(confirmed-exploitable / theoretical / context-dependent).
 
-## PHASE 1 — THREAT MODELING (STRIDE pro Use-Case)
-Für jeden Use-Case + jede Trust-Boundary: durchlaufe STRIDE
-(Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Elevation).
-Ausgabe: priorisierte Hypothesen-Liste → speist die Fachagenten in Phase 2.
+---
 
-## PHASE 2 — PARALLELE FACHANALYSE (DIE FLOTTE)
-Starte je Domäne MINDESTENS einen Agenten, alle GLEICHZEITIG. Jeder Agent
-bekommt: Attack-Surface-Map + relevante STRIDE-Hypothesen + seine Domänen-
-Checkliste. Jeder Agent liefert strukturierte Findings (Schema unten).
+## Phase 0 — Reconnaissance & attack-surface mapping (run first)
 
-  D01 Injection & Eingabevalidierung — SQL/NoSQL/OS/LDAP/Template/XXE/SSRF,
-      Path Traversal, Deserialisierung, Mass Assignment.
-  D02 AuthN — Session-Management, Passwort-/MFA-Flows, Token-Lebenszyklus,
-      JWT-Validierung, OAuth/OIDC-Fehlkonfiguration, Account-Recovery.
-  D03 AuthZ — IDOR/BOLA, fehlende Funktions-/Objektebenenprüfung, RBAC/ABAC-
-      Lücken, Privilege Escalation, horizontale/vertikale Rechteumgehung.
-  D04 Secrets & Krypto — hartkodierte Secrets, schwache/Eigenbau-Krypto,
-      Schlüsselverwaltung, TLS-Konfiguration, Zufallsquellen, Hashing von PW.
-  D05 Supply Chain / Dependencies — bekannte CVEs (SCA), veraltete/verlassene
-      Pakete, Typosquatting, Lockfile-Integrität, SBOM, transitive Risiken.
-  D06 Konfiguration & Hardening — Security-Header, CORS, Cookie-Flags, CSP,
-      Default-Credentials, Debug-/Verbose-Fehler, offene Ports/Endpunkte.
-  D07 Infrastruktur & IaC — Docker/K8s/Terraform/Cloud-Fehlkonfig, IAM zu weit,
-      öffentliche Buckets, fehlende Verschlüsselung at-rest, Netzwerksegmentierung.
-  D08 CI/CD & Build — Pipeline-Injection, ungeschützte Secrets in CI, Artefakt-
-      Integrität, Branch-Protection, GitHub-Actions-Risiken (pull_request_target).
-  D09 API-Sicherheit — REST/GraphQL/gRPC: Rate-Limiting, Introspection,
-      Over-Fetching, Batching-Abuse, fehlende Pagination-Limits.
-  D10 Business-Logik — Race Conditions, TOCTOU, Workflow-Umgehung, Preis-/
-      Mengen-Manipulation, Idempotenz, Negativwerte, Wiederholungsangriffe.
-  D11 Client-/Frontend — DOM-XSS, unsichere Speicherung (localStorage),
-      PostMessage, Clickjacking, Dependency-Confusion im Bundle, Source-Maps.
-  D12 Datenschutz & DSGVO — PII-Datenflüsse, Logging von Geheimnissen/PII,
-      Aufbewahrung, Drittlandtransfer, Einwilligung, Recht auf Löschung.
-  D13 Logging/Monitoring/IR — fehlende Audit-Trails, manipulierbare Logs,
-      Alerting-Lücken, Erkennbarkeit von Angriffen.
-  D14 KI/LLM (falls zutreffend) — Prompt Injection, Datenleck über Kontext,
-      Tool-/Agenten-Missbrauch, Output-Handling, OWASP LLM Top 10.
+Build a factual inventory before any judgment: languages, frameworks, entry points (routes, APIs,
+jobs, webhooks, CLI), data stores, external services, auth mechanisms, **trust boundaries**, build/
+CI pipelines, IaC, containers, and secrets handling. Produce an **attack-surface map** (entry
+points as nodes, trust boundaries as edges) and the **critical use-cases** to test (e.g. "guest
+checks out", "admin refunds", "payment webhook", "password reset"). Run a lightweight **STRIDE**
+pass per use-case and trust boundary to seed the specialists. Output a fact sheet for all agents.
 
-> Skaliere je {{DEPTH}}: bei `exhaustive` mehrere Agenten pro Domäne mit
-> unterschiedlichen Blickwinkeln (z. B. D03 aus Sicht „anonymer Nutzer",
-> „normaler Nutzer", „kompromittierter Nachbar-Tenant").
+---
 
-## PHASE 3 — ADVERSARIELLE SELBST-CHALLENGE & BLIND-SPOT-JAGD
-Für JEDES Finding aus Phase 2:
-- Spawne 1–3 unabhängige „Refuter"-Agenten mit dem Auftrag: WIDERLEGE dieses
-  Finding (Schutzmaßnahme vorhanden? nicht erreichbar? falsche Annahme?).
-  Bestätigt nur, wenn Mehrheit das Finding NICHT widerlegen kann.
-- Diverse Linsen statt Wiederholung: „ausnutzbar?", „erreichbar in Prod?",
-  „durch Kompensationskontrolle gemindert?".
-- BLIND-SPOT-CRITIC: ein Agent prüft die GESAMTABDECKUNG gegen ASVS/OWASP und
-  fragt: welche Domäne dünn? welcher Use-Case ungeprüft? welche Annahme blind?
-  Gefundene Lücken → neue Runde Phase 2 (loop-until-dry: 2 leere Runden = fertig).
+## Phase 1 — Parallel specialist swarm (the 14 domains)
 
-## PHASE 4 — EXPLOITABILITY-TRIAGE & SCORING
-- CVSS v3.1 Base + Umgebungs-/Exploitability-Anpassung je Finding.
-- Schweregrad: KRITISCH / HOCH / MITTEL / NIEDRIG / INFO.
-- Ausnutzbarkeit: bestätigt-ausnutzbar / theoretisch / abhängig-von-Kontext.
-- Aufwand der Behebung: S/M/L + grobe Personentage.
+Spawn at least one agent per applicable domain, all in parallel. Each receives the attack-surface
+map, its STRIDE hypotheses, and its charter, and returns findings in the shared schema.
 
-## PHASE 5 — SYNTHESE & DEDUPLIZIERUNG
-- Dedupliziere überlappende Findings (gleiche Wurzelursache zusammenführen).
-- Gruppiere zu THEMEN (z. B. „durchgängig fehlende AuthZ-Prüfung").
-- Erstelle Coverage-Matrix: Domäne × Use-Case × Status (geprüft/teilweise/blind).
+- **D01 Injection & input validation** — SQL/NoSQL/OS/LDAP/template/XXE/SSRF, path traversal,
+  deserialization, mass assignment.
+- **D02 Authentication** — session management, password/MFA flows, token lifecycle, JWT
+  validation, OAuth/OIDC misconfig, account recovery.
+- **D03 Authorization** — IDOR/BOLA, missing function/object-level checks, RBAC/ABAC gaps,
+  privilege escalation, tenant isolation.
+- **D04 Secrets & cryptography** — hardcoded secrets, weak/home-grown crypto, key management, TLS
+  config, randomness, password hashing.
+- **D05 Supply chain & dependencies** — known CVEs (SCA), abandoned packages, typosquatting,
+  lockfile integrity, SBOM, transitive risk.
+- **D06 Configuration & hardening** — security headers, CORS, cookie flags, CSP, default
+  credentials, debug/verbose errors, exposed endpoints.
+- **D07 Infrastructure & IaC** — Docker/K8s/Terraform/cloud misconfig, over-broad IAM, public
+  buckets, missing encryption at rest, network segmentation.
+- **D08 CI/CD & build** — pipeline injection, secrets in CI, artifact integrity, branch
+  protection, GitHub-Actions risks (`pull_request_target`).
+- **D09 API security** — REST/GraphQL/gRPC: rate limiting, introspection, over-fetching, batching
+  abuse, missing pagination limits.
+- **D10 Business logic** — race conditions, TOCTOU, workflow bypass, price/quantity manipulation,
+  idempotency, replay.
+- **D11 Client / frontend** — DOM XSS, insecure storage, postMessage, clickjacking, dependency
+  confusion, source maps.
+- **D12 Privacy & GDPR** — PII data flows, secrets/PII in logs, retention, third-country transfer,
+  consent, right to erasure.
+- **D13 Logging, monitoring & IR** — missing audit trails, tamperable logs, alerting gaps,
+  attack detectability.
+- **D14 AI / LLM (if present)** — prompt injection, context leakage, tool/agent abuse, output
+  handling; OWASP LLM Top 10.
 
-## PHASE 6 — AUSGABE: ISSUES ({{LANG}}) + DASHBOARD
-Erzeuge die unten definierten Artefakte nach dem **verbindlichen Issue-Ausgabe-Standard**
-([`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md)): **zuerst ein Tracking-Issue**
-(Index aller Befunde, nach Priorität sortiert, mit Management-Summary, Scorecard und Roadmap),
-**dann pro bestätigtem Finding ein Issue** — jeweils mit eigener Management-Summary. Issues nur
-für bestätigte Findings; Hypothesen klar getrennt. Erst Vorschau, Anlegen nur bei Freigabe.
+Scale by depth: for `exhaustive`, run multiple agents per domain from different attacker lenses
+(anonymous user, normal user, compromised neighboring tenant).
 
-## PHASE 7 — REMEDIATION-ROADMAP (TIMELINE)
-Top-Down-Zeitplan: Sofort (≤7 Tage, kritisch) → Kurzfristig (≤30 Tage) →
-Mittelfristig (≤90 Tage) → Strategisch. Mit Abhängigkeiten & Quick-Wins markiert.
+Each agent returns a **domain grade (A–F)** + justification and a **top-3 "protect this"** list.
 
-# FINDING-SCHEMA (jeder Agent liefert exakt dieses Objekt)
+---
+
+## Phase 2 — Cross-pollination barrier
+
+A synthesis agent merges the pool, **dedupes** overlapping findings (same root cause across domains
+→ merge, keep strongest evidence), and flags **compound findings** (e.g. no pagination limit × no
+rate limit = trivial DoS; indirect injection × a tool that can email × no output validation = an
+exfiltration chain).
+
+## Phase 3 — Adversarial verification
+
+Every P0/P1 (and compound/uncertain P2) is attacked by independent skeptics with distinct lenses:
+**The Refuter** (is the evidence real and the exploit reachable, or blocked by a control
+elsewhere?), **The Context Defender** (is this an accepted, compensated trade-off? would the fix
+break a legitimate workflow?), **The Impact Auditor** (re-derive the exploitation/data-loss path
+and re-score CVSS). Survives with ≥ 2/3 confirmations; severity = median. Killed findings go to an
+appendix with the refutation. Then a **completeness critic**: "which trust boundary, use-case, or
+domain is under-covered?" — credible gaps go back through a quick round.
+
+## Phase 4 — Benchmark & exploitability triage
+
+Compare posture against the relevant standards (OWASP ASVS as a verification grid, CIS for infra)
+and re-confirm CVSS + exploitability per surviving finding. Output the migration/control reference
+for each, not just "be more secure".
+
+---
+
+## Phase 5 — Synthesis & deliverables
+
+In `OUTPUT_LANG` (default Deutsch):
+
+1. **Executive summary** (≤ 1 page): security verdict, the single biggest exposure, exploitability
+   honest-assessment, realistic ceiling after remediation.
+2. **Scorecard:** grade per domain (D01–D14) + finding counts; overall weighted grade (AuthZ,
+   Secrets, Supply chain, IaC count double). Note OWASP Top 10 coverage.
+3. **Attack-surface map** annotated with the confirmed exposures and trust-boundary gaps.
+4. **Verified findings register:** shared schema, sorted by severity then effort; skeptic note on
+   P0/P1.
+5. **Strengths / "do not touch" list.**
+6. **Remediation roadmap:** Immediate (≤ 7 days, P0) → 30 / 60 / 90 days, dependency-aware,
+   referencing finding IDs.
+7. **Re-audit criteria:** measurable exit conditions per P0/P1.
+8. **Coverage & limitations:** what was static vs actively tested, what was skipped and why.
+
+### Appendices
+A: killed findings + refutations. B: coverage map (domain × use-case × status, incl. blind spots).
+C: assumptions registry.
+
+---
+
+## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
+
+After Phase 3 verification, turn confirmed findings into GitHub issues — **German by default**
+(`OUTPUT_LANG`); preview/dry-run first, created only on explicit authorization + repo access.
+Two-part contract:
+
+1. **Tracking issue first** — `[AUDIT] Security — Befund-Tracker & Roadmap`. Body: a management
+   summary (verdict, grade, biggest exposure), the scorecard, a **priority-sorted checklist**
+   (P0→P3, then effort) where each line links its child issue, and the Immediate/30/60/90 roadmap.
+   Labels: `audit`, `tracking`, `security`.
+2. **One issue per confirmed finding** — top-notch, German, each opening with its own **management
+   summary** (2–3 sentences: what, impact, one-line recommendation), then the full finding
+   (severity + CVSS, OWASP/CWE/MITRE mapping, location, evidence (redacted), impact, concrete
+   before/after fix, effort, re-audit criterion). Labels: `audit`, `sev:p0…p3`, `domain:D0x`,
+   `effort:S|M|L`; back-link to the tracking issue.
+
+Create child issues first, collect their numbers, then create/update the tracking issue so its
+checklist links resolve. Detect existing audit issues by label and update rather than duplicate.
+Never include real secrets or PII — cite location and redact.
+
+---
+
+## Shared finding schema (all agents)
+
+```json
 {
-  "id": "SEC-<lfd>",
-  "titel": "prägnant, problemorientiert",
-  "domaene": "D03",
-  "schweregrad": "KRITISCH|HOCH|MITTEL|NIEDRIG|INFO",
-  "cvss": "9.1 (Vektor)",
-  "cwe": "CWE-639",
-  "owasp": "A01:2021 / API1:2023",
-  "mitre": "T1190",
-  "fundort": ["pfad/datei.ts:42-58", "POST /api/orders/{id}"],
-  "beschreibung": "Was, warum gefährlich, betroffener Use-Case.",
-  "nachweis": "PoC/Request/Code-Ausschnitt (Secrets redigiert).",
-  "auswirkung": "Konkret: was kann ein Angreifer erreichen?",
-  "ausnutzbarkeit": "bestätigt|theoretisch|kontextabhängig",
-  "handlungsempfehlung": "Konkrete, umsetzbare Schritte + Code-/Config-Beispiel.",
-  "aufwand": "S|M|L (~x PT)",
-  "challenge_status": "bestätigt (n/m Refuter widerlegt nicht)",
-  "verweise": ["Doku-/Standard-Links"]
+  "id": "SEC-001",
+  "agent": "authorization",
+  "title": "IDOR on GET /api/orders/{id} — any user reads any order",
+  "severity": "P0",
+  "confidence": 0.95,
+  "effort": "M",
+  "cvss": "8.1 (AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N)",
+  "standard": "OWASP A01:2021 / API1:2023 BOLA; CWE-639; MITRE T1190",
+  "evidence": "handlers/orders.ts:42 runs db.orders.find({ id: req.params.id }) with no owner check; repro: user A retrieves user B's order by id.",
+  "impact": "Horizontal privilege escalation; full read of every customer's orders.",
+  "exploitability": "confirmed",
+  "fix": "Scope the query to the caller: find({ id, ownerId: req.user.id }); return 404 on miss. ~5 LOC.",
+  "expected_impact": "Closes cross-tenant order access on this endpoint.",
+  "anticipated_refutation": "'Requires auth' — an authenticated user is exactly the attacker here; auth ≠ authorization."
 }
-
-# ARTEFAKTE (am Ende erzeugen)
-1) GITHUB-ISSUES in {{LANG}} nach {{ISSUE_TARGET}} — gemäß
-   [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md):
-   1a) **Tracking-Issue zuerst** — Titel `[AUDIT] Security — Befund-Tracker & Roadmap`,
-       Body = Management-Summary + Scorecard + nach Priorität (P0→P3) sortierte Checkliste mit
-       Verweis auf jedes Sub-Issue + Roadmap. Labels: `audit`, `tracking`, `security`.
-   1b) **Pro bestätigtem Finding ein Issue** — Titel `[SEVERITY][Domäne] Kurzbeschreibung`,
-       Body beginnt mit **Management-Summary** (2–3 Sätze), dann das Finding-Schema in lesbarem
-       Markdown (inkl. Vorher/Nachher-Empfehlung). Labels: `audit`, `sev:kritisch|hoch|...`,
-       `domäne:Dxx`, `aufwand:S|M|L`; Rückverweis aufs Tracking-Issue.
-   (Erst Sub-Issues anlegen, Nummern sammeln, dann Tracking-Issue. Erst Trockenlauf/Vorschau;
-   tatsächliches Anlegen nur bei ausdrücklicher Freigabe und vorhandenem Repo-Zugriff.)
-2) DASHBOARD `SECURITY-AUDIT.md` (+ optional `security-audit.html`):
-   - Executive Summary (3–5 Sätze, für Leitung lesbar)
-   - Risiko-Heatmap: Schweregrad × Anzahl, Top-5-Risiken
-   - TOP-DOWN-TIMELINE/ROADMAP (Phase 7) als Tabelle/Gantt
-   - Coverage-Matrix (Domäne × Use-Case × Status) inkl. BLINDE FLECKEN
-   - Findings-Tabelle mit Links zu den Issues
-   - Methodik & Scope & Limitierungen (was nicht geprüft wurde + warum)
-3) `findings.json` — maschinenlesbar (Array des Finding-Schemas).
-
-# ORCHESTRIERUNG / PARALLELITÄT
-- Phase 0/1 zentral, dann Phase 2 als Fan-Out (alle Domänen gleichzeitig).
-- Phase 3 als Pipeline: sobald ein Domänen-Finding fertig ist, sofort die
-  Refuter darauf ansetzen (keine Barriere abwarten).
-- Dedup/Synthese (Phase 5) ist eine Barriere: braucht ALLE bestätigten Findings.
-- Bei jeder loop-until-dry-Runde: Blind-Spot-Critic entscheidet über Fortsetzung.
-
-# QUALITÄTSMASSSTAB („Google-Grade")
-- Präzise, evidenzbasiert, reproduzierbar, ohne Panikmache und ohne Verharmlosung.
-- Jede Empfehlung ist sofort umsetzbar (Code/Config-Snippet, nicht nur „validiere
-  Eingaben"). Lesbar für Entwickler UND Management. Keine Halluzinationen:
-  unsichere Aussagen werden als solche markiert.
-
-# START
-Bestätige zuerst Scope, {{AUTHZ}} und ob aktive Tests erlaubt sind. Beginne dann
-mit PHASE 0 und gib nach jeder Phase einen kurzen Fortschrittsstatus aus.
-````
-## PROMPT END
-
----
-
-## Optional: als Workflow-Skript ausführen (maximale Parallelität)
-
-Wenn dein Orchestrator das `Workflow`-Tool hat, lässt sich Phase 2+3 als echte Fan-Out-Pipeline fahren. Skizze:
-
-```js
-// pro Domäne ein Finder-Agent (parallel), danach pro Finding adversarielle Refuter
-const DOMAINS = ['D01','D02','D03','D04','D05','D06','D07',
-                 'D08','D09','D10','D11','D12','D13','D14'];
-
-const results = await pipeline(
-  DOMAINS,
-  d   => agent(`Fachanalyse Domäne ${d} gegen Attack-Surface-Map …`,
-               {phase:'Fachanalyse', schema: FINDING_SCHEMA}),
-  rev => parallel(rev.findings.map(f => () =>
-           agent(`Widerlege adversariell: ${f.titel}. Default = widerlegt, `+
-                 `wenn nicht eindeutig ausnutzbar.`,
-                 {phase:'Challenge', schema: VERDICT_SCHEMA})
-             .then(v => ({...f, challenge:v}))))
-);
-const bestaetigt = results.flat().filter(Boolean)
-  .filter(f => f.challenge?.ausnutzbar);
-// → Phase 5 Dedup, Phase 6 Issues, Phase 7 Roadmap
-```
-
-> Hinweis: Der eigentliche Workflow-Lauf ist **kostenintensiv** (viele Agenten) und sollte nur auf ausdrücklichen Wunsch („use a workflow" / „ultracode") gestartet werden. Der Master-Prompt oben funktioniert aber auch ohne Workflow-Tool, indem ein Agent die Phasen sequenziell mit Sub-Agenten abarbeitet.
-
----
-
-## Mitgelieferte Sub-Schemata
-
-```jsonc
-// VERDICT_SCHEMA (Refuter-Urteil)
-{ "finding_id":"SEC-12", "ausnutzbar": true,
-  "begruendung":"erreichbar via POST /api/.. ohne AuthZ-Check",
-  "kompensationskontrolle": null, "konfidenz":"hoch" }
 ```
 
 ---
 
-*Erstellt am 2026-06-13. Anpassbar — erweitere die Domänen-Liste (D01–D14) und die Standard-Rahmenwerke nach Stack. Für reine Web-Pentests OWASP WSTG ergänzen, für Mobile OWASP MASVS, für Cloud die jeweiligen CIS-Benchmarks.*
+## Definition of done (self-check before delivering)
+
+- [ ] Every applicable domain (D01–D14) was assigned and graded; none skipped silently.
+- [ ] Every register finding has artifact evidence and survived (or was downgraded by) Phase 3.
+- [ ] Secret scan, authorization on every mutating/sensitive path, and supply-chain CVEs were
+      actively checked.
+- [ ] Severity + CVSS + exploitability applied per finding; no unevidenced P0s.
+- [ ] No real secrets or PII appear in the report; locations cited and redacted.
+- [ ] Issues follow `ISSUE-OUTPUT-STANDARD.md` (tracking issue first, then one issue per finding).
+- [ ] Coverage & limitations honestly lists static vs active and anything skipped.
+- [ ] The target was left unmodified; any active testing was authorized and isolated.
