@@ -3,9 +3,12 @@
 import * as React from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV } from "@/lib/content";
 
-export function MobileNav() {
+export function MobileNav({
+  items,
+}: {
+  items: { href: string; label: string }[];
+}) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -32,7 +35,7 @@ export function MobileNav() {
           className="absolute left-0 right-0 top-full border-b border-border bg-background/95 backdrop-blur-md"
         >
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4">
-            {NAV.map((item) => (
+            {items.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
