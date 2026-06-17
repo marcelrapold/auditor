@@ -37,6 +37,14 @@ Empfehlung sofort umsetzbar.
 - Aktualisiere [`CHANGELOG.md`](CHANGELOG.md) unter `[Unreleased]`.
 - Versionierung nach [SemVer](https://semver.org/).
 
+## Release-Surface (Prompts und Checksummen)
+
+- Beim Editieren eines `audit-prompts/*.md` oder eines Standards die `CHECKSUMS.txt` regenerieren
+  (`sha256sum audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md > CHECKSUMS.txt`).
+  Die `prompts`-CI prüft das mit `sha256sum -c` und schlägt sonst fehl.
+- Die in URLs gepinnte Release-Version wird **nur beim Release** gebumpt — über
+  `node scripts/bump-version.mjs vX.Y.Z`, nie von Hand. Siehe [`RELEASING.md`](RELEASING.md).
+
 ## Verhalten und Sicherheit
 
 - Es gilt der [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) (Contributor Covenant).

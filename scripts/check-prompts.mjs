@@ -40,7 +40,18 @@ const LABELS = [
 // Uniform severity vocabulary (P0–P3) and no legacy German severities in headings/schema.
 const HAS_P0 = /\bP0\b/;
 const HAS_P3 = /\bP3\b/;
-const LEGACY_SEVERITY = /KRITISCH\|HOCH\|MITTEL\|NIEDRIG\|INFO/;
+const LEGACY_SEVERITY = /\b(KRITISCH|HOCH|MITTEL|NIEDRIG|INFO)\b/;
+
+// Self-test: the guard must actually match a reintroduced legacy severity and
+// must not fire on ordinary prose. Prevents the regex from silently rotting
+// (a previous version escaped the alternation pipes and matched nothing).
+if (
+  !LEGACY_SEVERITY.test("Severity: KRITISCH") ||
+  LEGACY_SEVERITY.test("This is a critical, high-priority finding.")
+) {
+  console.error("✗ check-prompts self-test failed: LEGACY_SEVERITY guard is broken.");
+  process.exit(1);
+}
 
 const files = readdirSync(DIR)
   .filter((f) => f.endsWith("-audit-master-prompt.md") && !EXEMPT.has(f))

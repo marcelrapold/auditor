@@ -7,6 +7,22 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- Per-locale root layouts (route groups `(en)`/`(de)`) so `/de` serves `<html lang="de">`; a German
+  Open Graph image and per-route Twitter/OG metadata.
+- `scripts/bump-version.mjs` + `RELEASING.md`: single-source the release tag pinned in the
+  orchestrator and `llms.txt`; a `CHECKSUMS.txt` verification gate (`sha256sum -c`) in the
+  `prompts` workflow.
+- Escape-to-close + focus-return on the mobile menu; reduced-motion handling for smooth scrolling.
+
+### Changed
+- English copy/metadata now say "GitHub issues in German or English" (was "German"); audit count
+  is derived from `AUDIT_COUNT` instead of a hardcoded literal.
+- CI hardening: GitHub Actions pinned to commit SHAs, `concurrency` + `timeout-minutes` on every
+  workflow, `prompts` Node version sourced from `.nvmrc`; Dependabot grouping/labels; `engines.node`
+  aligned to `>=22`; `esbuild` override for the dev toolchain; HSTS response header.
+- Fixed the `check-prompts.mjs` legacy-severity guard (escaped alternation) and added a self-test.
+
 ## [0.5.0] - 2026-06-17
 
 ### Added

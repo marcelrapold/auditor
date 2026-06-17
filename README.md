@@ -16,8 +16,8 @@ and documentation.
 > **Management summary.** `auditor` is a library of 11 reusable "master prompt" audit templates
 > plus the standards that govern their output. You point one at a repository, app, website, API,
 > datastore, or infrastructure; it runs a parallel swarm of specialist agents, adversarially
-> verifies every finding, scores the result, and files **German GitHub issues** — led by a single
-> priority-sorted tracking issue. It exists because most "audit my code" prompts return vague,
+> verifies every finding, scores the result, and files **GitHub issues** (German or English) — led
+> by a single priority-sorted tracking issue. It exists because most "audit my code" prompts return vague,
 > unverified opinions; these enforce evidence, self-challenge, and an actionable 30/60/90 roadmap.
 
 > [!NOTE]
@@ -28,7 +28,7 @@ and documentation.
 > dann pro Befund ein Ticket mit eigener Management-Summary.
 
 *Figure 1. How auditor works: a standard plus a template guide an AI agent swarm over a target,
-producing a scored report and German GitHub issues.*
+producing a scored report and GitHub issues (German or English).*
 
 ```mermaid
 flowchart LR
@@ -36,7 +36,7 @@ flowchart LR
     Target["Target repo / app / API"] --> Agent
     Prompt["Audit template<br/>(1 of 11)"] --> Agent["AI agent swarm<br/>(parallel + adversarial)"]
     Agent --> Report["Report +<br/>scorecard"]
-    Agent --> Issues["GitHub issues<br/>(tracker + findings, DE)"]
+    Agent --> Issues["GitHub issues<br/>(tracker + findings, DE/EN)"]
 ```
 
 ---
@@ -45,6 +45,8 @@ flowchart LR
 
 - [Overview](#overview)
 - [The audit library](#the-audit-library)
+- [Run it from your AI agent](#run-it-from-your-ai-agent)
+- [Worked example: auditing this repo](#worked-example-auditing-this-repo)
 - [Quickstart](#quickstart)
 - [How it works](#how-it-works)
 - [Issue output](#issue-output)
@@ -72,8 +74,8 @@ demand:
   `ultracode` / Workflow mode), then pipelines per-finding verification.
 - **A standardized procedure.** Every audit runs the same phases and maps findings to recognized
   standards (OWASP, CWE, MITRE ATT&CK, WCAG, CIS, DORA, RFCs, GDPR).
-- **Actionable output.** A severity-scored register, a 30/60/90 roadmap, and German GitHub issues
-  led by a priority-sorted tracker.
+- **Actionable output.** A severity-scored register, a 30/60/90 roadmap, and GitHub issues (German
+  or English) led by a priority-sorted tracker.
 
 The bar is "Google-grade": precise, reproducible, no panic, no hand-waving, every recommendation
 immediately actionable.
@@ -82,6 +84,11 @@ immediately actionable.
 
 All templates are stack-, framework-, and product-agnostic and share one methodology, so findings
 compose cleanly when you run several against the same target.
+
+> [!NOTE]
+> **Terminology.** Each audit ships as a *master prompt* — a self-contained *template* you paste
+> into your AI agent. This README uses "audit", "template", and "master prompt" for the same
+> artifact; "audit" names what it does, "template/master prompt" names the file you copy.
 
 | Template | Audits | Maps to | Output |
 |---|---|---|---|
@@ -114,6 +121,25 @@ The agent fetches the orchestrator
 (Deutsch / English) and which audits to run (or the full repo), then files a consolidated,
 priority-sorted issue backlog.
 
+## Worked example: auditing this repo
+
+The library is dogfooded on itself. Running the orchestrator end-to-end against `auditor` produced
+a consolidated, cross-audit backlog — a concrete trace of the input-to-issues loop:
+
+- **Input.** Point the agent at the repo. Phase 0 recon selected the seven applicable audits and
+  declared four **not applicable, with reasons** (no runtime API, no database, no in-repo LLM
+  runtime, no personal data) rather than skipping them silently.
+- **Scorecard.** documentation A (94), accessibility A (93), performance A (92), security A (91),
+  repo / frontend / infrastructure A- (90) — zero P0, one P1.
+- **Cross-audit dedupe.** "`CHECKSUMS.txt` is not verified in CI" was found independently by the
+  repo, infrastructure, and security lenses and merged into a single backlog item with all three
+  citations — the payoff of running the audits together.
+- **Output.** One master tracking issue plus one issue per finding, each with a management summary,
+  evidence (`file:line`), a before/after fix, an effort estimate, and a re-audit criterion.
+
+See the run on GitHub: [master tracker #97](https://github.com/marcelrapold/auditor/issues/97)
+(scorecard, consolidated backlog, and a 30/60/90 roadmap) and the per-finding issues it links.
+
 ## Quickstart
 
 > [!TIP]
@@ -141,7 +167,7 @@ access to the target repository for the issue phase.
    dedupes, adversarially verifies every serious finding, benchmarks against best-in-class, then
    synthesizes the report and roadmap.
 4. **Review the issues.** Each audit previews a priority-sorted tracking issue plus one issue per
-   finding (German), and creates them only on your explicit approval.
+   finding (in your chosen language), and creates them only on your explicit approval.
 
 To get the full picture of a production system, run `repo` + `security` + `performance` + `data` +
 `infrastructure` (and `frontend` / `api` / `ai-llm` / `compliance-privacy` / `accessibility` /
@@ -183,8 +209,8 @@ flowchart LR
     P5 -. "blind-spot critic:<br/>what did we miss?" .-> P1
 ```
 
-Severity is standardized (P0 critical to P3 polish, or KRITISCH–NIEDRIG in the German security
-template), each finding carries an effort estimate and an ICE/priority score, and the roadmap is
+Severity is standardized (P0 critical to P3 polish), each finding carries an effort estimate and an
+ICE/priority score, and the roadmap is
 always Quick Wins → 30 → 60 → 90 days, dependency-aware, with finding IDs traced through. Every
 report ends with an honest "Coverage and limitations" section; an unaudited area reported as
 "fine" is treated as an audit failure.

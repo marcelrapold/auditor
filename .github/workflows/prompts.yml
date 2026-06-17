@@ -6,25 +6,38 @@ on:
     paths:
       - "audit-prompts/**"
       - "scripts/check-prompts.mjs"
+      - "DOCUMENTATION-STANDARD*.md"
+      - "ISSUE-OUTPUT-STANDARD.md"
+      - "CHECKSUMS.txt"
       - ".github/workflows/prompts.yml"
   pull_request:
     paths:
       - "audit-prompts/**"
       - "scripts/check-prompts.mjs"
+      - "DOCUMENTATION-STANDARD*.md"
+      - "ISSUE-OUTPUT-STANDARD.md"
+      - "CHECKSUMS.txt"
       - ".github/workflows/prompts.yml"
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   structure:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: "22"
+          node-version-file: web/.nvmrc
       - name: Canonical prompt structure (interoperability)
         run: node scripts/check-prompts.mjs
+      - name: Verify prompt checksums (untrusted-fetch trust anchor)
+        run: sha256sum -c CHECKSUMS.txt
