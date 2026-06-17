@@ -9,7 +9,7 @@ and documentation.
 [![Last commit](https://img.shields.io/github/last-commit/marcelrapold/auditor)](https://github.com/marcelrapold/auditor/commits)
 [![Audits](https://img.shields.io/badge/audits-11-blue)](audit-prompts)
 [![Docs standard](https://img.shields.io/badge/docs%20standard-Google--grade-success)](DOCUMENTATION-STANDARD.md)
-[![Issue output](https://img.shields.io/badge/issues-DE%20%2B%20tracker-informational)](ISSUE-OUTPUT-STANDARD.md)
+[![Issue output](https://img.shields.io/badge/issues-DE%2FEN%20%2B%20tracker-informational)](ISSUE-OUTPUT-STANDARD.md)
 [![Website](https://img.shields.io/badge/website-auditor.rapold.io-10b981)](https://auditor.rapold.io)
 
 > [!NOTE]

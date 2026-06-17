@@ -7,6 +7,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-17
+
 ### Added
 - Per-locale root layouts (route groups `(en)`/`(de)`) so `/de` serves `<html lang="de">`; a German
   Open Graph image and per-route Twitter/OG metadata.
@@ -87,7 +89,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
   `api`, `performance`, `data`, `infrastructure`, `ai-llm`.
 - README, MIT-Lizenz, `.gitignore`.
 
-[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.6.0
 [0.5.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.5.0
 [0.4.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.4.0
 [0.3.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.3.0
