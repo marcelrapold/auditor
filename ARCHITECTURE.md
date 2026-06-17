@@ -12,7 +12,7 @@ This document records how the repository is structured and the design decisions 
 
 ```
 auditor/
-├── audit-prompts/   the 11 audit master prompts (the product)
+├── audit-prompts/   the 12 audit master prompts (the product)
 ├── web/             the landing page (Next.js 16) → auditor.rapold.io
 ├── templates/       a canonical README skeleton implementing the doc standard
 ├── DOCUMENTATION-STANDARD.md (+ .en.md)   the doc-quality yardstick
@@ -35,7 +35,7 @@ Phase 5  Synthesis           report, scorecard, issues, 30/60/90 roadmap
 Each prompt also shares a severity scale (P0–P3), a finding schema, and a mandatory issue output.
 
 > [!NOTE]
-> **Enforced consistency (interoperability).** All 11 audit prompts share the canonical structure —
+> **Enforced consistency (interoperability).** All 12 audit prompts share the canonical structure —
 > `How to use this prompt`, `Operating principles`, Phase 0–5, `Issue output — mandatory`,
 > `Shared finding schema`, `Definition of done` — plus the P0–P3 severity scale, so their findings
 > compose in the orchestrator. A CI gate (`scripts/check-prompts.mjs`, the `prompts` workflow)

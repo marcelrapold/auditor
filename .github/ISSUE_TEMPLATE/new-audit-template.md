@@ -7,7 +7,7 @@ labels: ["enhancement"]
 
 ## What would this audit cover?
 
-<!-- The domain and why it is distinct from the existing 11 audits. -->
+<!-- The domain and why it is distinct from the existing 12 audits. -->
 
 ## Standards it maps to
 

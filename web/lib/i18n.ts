@@ -28,7 +28,7 @@ export const ui = {
     prinEyebrow: "Why it is different",
     prinTitle: "Most audit prompts return unverified opinions. These enforce discipline.",
     audEyebrow: "The library",
-    audTitle: "Eleven stack-agnostic audits, one shared methodology",
+    audTitle: "Twelve stack-agnostic audits, one shared methodology",
     audLead:
       "Each is a self-contained master prompt. Run several against the same target and the findings compose cleanly.",
     howEyebrow: "The method",
@@ -72,7 +72,7 @@ export const ui = {
     prinEyebrow: "Warum es anders ist",
     prinTitle: "Die meisten Audit-Prompts liefern unverifizierte Meinungen. Diese erzwingen Disziplin.",
     audEyebrow: "Die Bibliothek",
-    audTitle: "Elf stack-agnostische Audits, eine gemeinsame Methodik",
+    audTitle: "Zwölf stack-agnostische Audits, eine gemeinsame Methodik",
     audLead:
       "Jedes ist ein eigenständiger Master-Prompt. Mehrere gegen dasselbe Ziel laufen lassen — die Befunde fügen sich sauber zusammen.",
     howEyebrow: "Die Methode",
@@ -108,6 +108,7 @@ const auditBlurbDe: Record<string, string> = {
   "compliance-privacy": "Datenschutz: Rechtsgrundlage, Consent/Cookies, Betroffenenrechte, Aufbewahrung, Transfers, Breach-Readiness.",
   accessibility: "Tiefes A11y: Semantik, Tastatur, Fokus, Screenreader, Kontrast, Formulare, Zoom, Motorik, Motion, Kognition.",
   documentation: "Doku-Qualität vs. Standard: Repo-Kopf, Onboarding, Doc-Code-Drift, Schreibstil, Diátaxis, Repo-Health.",
+  content: "Inhalt & Botschaft: These challengen, Zielgruppen-Fit, Belege & Originalität, Struktur, Stimme, konkrete Umformulierungen.",
 };
 
 const principleDe: { title: string; body: string }[] = [

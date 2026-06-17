@@ -41,6 +41,7 @@ Ask these questions and wait for answers. Offer the options; accept free-form to
 | `compliance-privacy` | Privacy & compliance | personal/regulated data (GDPR etc.) |
 | `accessibility` | Deep accessibility (WCAG) | a web/mobile UI held to a11y standards |
 | `documentation` | Documentation quality | any repo with docs / a README |
+| `content` | Content & messaging | any prose: marketing, blog, essays, posts, product copy |
 
 `full repo` = run **Phase 0 reconnaissance** (below), then every audit whose "run it when"
 condition the target meets. Declare audits marked **not applicable** explicitly; never skip silently.
@@ -61,7 +62,7 @@ resulting audit selection for the user to confirm.
 For each chosen audit, **fetch its specialist prompt** and execute it:
 
 ```
-https://raw.githubusercontent.com/marcelrapold/auditor/v0.6.0/audit-prompts/<key>-audit-master-prompt.md
+https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/audit-prompts/<key>-audit-master-prompt.md
 ```
 
 (e.g. `…/security-audit-master-prompt.md`). Then:
@@ -75,8 +76,8 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.6.0/audit-prompts/<key
 
 > [!NOTE]
 > Each specialist prompt is self-contained and standards-mapped (OWASP, CWE, MITRE, WCAG, CIS,
-> DORA, RFCs, GDPR). The two exceptions documented in `ARCHITECTURE.md` (the German security
-> prompt and the condensed repo-audit) still produce the shared finding fields.
+> DORA, RFCs, GDPR) and conforms to the shared canonical structure — enforced by the `prompts`
+> CI gate — so their findings compose across audits.
 
 ---
 
@@ -92,7 +93,7 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.6.0/audit-prompts/<key
 ## Step 5 — Issue output (per `ISSUE-OUTPUT-STANDARD.md`)
 
 Fetch and follow
-`https://raw.githubusercontent.com/marcelrapold/auditor/v0.6.0/ISSUE-OUTPUT-STANDARD.md`. Produce, in
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/ISSUE-OUTPUT-STANDARD.md`. Produce, in
 **`OUTPUT_LANG`** (German or English as chosen), preview-first and created only on approval:
 
 1. **One master tracking issue** — `[AUDIT] Full repo — Master-Tracker & Roadmap`: management
@@ -127,9 +128,9 @@ resolve. Detect existing audit issues by label and update rather than duplicate.
 
 ## Index (machine-readable)
 
-Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.6.0/`
+Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/`
 
-- Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation}-audit-master-prompt.md`
+- Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content}-audit-master-prompt.md`
 - Standards: `ISSUE-OUTPUT-STANDARD.md`, `DOCUMENTATION-STANDARD.md` (+ `.en.md`)
 - This orchestrator: `audit-prompts/full-audit-master-prompt.md`
 - Human overview + language switcher: `https://auditor.rapold.io`

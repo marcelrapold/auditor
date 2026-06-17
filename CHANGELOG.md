@@ -7,6 +7,14 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-06-17
+
+### Added
+- **`content` audit** — the 12th template: a content & messaging audit that challenges the thesis
+  (steelmans the strongest counter-argument), measures information gain against best-in-class
+  references, and ships concrete before/after rewrites, filed as GitHub issues. Wired into the
+  orchestrator menu, `llms.txt`, the landing page, the audit count, and a content scorecard rubric.
+
 ## [0.6.0] - 2026-06-17
 
 ### Added
@@ -89,7 +97,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
   `api`, `performance`, `data`, `infrastructure`, `ai-llm`.
 - README, MIT-Lizenz, `.gitignore`.
 
-[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.7.0
 [0.6.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.6.0
 [0.5.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.5.0
 [0.4.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.4.0

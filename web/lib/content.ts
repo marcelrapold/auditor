@@ -9,6 +9,7 @@ import {
   Gauge,
   LayoutDashboard,
   type LucideIcon,
+  PenLine,
   Plug,
   Scale,
   ShieldCheck,
@@ -120,6 +121,14 @@ export const AUDITS: Audit[] = [
       "Docs quality vs the standard: head-matter, onboarding, doc–code drift, writing, Diátaxis.",
     mapsTo: "DOCUMENTATION-STANDARD · Diátaxis",
     icon: BookText,
+  },
+  {
+    name: "content",
+    file: "content-audit-master-prompt.md",
+    blurb:
+      "Content & messaging: thesis challenge, audience fit, evidence & originality, structure, voice, concrete rewrites.",
+    mapsTo: "E-E-A-T · BLUF · rhetoric",
+    icon: PenLine,
   },
 ];
 
