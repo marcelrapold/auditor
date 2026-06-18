@@ -18,6 +18,40 @@ import {
 export const REPO = "https://github.com/marcelrapold/auditor";
 export const PROMPTS = `${REPO}/blob/main/audit-prompts`;
 
+/** Latest release tag — single-sourced via scripts/bump-version.mjs. */
+export const VERSION = "v0.7.0";
+
+/** The one activation command; copied verbatim (the leading "$" is visual only). */
+export const AUDIT_COMMAND = "Audit github.com/your/repo using auditor.rapold.io";
+
+/** Top of the scorecard from this repo's own #97 self-audit run. */
+export const SCORECARD = [
+  { audit: "documentation", grade: "A", score: 94 },
+  { audit: "performance", grade: "A", score: 92 },
+  { audit: "security", grade: "A", score: 91 },
+] as const;
+
+/** One real finding the #97 run filed against this repo (since fixed). */
+export const SAMPLE_FINDING = {
+  severity: "P1",
+  title: '/de served <html lang="en">',
+  evidence: "web/app/layout.tsx:71",
+  before: '/ and /de → <html lang="en">',
+  after: '/de → <html lang="de">',
+  issue: 81,
+} as const;
+
+/** Six real findings from this page's own content audit (#123) — backlog exhibit.
+ *  Titles are localized in i18n (proofRows), matched by index. */
+export const BACKLOG_SAMPLE = [
+  { n: 100, sev: "P1" },
+  { n: 103, sev: "P1" },
+  { n: 104, sev: "P1" },
+  { n: 107, sev: "P1" },
+  { n: 113, sev: "P2" },
+  { n: 122, sev: "P3" },
+] as const;
+
 export const NAV = [
   { href: "#use", label: "Use it" },
   { href: "#audits", label: "Audits" },
@@ -145,7 +179,7 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "Adversarial self-challenge",
-    body: "No finding survives until independent skeptic agents have tried to refute it. The strongest defense against false positives.",
+    body: "No finding survives until independent skeptic agents have tried to refute it — it must clear at least two of three, or it is dropped. If it cannot survive a hostile reading, it is not a finding.",
     icon: ShieldCheck,
   },
   {
@@ -155,7 +189,7 @@ export const PRINCIPLES: Principle[] = [
   },
   {
     title: "Actionable issue tracker",
-    body: "Output is GitHub issues — German or English — led by a single priority-sorted tracking issue, each with a management summary and a before/after fix.",
+    body: "Output is GitHub issues — German or English — led by a single priority-sorted tracking issue, each with a management summary and a before/after fix. A finding you cannot act on is just an opinion.",
     icon: GitBranch,
   },
 ];
@@ -207,7 +241,7 @@ export const STANDARDS: Standard[] = [
     name: "Documentation standard",
     file: "DOCUMENTATION-STANDARD.md",
     blurb:
-      "A Google-grade documentation standard with five repo profiles and a 0–100 scoring rubric. The yardstick the documentation audit measures against.",
+      "A documentation standard with five repo profiles and a 0–100 scoring rubric — the same yardstick the documentation audit scores against.",
     icon: BookText,
   },
   {
