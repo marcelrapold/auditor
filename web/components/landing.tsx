@@ -163,17 +163,17 @@ function Hero({ lang }: { lang: Lang }) {
             {tt.heroTitle}
           </h1>
         </Reveal>
-        <Reveal delay={0.1}>
+        <Reveal immediate delay={0.1}>
           <p className="mx-auto mt-6 max-w-prose text-pretty text-lg text-muted-foreground">
             {tt.heroSub}
           </p>
         </Reveal>
-        <Reveal delay={0.14}>
+        <Reveal immediate delay={0.14}>
           <p className="mx-auto mt-5 max-w-prose text-pretty text-base font-medium text-foreground/90">
             {tt.heroContrast}
           </p>
         </Reveal>
-        <Reveal delay={0.18}>
+        <Reveal immediate delay={0.18}>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <CopyCommandButton
               command={AUDIT_COMMAND}
@@ -188,7 +188,7 @@ function Hero({ lang }: { lang: Lang }) {
             </a>
           </div>
         </Reveal>
-        <Reveal delay={0.22}>
+        <Reveal immediate delay={0.22}>
           <p className="mt-8 font-mono text-xs uppercase tracking-widest text-muted-foreground">
             {tt.heroMeta}
           </p>

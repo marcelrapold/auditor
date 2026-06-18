@@ -111,7 +111,6 @@
     font-family: var(--font-sans);
     overflow-x: clip;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
   }
 
   ::selection {
@@ -158,6 +157,16 @@
     transform: none;
   }
   @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* No-JS fallback: without scripting the IntersectionObserver never runs, so
+     keep revealed content visible instead of stranding it at opacity:0. */
+  @media (scripting: none) {
     .reveal {
       opacity: 1;
       transform: none;
