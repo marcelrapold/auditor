@@ -18,6 +18,7 @@ import {
   SCORECARD,
   VERSION,
 } from "@/lib/content";
+import { glossify } from "@/lib/glossary";
 import { DESCRIPTION, SITE_URL } from "@/lib/site";
 import {
   type Lang,
@@ -294,7 +295,7 @@ function Principles({ lang }: { lang: Lang }) {
             <div className="h-full rounded-xl border border-border bg-card p-6">
               <p.icon aria-hidden className="size-5 text-primary" />
               <h3 className="mt-4 font-medium">{p.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{p.body}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{glossify(p.body, lang)}</p>
             </div>
           </Reveal>
         ))}
@@ -463,8 +464,8 @@ function Audits({ lang }: { lang: Lang }) {
             >
               <a.icon aria-hidden className="size-5 text-primary" />
               <h3 className="mt-4 font-mono text-sm font-semibold">{a.name}</h3>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{a.blurb}</p>
-              <p className="mt-4 font-mono text-xs text-muted-foreground">{a.mapsTo}</p>
+              <p className="mt-2 flex-1 text-sm text-muted-foreground">{glossify(a.blurb, lang)}</p>
+              <p className="mt-4 font-mono text-xs text-muted-foreground">{glossify(a.mapsTo, lang)}</p>
             </a>
           </Reveal>
         ))}
@@ -510,7 +511,7 @@ function HowItWorks({ lang }: { lang: Lang }) {
                   {phase.n}
                 </span>
                 <h3 className="font-medium">{phase.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{phase.body}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{glossify(phase.body, lang)}</p>
                 {phase.n === "1" ? (
                   <div className="mt-3 flex flex-wrap items-center gap-1.5">
                     {specialists.map((s) => (
@@ -564,7 +565,7 @@ function Standards({ lang }: { lang: Lang }) {
             >
               <s.icon aria-hidden className="size-5 text-primary" />
               <h3 className="mt-4 text-lg font-medium">{s.name}</h3>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{s.blurb}</p>
+              <p className="mt-2 flex-1 text-sm text-muted-foreground">{glossify(s.blurb, lang)}</p>
               <span className="mt-4 inline-flex items-center gap-1 font-mono text-xs text-primary">
                 {s.file}
                 <ArrowRight
