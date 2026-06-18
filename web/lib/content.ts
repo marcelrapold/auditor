@@ -41,6 +41,17 @@ export const SAMPLE_FINDING = {
   issue: 81,
 } as const;
 
+/** Six real findings from this page's own content audit (#123) — backlog exhibit.
+ *  Titles are localized in i18n (proofRows), matched by index. */
+export const BACKLOG_SAMPLE = [
+  { n: 100, sev: "P1" },
+  { n: 103, sev: "P1" },
+  { n: 104, sev: "P1" },
+  { n: 107, sev: "P1" },
+  { n: 113, sev: "P2" },
+  { n: 122, sev: "P3" },
+] as const;
+
 export const NAV = [
   { href: "#use", label: "Use it" },
   { href: "#audits", label: "Audits" },

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowDown, ArrowRight, CircleDot, Search, ShieldCheck } from "lucide-react";
 import { CommandBlock, CopyCommandButton } from "@/components/copy-command";
 import { GitHubMark } from "@/components/icons";
 import { MobileNav } from "@/components/mobile-nav";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import {
   AUDIT_COMMAND,
   AUDIT_COUNT,
+  BACKLOG_SAMPLE,
   PROMPTS,
   REPO,
   SAMPLE_FINDING,
@@ -289,27 +290,95 @@ function Principles({ lang }: { lang: Lang }) {
   );
 }
 
+const SEV_CLASS: Record<string, string> = {
+  P1: "bg-red-500/10 text-red-600 dark:bg-red-500/15 dark:text-red-400",
+  P2: "bg-amber-500/10 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400",
+  P3: "bg-muted text-muted-foreground",
+};
+
 function Proof({ lang }: { lang: Lang }) {
   const tt = t(lang);
+  const rows = BACKLOG_SAMPLE.map((b, i) => ({ ...b, title: tt.proofRows[i] }));
   return (
     <Section id="proof" eyebrow={tt.proofEyebrow} title={tt.proofTitle} lead={tt.proofLead}>
-      <div className="grid gap-4 sm:grid-cols-3">
-        {SCORECARD.map((s) => (
-          <Reveal key={s.audit} delay={0}>
-            <div className="rounded-xl border border-border bg-card p-6">
-              <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                {s.audit}
-              </p>
-              <p className="mt-3 flex items-baseline gap-2">
-                <span className="text-3xl font-semibold text-primary">{s.grade}</span>
-                <span className="font-mono text-sm text-muted-foreground">{s.score}/100</span>
-              </p>
+      <div className="grid gap-6 lg:grid-cols-5 lg:items-center">
+        {/* The real backlog from this page's own content audit — a framed GitHub issues view. */}
+        <Reveal className="lg:col-span-3">
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+            <div className="flex items-center gap-2 border-b border-border/60 bg-muted/40 px-4 py-2.5">
+              <span className="size-2.5 rounded-full bg-border" />
+              <span className="size-2.5 rounded-full bg-border" />
+              <span className="size-2.5 rounded-full bg-border" />
+              <span className="ml-2 truncate font-mono text-xs text-muted-foreground">
+                github.com/marcelrapold/auditor/issues
+              </span>
             </div>
-          </Reveal>
-        ))}
+            <div className="flex items-center justify-between gap-3 border-b border-border/60 px-4 py-2.5">
+              <span className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-2.5 py-1 font-mono text-xs text-muted-foreground">
+                <Search aria-hidden className="size-3.5" />
+                is:issue label:content
+              </span>
+              <span className="font-mono text-xs text-muted-foreground">
+                23 {tt.proofFindings}
+              </span>
+            </div>
+            <ul>
+              {rows.map((b) => (
+                <li key={b.n} className="border-b border-border/60 last:border-0">
+                  <a
+                    href={`${REPO}/issues/${b.n}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-start gap-2.5 px-4 py-3 transition-colors hover:bg-accent/40 focus-visible:bg-accent/40"
+                  >
+                    <CircleDot aria-hidden className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                    <span
+                      className={cn(
+                        "shrink-0 rounded-md px-1.5 py-0.5 font-mono text-[11px] font-medium",
+                        SEV_CLASS[b.sev],
+                      )}
+                    >
+                      {b.sev}
+                    </span>
+                    <span className="text-sm text-foreground">
+                      {b.title}{" "}
+                      <span className="font-mono text-xs text-muted-foreground">#{b.n}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Reveal>
+
+        {/* Explanation + the real cross-audit grades, alongside the exhibit. */}
+        <Reveal className="lg:col-span-2">
+          <p className="text-pretty text-lg font-medium text-foreground">{tt.proofAnnotation}</p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {SCORECARD.map((s) => (
+              <span
+                key={s.audit}
+                className="inline-flex items-baseline gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 font-mono text-xs"
+              >
+                <span className="text-muted-foreground">{s.audit}</span>
+                <span className="text-sm font-semibold text-primary">{s.grade}</span>
+                <span className="text-muted-foreground">{s.score}</span>
+              </span>
+            ))}
+            <span className="inline-flex items-center rounded-lg border border-dashed border-border px-2.5 py-1.5 font-mono text-xs text-muted-foreground">
+              0 P0 · 1 P1
+            </span>
+          </div>
+          <p className="mt-5 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+            <ArrowDown aria-hidden className="size-4" />
+            {tt.proofVerifyHint}
+          </p>
+        </Reveal>
       </div>
+
+      {/* One finding, in full — real evidence + before/after from the same run. */}
       <Reveal>
-        <div className="mt-4 rounded-xl border border-border bg-card p-6">
+        <div className="mt-6 rounded-xl border border-border bg-card p-6">
           <div className="flex flex-wrap items-center gap-3">
             <Badge variant="outline" className="font-mono">
               {SAMPLE_FINDING.severity}
@@ -341,6 +410,7 @@ function Proof({ lang }: { lang: Lang }) {
           </a>
         </div>
       </Reveal>
+
       <Reveal>
         <div className="mt-8">
           <a

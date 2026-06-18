@@ -51,7 +51,19 @@ export const ui = {
     proofEyebrow: "Proof, not claims",
     proofTitle: "We pointed the whole suite at our own repo",
     proofLead:
-      'The library is dogfooded on itself — run end-to-end against this very repo, with the backlog filed as public GitHub issues. The cross-audit pass even caught itself: "CHECKSUMS.txt not verified in CI" surfaced independently from three lenses and merged into one. Below: the scorecard, and one finding from that run, exactly as filed.',
+      "The library is dogfooded on itself — pointed at this very repo, with the backlog filed as public GitHub issues. This page got its own content audit; across the full repo, every lens scored A− to A. Below: the real backlog, the grades, and one finding in full.",
+    proofAnnotation:
+      "The real backlog from auditing this very page — 23 findings, every one now fixed.",
+    proofVerifyHint: "Click any issue to verify on GitHub.",
+    proofFindings: "findings",
+    proofRows: [
+      'No visible output proof — it preaches "evidence", ships prose',
+      "Activation command is not copyable",
+      '"any AI agent" — an unsupported universal claim',
+      "End-CTA repeats the hero instead of closing",
+      '"Google-grade" — an unsupported superlative',
+      'Hero badge "copy & paste" duplicates the subhead',
+    ],
     proofEvidence: "Evidence",
     proofBefore: "Before",
     proofAfter: "After",
@@ -125,7 +137,19 @@ export const ui = {
     proofEyebrow: "Beweise statt Behauptungen",
     proofTitle: "Wir haben die ganze Suite auf das eigene Repo gerichtet",
     proofLead:
-      "Die Bibliothek wird auf sich selbst angewendet — end-to-end gegen genau dieses Repo, das Backlog als öffentliche GitHub-Issues. Der Cross-Audit-Durchlauf hat sich sogar selbst ertappt: „CHECKSUMS.txt nicht in CI verifiziert“ tauchte unabhängig aus drei Linsen auf und wurde zu einem Issue zusammengeführt. Unten: die Scorecard und ein Finding aus diesem Lauf, genau so eingereicht.",
+      "Die Bibliothek wird auf sich selbst angewendet — auf genau dieses Repo gerichtet, das Backlog als öffentliche GitHub-Issues. Diese Seite bekam ihr eigenes Content-Audit; über das ganze Repo bewertete jede Linse A− bis A. Unten: der echte Backlog, die Noten und ein Finding in voller Tiefe.",
+    proofAnnotation:
+      "Der echte Backlog aus dem Audit genau dieser Seite — 23 Befunde, jeder davon jetzt behoben.",
+    proofVerifyHint: "Klick ein Issue an und prüf es auf GitHub.",
+    proofFindings: "Befunde",
+    proofRows: [
+      'Kein sichtbarer Output-Beweis — predigt „Evidence“, liefert Prosa',
+      "Aktivierungs-Befehl ist nicht kopierbar",
+      '„any AI agent“ — unbelegte Universalbehauptung',
+      "End-CTA wiederholt den Hero statt zu schließen",
+      '„Google-grade“ — unbelegter Superlativ',
+      'Hero-Badge „copy & paste“ doppelt den Subhead',
+    ],
     proofEvidence: "Beleg",
     proofBefore: "Vorher",
     proofAfter: "Nachher",
