@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { AuditDetailPage } from "@/components/audit-page";
 import { auditDetail } from "@/lib/audit-details";
 import { AUDITS } from "@/lib/content";
-import { SITE_URL } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -33,7 +32,6 @@ export async function generateMetadata({
       url: path,
       title: `${audit.name} audit`,
       description: detail.tagline,
-      images: [`${SITE_URL}/de/opengraph-image`],
     },
   };
 }

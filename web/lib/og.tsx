@@ -9,9 +9,12 @@ export const ogContentType = "image/png";
 export function renderOgImage({
   title,
   subtitle,
+  footer,
 }: {
   title: string;
   subtitle: string;
+  /** Optional mono footer line, e.g. the standards an audit maps to. */
+  footer?: string;
 }) {
   return new ImageResponse(
     (
@@ -64,9 +67,21 @@ export function renderOgImage({
         >
           {title}
         </div>
-        <div style={{ fontSize: 28, marginTop: 28, color: "#a3a3a3" }}>
+        <div style={{ fontSize: 28, marginTop: 28, color: "#a3a3a3", maxWidth: 1000 }}>
           {subtitle}
         </div>
+        {footer ? (
+          <div
+            style={{
+              fontSize: 22,
+              marginTop: 40,
+              color: "#10b981",
+              fontFamily: "monospace",
+            }}
+          >
+            {footer}
+          </div>
+        ) : null}
       </div>
     ),
     { ...ogSize },
