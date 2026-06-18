@@ -174,7 +174,7 @@ function Hero({ lang }: { lang: Lang }) {
           </p>
         </Reveal>
         <Reveal immediate delay={0.18}>
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-9 flex flex-col items-center justify-center gap-3 [&>*]:w-full sm:flex-row sm:[&>*]:w-auto">
             <CopyCommandButton
               command={AUDIT_COMMAND}
               label={tt.heroCtaCopy}
@@ -259,7 +259,7 @@ function AgentEntry({ lang }: { lang: Lang }) {
         <h3 className="font-medium">{tt.trustTitle}</h3>
         <dl className="mt-4 grid gap-4 sm:grid-cols-3">
           {tt.trust.map((item) => (
-            <div key={item.q} className="rounded-xl border border-border bg-card p-5">
+            <div key={item.q} className="rounded-xl border border-border bg-card p-6">
               <dt className="text-sm font-medium">{item.q}</dt>
               <dd className="mt-2 text-sm text-muted-foreground">{item.a}</dd>
             </div>
@@ -306,15 +306,15 @@ function Proof({ lang }: { lang: Lang }) {
   const rows = BACKLOG_SAMPLE.map((b, i) => ({ ...b, title: tt.proofRows[i] }));
   return (
     <Section id="proof" eyebrow={tt.proofEyebrow} title={tt.proofTitle} lead={tt.proofLead}>
-      <div className="grid gap-6 lg:grid-cols-5 lg:items-center">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5 lg:items-center">
         {/* The real backlog from this page's own content audit — a framed GitHub issues view. */}
         <Reveal className="lg:col-span-3">
           <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
             <div className="flex items-center gap-2 border-b border-border/60 bg-muted/40 px-4 py-2.5">
               <span className="size-2.5 rounded-full bg-border" />
               <span className="size-2.5 rounded-full bg-border" />
-              <span className="size-2.5 rounded-full bg-border" />
-              <span className="ml-2 truncate font-mono text-xs text-muted-foreground">
+              <span className="size-2.5 rounded-full bg-primary/40" />
+              <span className="ml-2 min-w-0 truncate font-mono text-xs text-muted-foreground">
                 github.com/marcelrapold/auditor/issues
               </span>
             </div>
@@ -345,7 +345,7 @@ function Proof({ lang }: { lang: Lang }) {
                     >
                       {b.sev}
                     </span>
-                    <span className="text-sm text-foreground">
+                    <span className="min-w-0 text-sm text-foreground">
                       {b.title}{" "}
                       <span className="font-mono text-xs text-muted-foreground">#{b.n}</span>
                     </span>
@@ -385,23 +385,30 @@ function Proof({ lang }: { lang: Lang }) {
       <Reveal>
         <div className="mt-6 rounded-xl border border-border bg-card p-6">
           <div className="flex flex-wrap items-center gap-3">
-            <Badge variant="outline" className="font-mono">
+            <span
+              className={cn(
+                "shrink-0 rounded-md px-1.5 py-0.5 font-mono text-[11px] font-medium",
+                SEV_CLASS[SAMPLE_FINDING.severity],
+              )}
+            >
               {SAMPLE_FINDING.severity}
-            </Badge>
+            </span>
             <h3 className="font-mono text-sm font-semibold">{SAMPLE_FINDING.title}</h3>
           </div>
           <dl className="mt-4 space-y-1.5 font-mono text-xs">
             <div className="flex flex-wrap gap-x-2">
               <dt className="w-16 shrink-0 text-muted-foreground">{tt.proofEvidence}</dt>
-              <dd className="text-foreground">{SAMPLE_FINDING.evidence}</dd>
+              <dd className="min-w-0 break-words text-foreground">{SAMPLE_FINDING.evidence}</dd>
             </div>
             <div className="flex flex-wrap gap-x-2">
               <dt className="w-16 shrink-0 text-muted-foreground">{tt.proofBefore}</dt>
-              <dd className="text-muted-foreground line-through">{SAMPLE_FINDING.before}</dd>
+              <dd className="min-w-0 break-words text-muted-foreground line-through">
+                {SAMPLE_FINDING.before}
+              </dd>
             </div>
             <div className="flex flex-wrap gap-x-2">
               <dt className="w-16 shrink-0 text-muted-foreground">{tt.proofAfter}</dt>
-              <dd className="text-primary">{SAMPLE_FINDING.after}</dd>
+              <dd className="min-w-0 break-words text-primary">{SAMPLE_FINDING.after}</dd>
             </div>
           </dl>
           <a
@@ -490,7 +497,7 @@ function Standards({ lang }: { lang: Lang }) {
               href={`${REPO}/blob/main/${s.file}`}
               target="_blank"
               rel="noreferrer"
-              className="group flex h-full flex-col rounded-xl border border-border bg-card p-7 transition-colors hover:border-primary/50 hover:bg-accent/40 focus-visible:border-primary/50 focus-visible:bg-accent/40"
+              className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/50 hover:bg-accent/40 focus-visible:border-primary/50 focus-visible:bg-accent/40"
             >
               <s.icon aria-hidden className="size-5 text-primary" />
               <h3 className="mt-4 text-lg font-medium">{s.name}</h3>
