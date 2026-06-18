@@ -466,7 +466,12 @@ function Proof({ lang }: { lang: Lang }) {
 function Audits({ lang }: { lang: Lang }) {
   const tt = t(lang);
   return (
-    <Section id="audits" eyebrow={tt.audEyebrow} title={tt.audTitle} lead={tt.audLead}>
+    <Section
+      id="audits"
+      eyebrow={tt.audEyebrow}
+      title={tt.audTitle.replace("{count}", String(AUDIT_COUNT))}
+      lead={tt.audLead}
+    >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {auditsFor(lang).map((a, i) => (
           <Reveal key={a.name} delay={(i % 3) * 0.05}>

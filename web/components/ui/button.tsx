@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 
 // This site is link-based; only buttonVariants is consumed (applied to <a>).
 // The former <Button> wrapper + unused asChild prop were removed as dead code.
@@ -24,5 +24,3 @@ export const buttonVariants = cva(
     },
   },
 );
-
-export type ButtonVariants = VariantProps<typeof buttonVariants>;

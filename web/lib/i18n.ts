@@ -1,7 +1,6 @@
 import { AUDITS, PHASES, PRINCIPLES, STANDARDS, type Audit } from "./content";
 
 export type Lang = "en" | "de";
-export const LANGS: Lang[] = ["en", "de"];
 
 // UI chrome strings.
 export const ui = {
@@ -81,7 +80,7 @@ export const ui = {
     proofAfter: "After",
     proofCta: "See the full run (#97)",
     audEyebrow: "The library",
-    audTitle: "Thirteen stack-agnostic audits, one shared methodology",
+    audTitle: "{count} stack-agnostic audits, one shared methodology",
     audLead:
       'Each is a self-contained master prompt: a multi-phase spec, not a one-shot "review my code" question. Run several against the same repo and their findings merge into one priority-sorted tracker — no duplicates — because every audit emits the same issue contract.',
     howEyebrow: "The method",
@@ -183,7 +182,7 @@ export const ui = {
     proofAfter: "Nachher",
     proofCta: "Ganzen Lauf ansehen (#97)",
     audEyebrow: "Die Bibliothek",
-    audTitle: "Dreizehn stack-agnostische Audits, eine gemeinsame Methodik",
+    audTitle: "{count} stack-agnostische Audits, eine gemeinsame Methodik",
     audLead:
       "Jedes ist ein eigenständiger Master-Prompt: eine mehrphasige Spezifikation, keine einmalige „review my code“-Frage. Mehrere gegen dasselbe Repo laufen lassen — ihre Befunde fließen ohne Duplikate in einen einzigen, prioritätssortierten Tracker, weil jedes Audit denselben Issue-Kontrakt liefert.",
     howEyebrow: "Die Methode",
