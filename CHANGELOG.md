@@ -7,6 +7,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-06-18
+
 ### Added
 - **`lean` audit** — the 13th template: a repo-leanness / anti-AI-slop / dependency-transparency
   audit that challenges dead code, redundancy, unused/phantom dependencies, and bloat, and proposes
@@ -114,7 +116,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
   `api`, `performance`, `data`, `infrastructure`, `ai-llm`.
 - README, MIT-Lizenz, `.gitignore`.
 
-[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.8.0
 [0.7.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.7.0
 [0.6.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.6.0
 [0.5.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.5.0

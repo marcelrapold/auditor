@@ -20,7 +20,7 @@ export const REPO = "https://github.com/marcelrapold/auditor";
 export const PROMPTS = `${REPO}/blob/main/audit-prompts`;
 
 /** Latest release tag — single-sourced via scripts/bump-version.mjs. */
-export const VERSION = "v0.7.0";
+export const VERSION = "v0.8.0";
 
 /** The one activation command; copied verbatim (the leading "$" is visual only). */
 export const AUDIT_COMMAND = "Audit github.com/your/repo using auditor.rapold.io";
