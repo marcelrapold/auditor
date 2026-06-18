@@ -83,11 +83,12 @@ export function Landing({ lang }: { lang: Lang }) {
 }
 
 function LangToggle({ lang }: { lang: Lang }) {
+  const tt = t(lang);
   const other = lang === "en" ? { href: "/de", label: "DE" } : { href: "/", label: "EN" };
   return (
     <Link
       href={other.href}
-      aria-label={`Switch to ${other.label === "DE" ? "Deutsch" : "English"}`}
+      aria-label={tt.langToggle}
       className="inline-flex h-10 items-center justify-center rounded-md border border-border bg-background/60 px-3 text-xs font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:h-9"
     >
       {other.label}
@@ -178,6 +179,8 @@ function Hero({ lang }: { lang: Lang }) {
               command={AUDIT_COMMAND}
               label={tt.heroCtaCopy}
               copiedLabel={tt.agentCopied}
+              copiedAnnounce={tt.agentCopiedAnnounce}
+              failedAnnounce={tt.agentCopyFailed}
             />
             <a href="#proof" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
               {tt.heroCtaProof}
@@ -237,6 +240,8 @@ function AgentEntry({ lang }: { lang: Lang }) {
           using={tt.agentCmdUsing}
           copyLabel={tt.agentCopy}
           copiedLabel={tt.agentCopied}
+          copiedAnnounce={tt.agentCopiedAnnounce}
+          failedAnnounce={tt.agentCopyFailed}
           hint={tt.agentCopyHint}
         />
         <p className="mt-4 border-t border-border/60 pt-4 text-sm text-muted-foreground">
@@ -291,8 +296,8 @@ function Principles({ lang }: { lang: Lang }) {
 }
 
 const SEV_CLASS: Record<string, string> = {
-  P1: "bg-red-500/10 text-red-600 dark:bg-red-500/15 dark:text-red-400",
-  P2: "bg-amber-500/10 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400",
+  P1: "bg-red-500/10 text-red-700 dark:bg-red-500/15 dark:text-red-400",
+  P2: "bg-amber-500/10 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400",
   P3: "bg-muted text-muted-foreground",
 };
 
@@ -561,13 +566,20 @@ function Footer({ lang }: { lang: Lang }) {
           {tt.footerLicense}
         </p>
         <nav aria-label="Footer" className="flex items-center gap-6">
-          <a href={REPO} target="_blank" rel="noreferrer" className="rounded-md hover:text-foreground">
+          <a
+            href={REPO}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`${tt.footerGithub} ${tt.newTab}`}
+            className="rounded-md hover:text-foreground"
+          >
             {tt.footerGithub}
           </a>
           <a
             href={`${REPO}/blob/main/DOCUMENTATION-STANDARD.md`}
             target="_blank"
             rel="noreferrer"
+            aria-label={`${tt.footerStandard} ${tt.newTab}`}
             className="rounded-md hover:text-foreground"
           >
             {tt.footerStandard}
@@ -576,6 +588,7 @@ function Footer({ lang }: { lang: Lang }) {
             href={`${REPO}/blob/main/CHANGELOG.md`}
             target="_blank"
             rel="noreferrer"
+            aria-label={`${tt.footerChangelog} ${tt.newTab}`}
             className="rounded-md hover:text-foreground"
           >
             {tt.footerChangelog}

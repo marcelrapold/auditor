@@ -8,6 +8,8 @@ export const ui = {
   en: {
     nav: { use: "Use it", audits: "Audits", how: "How it works", standards: "Standards" },
     skip: "Skip to content",
+    langToggle: "Switch to German",
+    newTab: "(opens in a new tab)",
     heroBadge: "audits · MIT",
     heroTitle: "Turn any AI agent into a swarm of specialist auditors",
     heroSub:
@@ -25,7 +27,9 @@ export const ui = {
     agentCmdUsing: "using",
     agentCopy: "Copy command",
     agentCopied: "Copied",
-    agentCopyHint: "Copy it, swap in your repo, paste into your agent.",
+    agentCopiedAnnounce: "Command copied to clipboard",
+    agentCopyFailed: "Copy failed — select the command and press Ctrl/Cmd-C",
+    agentCopyHint: "Copy it, swap in your repo, paste it to your agent.",
     agentCtaSeeAudits: "See the {count} audits",
     agentExplain:
       "It then asks: output language (Deutsch / English), which of the {count} audits (or the full repo), and whether to create issues — then runs them and opens a priority-sorted tracker.",
@@ -94,6 +98,8 @@ export const ui = {
   de: {
     nav: { use: "Nutzen", audits: "Audits", how: "Ablauf", standards: "Standards" },
     skip: "Zum Inhalt springen",
+    langToggle: "Auf Englisch wechseln",
+    newTab: "(öffnet in neuem Tab)",
     heroBadge: "Audits · MIT",
     heroTitle: "Mach aus jedem KI-Agenten einen Schwarm spezialisierter Auditoren",
     heroSub:
@@ -111,7 +117,9 @@ export const ui = {
     agentCmdUsing: "using",
     agentCopy: "Befehl kopieren",
     agentCopied: "Kopiert",
-    agentCopyHint: "Kopieren, dein Repo einsetzen, in deinen Agenten einfügen.",
+    agentCopiedAnnounce: "Befehl in die Zwischenablage kopiert",
+    agentCopyFailed: "Kopieren fehlgeschlagen — Befehl markieren und Strg/Cmd-C drücken",
+    agentCopyHint: "Kopiere, setz dein Repo ein, füg es in deinen Agenten ein.",
     agentCtaSeeAudits: "Alle {count} Audits ansehen",
     agentExplain:
       "Er fragt dann: Ausgabesprache (Deutsch / English), welche der {count} Audits (oder das ganze Repo) und ob Issues erstellt werden dürfen — dann führt er sie aus und öffnet einen nach Priorität sortierten Tracker.",
