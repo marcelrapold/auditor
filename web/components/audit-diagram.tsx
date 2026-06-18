@@ -1,6 +1,5 @@
 import { ChevronRight, Terminal } from "lucide-react";
 import { GitHubMark } from "@/components/icons";
-import { glossify } from "@/lib/glossary";
 import { type Lang, t } from "@/lib/i18n";
 
 /** Pull the audit's focus areas from its (localized) blurb — single source, no
@@ -43,7 +42,7 @@ export function AuditDiagram({ lenses, lang }: { lenses: string[]; lang: Lang })
                 key={l}
                 className="rounded-md border border-border bg-card px-2 py-0.5 font-mono text-[11px] text-muted-foreground"
               >
-                {glossify(l, lang)}
+                {l}
               </span>
             ))}
           </div>
