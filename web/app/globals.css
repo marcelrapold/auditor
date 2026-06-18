@@ -250,3 +250,15 @@
     animation: none;
   }
 }
+
+/* Glossary term tooltip: reveal on the term's OWN hover/focus only. Scoped to
+   the trigger via the adjacent-sibling combinator, so an ancestor Tailwind
+   `group` — e.g. the audit cards — can never pop every tooltip in the card at
+   once (a real bug with `group-hover`). Pure CSS, no JS. */
+.term-tip {
+  opacity: 0;
+}
+.term-trigger:hover + .term-tip,
+.term-trigger:focus + .term-tip {
+  opacity: 1;
+}
