@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   ...baseMetadata,
   alternates: {
     canonical: "/",
-    languages: { en: "/", de: "/de" },
+    languages: { en: "/", de: "/de", "x-default": "/" },
   },
   openGraph: {
     type: "website",

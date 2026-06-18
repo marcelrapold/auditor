@@ -6,8 +6,14 @@ import { cn } from "@/lib/utils";
 
 export function MobileNav({
   items,
+  openLabel,
+  closeLabel,
+  navLabel,
 }: {
   items: { href: string; label: string }[];
+  openLabel: string;
+  closeLabel: string;
+  navLabel: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -31,7 +37,7 @@ export function MobileNav({
       <button
         ref={buttonRef}
         type="button"
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? closeLabel : openLabel}
         aria-expanded={open}
         aria-controls="mobile-nav"
         onClick={() => setOpen((o) => !o)}
@@ -47,7 +53,7 @@ export function MobileNav({
       {open ? (
         <nav
           id="mobile-nav"
-          aria-label="Mobile navigation"
+          aria-label={navLabel}
           className="absolute left-0 right-0 top-full border-b border-border bg-background/95 backdrop-blur-md"
         >
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4">

@@ -195,15 +195,6 @@
       transform: translate3d(7%, 5%, 0) scale(1.12);
     }
   }
-  @keyframes aurora-drift-2 {
-    0%,
-    100% {
-      transform: translate3d(5%, 3%, 0) scale(1.08);
-    }
-    50% {
-      transform: translate3d(-6%, -5%, 0) scale(0.95);
-    }
-  }
   @keyframes badge-pulse {
     0%,
     100% {
@@ -219,16 +210,11 @@
     animation: aurora-drift-1 24s ease-in-out infinite;
     will-change: transform;
   }
-  .animate-aurora-2 {
-    animation: aurora-drift-2 30s ease-in-out infinite;
-    will-change: transform;
-  }
   .animate-badge-pulse {
     animation: badge-pulse 2.6s ease-in-out infinite;
   }
   @media (prefers-reduced-motion: reduce) {
     .animate-aurora-1,
-    .animate-aurora-2,
     .animate-badge-pulse {
       animation: none;
     }

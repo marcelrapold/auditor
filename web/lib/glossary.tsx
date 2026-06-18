@@ -153,8 +153,8 @@ const GLOSSARY: Entry[] = [
     key: "eeat",
     forms: { en: ["E-E-A-T"], de: ["E-E-A-T"] },
     def: {
-      en: "Experience, Expertise, Authoritativeness, Trust — Google's content-quality signals.",
-      de: "Experience, Expertise, Authoritativeness, Trust — Googles Signale für Content-Qualität.",
+      en: "Experience, Expertise, Authoritativeness, Trustworthiness — Google's content-quality signals.",
+      de: "Experience, Expertise, Authoritativeness, Trustworthiness — Googles Signale für Content-Qualität.",
     },
   },
 ];

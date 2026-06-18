@@ -32,15 +32,18 @@ import {
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
+  "@id": `${SITE_URL}#software`,
   name: "auditor",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Any",
   description: DESCRIPTION,
   url: SITE_URL,
+  image: `${SITE_URL}/opengraph-image`,
   author: { "@type": "Person", name: "Marcel Rapold" },
-  offers: { "@type": "Offer", price: 0, priceCurrency: "USD" },
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   license: "https://opensource.org/licenses/MIT",
   codeRepository: REPO,
+  sameAs: [REPO],
 };
 
 function navItems(lang: Lang) {
@@ -98,7 +101,9 @@ function LangToggle({ lang }: { lang: Lang }) {
 }
 
 function Header({ lang }: { lang: Lang }) {
+  const tt = t(lang);
   const home = lang === "de" ? "/de" : "/";
+  const items = navItems(lang);
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
@@ -113,7 +118,7 @@ function Header({ lang }: { lang: Lang }) {
           aria-label="Primary"
           className="hidden items-center gap-7 text-sm text-muted-foreground md:flex"
         >
-          {navItems(lang).map((item) => (
+          {items.map((item) => (
             <a
               key={item.href}
               href={item.href}
@@ -128,7 +133,7 @@ function Header({ lang }: { lang: Lang }) {
             href={REPO}
             target="_blank"
             rel="noreferrer"
-            aria-label="GitHub repository (opens in a new tab)"
+            aria-label={`${tt.ghRepo} ${tt.newTab}`}
             className={cn(
               buttonVariants({ variant: "outline", size: "sm" }),
               "h-10 sm:h-9",
@@ -138,8 +143,17 @@ function Header({ lang }: { lang: Lang }) {
             <span className="hidden sm:inline">GitHub</span>
           </a>
           <LangToggle lang={lang} />
-          <ThemeToggle />
-          <MobileNav items={navItems(lang)} />
+          <ThemeToggle
+            lightLabel={tt.themeLight}
+            darkLabel={tt.themeDark}
+            toggleLabel={tt.themeToggle}
+          />
+          <MobileNav
+            items={items}
+            openLabel={tt.menuOpen}
+            closeLabel={tt.menuClose}
+            navLabel={tt.navMobile}
+          />
         </div>
       </div>
     </header>
@@ -490,21 +504,21 @@ function HowItWorks({ lang }: { lang: Lang }) {
             <div className="wf-comet absolute inset-x-0 h-24 bg-gradient-to-b from-transparent via-primary to-transparent" />
           </div>
 
-          <ol className="space-y-7">
-            {/* Input — one line into any capable agent. */}
-            <li className="relative">
-              <span className="absolute -left-12 top-0 flex size-9 items-center justify-center rounded-full border border-primary/40 bg-card text-primary">
-                <Terminal aria-hidden className="size-4" />
-              </span>
-              <p className="font-mono text-sm">
-                <span aria-hidden className="text-primary">$</span>{" "}
-                <span className="text-foreground">{tt.agentCmdVerb}</span> {tt.agentCmdUsing}{" "}
-                <span className="text-foreground">auditor.rapold.io</span>
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">{tt.howInput}</p>
-            </li>
+          {/* Input — one line into any capable agent (framing, not a numbered step). */}
+          <div className="relative mb-7">
+            <span className="absolute -left-12 top-0 flex size-9 items-center justify-center rounded-full border border-primary/40 bg-card text-primary">
+              <Terminal aria-hidden className="size-4" />
+            </span>
+            <p className="font-mono text-sm">
+              <span aria-hidden className="text-primary">$</span>{" "}
+              <span className="text-foreground">{tt.agentCmdVerb}</span> {tt.agentCmdUsing}{" "}
+              <span className="text-foreground">auditor.rapold.io</span>
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{tt.howInput}</p>
+          </div>
 
-            {/* The six phases. */}
+          {/* The six phases — the ordered list is exactly the six numbered steps. */}
+          <ol className="space-y-7">
             {phases.map((phase) => (
               <li key={phase.n} className="relative">
                 <span className="absolute -left-12 top-0 flex size-9 items-center justify-center rounded-full border border-border bg-card font-mono text-sm font-semibold text-primary">
@@ -536,14 +550,15 @@ function HowItWorks({ lang }: { lang: Lang }) {
               </li>
             ))}
 
-            {/* Output — priority-sorted GitHub issues. */}
-            <li className="relative">
-              <span className="absolute -left-12 top-0 flex size-9 items-center justify-center rounded-full border border-primary/40 bg-card text-primary">
-                <GitHubMark className="size-4" />
-              </span>
-              <p className="text-sm font-medium text-foreground">{tt.howOutput}</p>
-            </li>
           </ol>
+
+          {/* Output — priority-sorted GitHub issues (framing, not a numbered step). */}
+          <div className="relative mt-7">
+            <span className="absolute -left-12 top-0 flex size-9 items-center justify-center rounded-full border border-primary/40 bg-card text-primary">
+              <GitHubMark className="size-4" />
+            </span>
+            <p className="text-sm font-medium text-foreground">{tt.howOutput}</p>
+          </div>
         </div>
       </Reveal>
     </Section>

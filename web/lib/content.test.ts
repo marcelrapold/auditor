@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { AUDITS, AUDIT_COUNT, NAV } from "./content";
+import { AUDITS, AUDIT_COUNT } from "./content";
 import { SITE_URL, TITLE, DESCRIPTION } from "./site";
 
 describe("content", () => {
@@ -16,9 +16,6 @@ describe("content", () => {
     }
   });
 
-  it("nav entries are in-page anchors", () => {
-    for (const n of NAV) expect(n.href.startsWith("#")).toBe(true);
-  });
 });
 
 describe("site", () => {

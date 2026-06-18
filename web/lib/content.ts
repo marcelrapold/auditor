@@ -52,13 +52,6 @@ export const BACKLOG_SAMPLE = [
   { n: 122, sev: "P3" },
 ] as const;
 
-export const NAV = [
-  { href: "#use", label: "Use it" },
-  { href: "#audits", label: "Audits" },
-  { href: "#how", label: "How it works" },
-  { href: "#standards", label: "Standards" },
-];
-
 export type Audit = {
   name: string;
   file: string;

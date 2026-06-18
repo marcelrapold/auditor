@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Master-Prompts, die jeden KI-Coding-Agenten in einen Schwarm spezialisierter Auditoren verwandeln — belegbasiert, adversariell verifiziert, als deutsche oder englische GitHub-Issues.",
   alternates: {
     canonical: "/de",
-    languages: { en: "/", de: "/de" },
+    languages: { en: "/", de: "/de", "x-default": "/" },
   },
   openGraph: {
     type: "website",

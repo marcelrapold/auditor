@@ -10,6 +10,13 @@ export const ui = {
     skip: "Skip to content",
     langToggle: "Switch to German",
     newTab: "(opens in a new tab)",
+    ghRepo: "GitHub repository",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+    navMobile: "Mobile navigation",
+    themeLight: "Switch to light theme",
+    themeDark: "Switch to dark theme",
+    themeToggle: "Toggle color theme",
     heroBadge: "audits · MIT",
     heroTitle: "Turn any AI agent into a swarm of specialist auditors",
     heroSub:
@@ -105,12 +112,19 @@ export const ui = {
     skip: "Zum Inhalt springen",
     langToggle: "Auf Englisch wechseln",
     newTab: "(öffnet in neuem Tab)",
+    ghRepo: "GitHub-Repository",
+    menuOpen: "Menü öffnen",
+    menuClose: "Menü schließen",
+    navMobile: "Mobile Navigation",
+    themeLight: "Zu hellem Design wechseln",
+    themeDark: "Zu dunklem Design wechseln",
+    themeToggle: "Farbdesign umschalten",
     heroBadge: "Audits · MIT",
     heroTitle: "Mach aus jedem KI-Agenten einen Schwarm spezialisierter Auditoren",
     heroSub:
       "Kopiere einen Master-Prompt in deinen KI-Coding-Agenten. Er lässt viele Spezialisten parallel laufen und jeden Befund von unabhängigen Skeptikern auf die Probe stellen — nur was standhält, landet als GitHub-Issue in einem nach Priorität sortierten Backlog.",
     heroContrast:
-      "Kein weiterer „audit mein Code“-Prompt — diese zwingen deinen Agenten, jeden Befund zu belegen, bevor er ihn einreicht.",
+      "Kein weiterer „audit my code“-Prompt — diese zwingen deinen Agenten, jeden Befund zu belegen, bevor er ihn einreicht.",
     heroCtaCopy: "Befehl kopieren",
     heroCtaProof: "Echten Lauf ansehen",
     heroCtaHint: "Kopiert eine Vorlage — ersetze die Repo-URL, bevor du sie ausführst.",
@@ -118,7 +132,7 @@ export const ui = {
     agentEyebrow: "Loslegen",
     agentTitle: "Richte deinen KI-Agenten auf auditor.rapold.io",
     agentLead:
-      "Keine Installation — funktioniert mit jedem Agenten, der eine URL abrufen und Tools ausführen kann (läuft mit Claude Code). Sag ihm, er soll ein Repo „using auditor.rapold.io“ auditieren: er holt den Audit-Prompt — einen einzigen Einstiegspunkt, der Sprache und Umfang erfragt — und legt dann die Issues an.",
+      "Keine Installation — funktioniert mit jedem Agenten, der eine URL abrufen und Tools ausführen kann (läuft mit Claude Code). Sag ihm, er soll ein Repo mit auditor.rapold.io auditieren: er holt den Audit-Prompt — einen einzigen Einstiegspunkt, der Sprache und Umfang erfragt — und legt dann die Issues an.",
     agentCmdVerb: "Audit",
     agentCmdUsing: "using",
     agentCopy: "Befehl kopieren",
@@ -135,7 +149,7 @@ export const ui = {
     trust: [
       {
         q: "Halluziniert es Belege?",
-        a: "Jede file:line wird in der adversariellen Verifikation (Phase 3) gegen die echte Datei gegengeprüft; nicht verifizierbare Aussagen werden verworfen.",
+        a: "Jede file:line wird in der adversariellen Verifikation (Phase 3) anhand der echten Datei nachgeprüft; nicht verifizierbare Aussagen werden verworfen.",
       },
       {
         q: "Verlässt mein Code meine Maschine?",
@@ -171,7 +185,7 @@ export const ui = {
     audEyebrow: "Die Bibliothek",
     audTitle: "Zwölf stack-agnostische Audits, eine gemeinsame Methodik",
     audLead:
-      "Jedes ist ein eigenständiger Master-Prompt: eine mehrphasige Spezifikation, keine einmalige „Review mein Code“-Frage. Mehrere gegen dasselbe Repo laufen lassen — ihre Befunde fließen ohne Duplikate in einen einzigen, prioritätssortierten Tracker, weil jedes Audit denselben Issue-Kontrakt liefert.",
+      "Jedes ist ein eigenständiger Master-Prompt: eine mehrphasige Spezifikation, keine einmalige „review my code“-Frage. Mehrere gegen dasselbe Repo laufen lassen — ihre Befunde fließen ohne Duplikate in einen einzigen, prioritätssortierten Tracker, weil jedes Audit denselben Issue-Kontrakt liefert.",
     howEyebrow: "Die Methode",
     howTitle: "Sechs Phasen, jedes Mal",
     howLead:
