@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { ArrowDown, ArrowRight, CircleDot, Search, ShieldCheck, Terminal } from "lucide-react";
 import { CommandBlock, CopyCommandButton } from "@/components/copy-command";
 import { GitHubMark } from "@/components/icons";
-import { MobileNav } from "@/components/mobile-nav";
 import { Reveal } from "@/components/reveal";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { SiteFooter, SiteHeader, homeNav } from "@/components/site-chrome";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -46,16 +44,6 @@ const JSON_LD = {
   sameAs: [REPO],
 };
 
-function navItems(lang: Lang) {
-  const tt = t(lang);
-  return [
-    { href: "#use", label: tt.nav.use },
-    { href: "#audits", label: tt.nav.audits },
-    { href: "#how", label: tt.nav.how },
-    { href: "#standards", label: tt.nav.standards },
-  ];
-}
-
 export function Landing({ lang }: { lang: Lang }) {
   const tt = t(lang);
   return (
@@ -66,7 +54,7 @@ export function Landing({ lang }: { lang: Lang }) {
       >
         {tt.skip}
       </a>
-      <Header lang={lang} />
+      <SiteHeader lang={lang} nav={homeNav(lang)} langHref={lang === "de" ? "/" : "/de"} />
       <main id="main">
         <Hero lang={lang} />
         <AgentEntry lang={lang} />
@@ -77,86 +65,12 @@ export function Landing({ lang }: { lang: Lang }) {
         <Standards lang={lang} />
         <CallToAction lang={lang} />
       </main>
-      <Footer lang={lang} />
+      <SiteFooter lang={lang} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
       />
     </div>
-  );
-}
-
-function LangToggle({ lang }: { lang: Lang }) {
-  const tt = t(lang);
-  const other = lang === "en" ? { href: "/de", label: "DE" } : { href: "/", label: "EN" };
-  return (
-    <Link
-      href={other.href}
-      aria-label={tt.langToggle}
-      className="inline-flex h-10 items-center justify-center rounded-md border border-border bg-background/60 px-3 text-xs font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:h-9"
-    >
-      {other.label}
-    </Link>
-  );
-}
-
-function Header({ lang }: { lang: Lang }) {
-  const tt = t(lang);
-  const home = lang === "de" ? "/de" : "/";
-  const items = navItems(lang);
-  return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <Link
-          href={home}
-          className="flex items-center gap-2 rounded-md font-mono text-sm font-semibold tracking-tight"
-        >
-          <ShieldCheck aria-hidden className="size-5 text-primary" />
-          auditor
-        </Link>
-        <nav
-          aria-label="Primary"
-          className="hidden items-center gap-7 text-sm text-muted-foreground md:flex"
-        >
-          {items.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="rounded-md transition-colors hover:text-foreground"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <div className="flex items-center gap-2">
-          <a
-            href={REPO}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`${tt.ghRepo} ${tt.newTab}`}
-            className={cn(
-              buttonVariants({ variant: "outline", size: "sm" }),
-              "h-10 sm:h-9",
-            )}
-          >
-            <GitHubMark className="size-4" />
-            <span className="hidden sm:inline">GitHub</span>
-          </a>
-          <LangToggle lang={lang} />
-          <ThemeToggle
-            lightLabel={tt.themeLight}
-            darkLabel={tt.themeDark}
-            toggleLabel={tt.themeToggle}
-          />
-          <MobileNav
-            items={items}
-            openLabel={tt.menuOpen}
-            closeLabel={tt.menuClose}
-            navLabel={tt.navMobile}
-          />
-        </div>
-      </div>
-    </header>
   );
 }
 
@@ -465,6 +379,7 @@ function Proof({ lang }: { lang: Lang }) {
 
 function Audits({ lang }: { lang: Lang }) {
   const tt = t(lang);
+  const base = lang === "de" ? "/de/audits" : "/audits";
   return (
     <Section
       id="audits"
@@ -476,9 +391,7 @@ function Audits({ lang }: { lang: Lang }) {
         {auditsFor(lang).map((a, i) => (
           <Reveal key={a.name} delay={(i % 3) * 0.05}>
             <a
-              href={`${PROMPTS}/${a.file}`}
-              target="_blank"
-              rel="noreferrer"
+              href={`${base}/${a.name}`}
               className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/50 hover:bg-accent/40 focus-visible:border-primary/50 focus-visible:bg-accent/40"
             >
               <a.icon aria-hidden className="size-5 text-primary" />
@@ -647,45 +560,3 @@ function CallToAction({ lang }: { lang: Lang }) {
   );
 }
 
-function Footer({ lang }: { lang: Lang }) {
-  const tt = t(lang);
-  return (
-    <footer className="border-t border-border/60 py-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 text-sm text-muted-foreground sm:flex-row">
-        <p className="flex items-center gap-2 font-mono">
-          <ShieldCheck aria-hidden className="size-4 text-primary" />
-          {tt.footerLicense}
-        </p>
-        <nav aria-label="Footer" className="flex items-center gap-6">
-          <a
-            href={REPO}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`${tt.footerGithub} ${tt.newTab}`}
-            className="rounded-md hover:text-foreground"
-          >
-            {tt.footerGithub}
-          </a>
-          <a
-            href={`${REPO}/blob/main/DOCUMENTATION-STANDARD.md`}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`${tt.footerStandard} ${tt.newTab}`}
-            className="rounded-md hover:text-foreground"
-          >
-            {tt.footerStandard}
-          </a>
-          <a
-            href={`${REPO}/blob/main/CHANGELOG.md`}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`${tt.footerChangelog} ${tt.newTab}`}
-            className="rounded-md hover:text-foreground"
-          >
-            {tt.footerChangelog}
-          </a>
-        </nav>
-      </div>
-    </footer>
-  );
-}
