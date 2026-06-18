@@ -65,7 +65,7 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
               {audit.name}
             </h1>
             <p className="mt-4 max-w-prose text-pretty text-lg text-muted-foreground">
-              {detail.tagline}
+              {glossify(detail.tagline, lang)}
             </p>
             <p className="mt-6 font-mono text-xs text-muted-foreground">
               {tt.apMaps}: {glossify(audit.mapsTo, lang)}
