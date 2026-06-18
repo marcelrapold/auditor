@@ -244,53 +244,23 @@
   }
 }
 
-/* Hero CI-pipeline particles (HeroWorkflow): flowing edge pulses, packets that
-   travel the pipeline, and gently pulsing nodes. Kept top-level (not @layer) so
-   the keyframes survive Turbopack dev too. Frozen under reduced-motion. */
-.wf-flow {
-  animation: wf-flow 1.5s linear infinite;
+/* Process pipeline (HowItWorks): a single pulse travels down the spine to show
+   data flowing through the phases. Top-level so it survives Turbopack dev;
+   frozen under reduced-motion. */
+.wf-comet {
+  top: -6rem;
+  animation: wf-comet 5s linear infinite;
 }
-@keyframes wf-flow {
+@keyframes wf-comet {
+  from {
+    top: -6rem;
+  }
   to {
-    stroke-dashoffset: -16;
-  }
-}
-.wf-packet {
-  offset-rotate: 0deg;
-  animation: wf-packet 4.2s linear infinite;
-}
-@keyframes wf-packet {
-  0% {
-    offset-distance: 0%;
-    opacity: 0;
-  }
-  12% {
-    opacity: 1;
-  }
-  85% {
-    opacity: 1;
-  }
-  100% {
-    offset-distance: 100%;
-    opacity: 0;
-  }
-}
-.wf-node {
-  animation: wf-node 3s ease-in-out infinite;
-}
-@keyframes wf-node {
-  0%,
-  100% {
-    opacity: 0.62;
-  }
-  50% {
-    opacity: 0.28;
+    top: 100%;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wf-flow,
-  .wf-packet,
-  .wf-node {
+  .wf-comet {
     animation: none;
   }
 }

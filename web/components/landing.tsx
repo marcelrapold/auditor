@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { ArrowDown, ArrowRight, CircleDot, Search, ShieldCheck } from "lucide-react";
+import { ArrowDown, ArrowRight, CircleDot, Search, ShieldCheck, Terminal } from "lucide-react";
 import { CommandBlock, CopyCommandButton } from "@/components/copy-command";
-import { HeroWorkflow } from "@/components/hero-workflow";
 import { GitHubMark } from "@/components/icons";
 import { MobileNav } from "@/components/mobile-nav";
 import { Reveal } from "@/components/reveal";
@@ -157,7 +156,6 @@ function Hero({ lang }: { lang: Lang }) {
       >
         <div className="size-full rounded-full bg-primary/10 blur-3xl animate-aurora-1" />
       </div>
-      <HeroWorkflow />
       <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-12 text-center md:py-32">
         <Reveal immediate>
           <Badge className="mx-auto">
@@ -477,21 +475,76 @@ function Audits({ lang }: { lang: Lang }) {
 
 function HowItWorks({ lang }: { lang: Lang }) {
   const tt = t(lang);
+  const phases = phasesFor(lang);
+  const specialists = ["security", "accessibility", "performance", "data"];
   return (
     <Section id="how" eyebrow={tt.howEyebrow} title={tt.howTitle} lead={tt.howLead}>
-      <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {phasesFor(lang).map((phase, i) => (
-          <Reveal key={phase.n} delay={(i % 3) * 0.05}>
-            <li className="flex h-full gap-4 rounded-xl border border-border bg-card p-6">
-              <span className="font-mono text-2xl font-semibold text-primary/60">{phase.n}</span>
-              <div>
+      <Reveal>
+        <div className="relative mx-auto max-w-2xl pl-12">
+          {/* The spine, with a single pulse flowing down it (data through the pipeline). */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-2 left-[18px] top-2 w-px overflow-hidden bg-border"
+          >
+            <div className="wf-comet absolute inset-x-0 h-24 bg-gradient-to-b from-transparent via-primary to-transparent" />
+          </div>
+
+          <ol className="space-y-7">
+            {/* Input — one line into any capable agent. */}
+            <li className="relative">
+              <span className="absolute -left-12 top-0 flex size-9 items-center justify-center rounded-full border border-primary/40 bg-card text-primary">
+                <Terminal aria-hidden className="size-4" />
+              </span>
+              <p className="font-mono text-sm">
+                <span aria-hidden className="text-primary">$</span>{" "}
+                <span className="text-foreground">{tt.agentCmdVerb}</span> {tt.agentCmdUsing}{" "}
+                <span className="text-foreground">auditor.rapold.io</span>
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{tt.howInput}</p>
+            </li>
+
+            {/* The six phases. */}
+            {phases.map((phase) => (
+              <li key={phase.n} className="relative">
+                <span className="absolute -left-12 top-0 flex size-9 items-center justify-center rounded-full border border-border bg-card font-mono text-sm font-semibold text-primary">
+                  {phase.n}
+                </span>
                 <h3 className="font-medium">{phase.title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{phase.body}</p>
-              </div>
+                {phase.n === "1" ? (
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                    {specialists.map((s) => (
+                      <span
+                        key={s}
+                        className="rounded-md border border-border bg-card px-2 py-0.5 font-mono text-[11px] text-muted-foreground"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                    <span className="font-mono text-[11px] text-muted-foreground">
+                      … · {tt.howParallel}
+                    </span>
+                  </div>
+                ) : null}
+                {phase.n === "3" ? (
+                  <div className="mt-3 inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-primary/5 px-2 py-1 font-mono text-[11px] font-medium text-primary">
+                    <ShieldCheck aria-hidden className="size-3.5" />
+                    {tt.howGate}
+                  </div>
+                ) : null}
+              </li>
+            ))}
+
+            {/* Output — priority-sorted GitHub issues. */}
+            <li className="relative">
+              <span className="absolute -left-12 top-0 flex size-9 items-center justify-center rounded-full border border-primary/40 bg-card text-primary">
+                <GitHubMark className="size-4" />
+              </span>
+              <p className="text-sm font-medium text-foreground">{tt.howOutput}</p>
             </li>
-          </Reveal>
-        ))}
-      </ol>
+          </ol>
+        </div>
+      </Reveal>
     </Section>
   );
 }

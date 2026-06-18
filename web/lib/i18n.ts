@@ -81,6 +81,10 @@ export const ui = {
     howTitle: "Six phases, every time",
     howLead:
       "Recon, a parallel specialist swarm, then adversarial verification before anything reaches the report.",
+    howInput: "You type — one line, any capable agent.",
+    howOutput: "You get — priority-sorted GitHub issues.",
+    howParallel: "in parallel",
+    howGate: "survives ≥2 of 3",
     stdEyebrow: "The yardsticks",
     stdTitle: "Two yardsticks. Every report measured against them.",
     stdLead:
@@ -172,6 +176,10 @@ export const ui = {
     howTitle: "Sechs Phasen, jedes Mal",
     howLead:
       "Recon, ein paralleler Spezialisten-Schwarm, dann adversarielle Verifikation, bevor irgendetwas in den Bericht kommt.",
+    howInput: "Du tippst — eine Zeile, jeder fähige Agent.",
+    howOutput: "Du bekommst — nach Priorität sortierte GitHub-Issues.",
+    howParallel: "parallel",
+    howGate: "übersteht ≥2 von 3",
     stdEyebrow: "Die Maßstäbe",
     stdTitle: "Zwei Maßstäbe. Jeder Bericht daran gemessen.",
     stdLead:
