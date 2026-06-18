@@ -12,6 +12,7 @@ import {
   PenLine,
   Plug,
   Scale,
+  Scissors,
   ShieldCheck,
 } from "lucide-react";
 
@@ -156,6 +157,14 @@ export const AUDITS: Audit[] = [
       "Content & messaging: thesis challenge, audience fit, evidence & originality, structure, voice, concrete rewrites.",
     mapsTo: "E-E-A-T · BLUF · rhetoric",
     icon: PenLine,
+  },
+  {
+    name: "lean",
+    file: "lean-audit-master-prompt.md",
+    blurb:
+      "Bloat, redundancy & dependency transparency: dead code, unused/phantom deps, duplication, AI slop — a safe strip-down that never over-deletes.",
+    mapsTo: "Google Eng · OWASP · YAGNI",
+    icon: Scissors,
   },
 ];
 

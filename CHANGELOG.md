@@ -7,6 +7,23 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- **`lean` audit** — the 13th template: a repo-leanness / anti-AI-slop / dependency-transparency
+  audit that challenges dead code, redundancy, unused/phantom dependencies, and bloat, and proposes
+  a safe strip-down **gated against over-deletion** (a Phase-0 Protected/Load-Bearing Manifest,
+  Chesterton's Fence, a four-class removal register, and a "Resurrector"/"Fence-Keeper" adversarial
+  pass). Maps to Software Engineering at Google (deprecation/dependency management), OWASP Component
+  Analysis, SLSA, and YAGNI. Wired into the orchestrator menu + index, `llms.txt`, the README table/
+  badge, ARCHITECTURE, the landing page, and the derived audit count (now 13).
+
+### Changed
+- Landing-page overhaul (from a dogfooded `content` audit and follow-up non-design reviews): a Proof
+  section with the real #97 self-audit backlog exhibit, scorecard, and a filed finding; copy-to-
+  clipboard activation CTAs; grounded claims and a Trust/FAQ block; a visual "input → six-phase
+  pipeline → GitHub issues" process diagram in "How it works"; inline jargon tooltips; plus
+  accessibility, performance (EN `og:image`, hreflang), SEO and German-copy fixes. All 23
+  content-audit findings (#100–#122) closed.
+
 ## [0.7.0] - 2026-06-17
 
 ### Added

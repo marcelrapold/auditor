@@ -2,18 +2,18 @@
 
 Master prompts that turn any AI coding agent into a swarm of specialist auditors — for security,
 engineering, frontend, API, performance, data, infrastructure, AI/LLM, compliance, accessibility,
-documentation, and content.
+documentation, content, and lean.
 
 [![Release](https://img.shields.io/github/v/release/marcelrapold/auditor)](https://github.com/marcelrapold/auditor/releases)
 [![License](https://img.shields.io/github/license/marcelrapold/auditor)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/marcelrapold/auditor)](https://github.com/marcelrapold/auditor/commits)
-[![Audits](https://img.shields.io/badge/audits-12-blue)](audit-prompts)
+[![Audits](https://img.shields.io/badge/audits-13-blue)](audit-prompts)
 [![Docs standard](https://img.shields.io/badge/docs%20standard-Google--grade-success)](DOCUMENTATION-STANDARD.md)
 [![Issue output](https://img.shields.io/badge/issues-DE%2FEN%20%2B%20tracker-informational)](ISSUE-OUTPUT-STANDARD.md)
 [![Website](https://img.shields.io/badge/website-auditor.rapold.io-10b981)](https://auditor.rapold.io)
 
 > [!NOTE]
-> **Management summary.** `auditor` is a library of 12 reusable "master prompt" audit templates
+> **Management summary.** `auditor` is a library of 13 reusable "master prompt" audit templates
 > plus the standards that govern their output. You point one at a repository, app, website, API,
 > datastore, or infrastructure; it runs a parallel swarm of specialist agents, adversarially
 > verifies every finding, scores the result, and files **GitHub issues** (German or English) — led
@@ -34,7 +34,7 @@ producing a scored report and GitHub issues (German or English).*
 flowchart LR
     Standards["Standards<br/>(documentation,<br/>issue-output)"] --> Prompt
     Target["Target repo / app / API"] --> Agent
-    Prompt["Audit template<br/>(1 of 12)"] --> Agent["AI agent swarm<br/>(parallel + adversarial)"]
+    Prompt["Audit template<br/>(1 of 13)"] --> Agent["AI agent swarm<br/>(parallel + adversarial)"]
     Agent --> Report["Report +<br/>scorecard"]
     Agent --> Issues["GitHub issues<br/>(tracker + findings, DE/EN)"]
 ```
@@ -104,6 +104,7 @@ compose cleanly when you run several against the same target.
 | [`accessibility`](audit-prompts/accessibility-audit-master-prompt.md) | Deep a11y: semantics, keyboard, focus, screen reader, contrast, forms, zoom, motor, motion, cognitive | WCAG 2.2 AA/AAA, EAA 2025, EN 301 549, ADA/508 | WCAG conformance table + roadmap |
 | [`documentation`](audit-prompts/documentation-audit-master-prompt.md) | Docs quality vs the standard: head-matter, onboarding, doc–code drift, writing, Diátaxis, repo-health | DOCUMENTATION-STANDARD.md, Diátaxis, Google style | Rubric scorecard + German issues |
 | [`content`](audit-prompts/content-audit-master-prompt.md) | Content & messaging: thesis challenge, audience fit, evidence & originality, structure, voice, line-level rewrites | E-E-A-T, BLUF, awareness stages, rhetoric | Scorecard + before/after rewrites |
+| [`lean`](audit-prompts/lean-audit-master-prompt.md) | Repo leanness: dead code, unused/phantom deps, duplication, AI slop, dependency transparency, safe strip-down — gated against over-deletion | SWE@Google (deprecation/deps), OWASP Component Analysis, SLSA, YAGNI, Chesterton's Fence | Removal register (4-class) + scorecard |
 
 > [!NOTE]
 > **Acronyms.** DX = developer experience · CRO = conversion-rate optimization · IA = information

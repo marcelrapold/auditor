@@ -39,6 +39,7 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/audit-prompts/full
 - [accessibility](https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/audit-prompts/accessibility-audit-master-prompt.md): deep accessibility (WCAG 2.2, EAA)
 - [documentation](https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/audit-prompts/documentation-audit-master-prompt.md): documentation quality vs the standard
 - [content](https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/audit-prompts/content-audit-master-prompt.md): content & messaging — thesis challenge, audience fit, concrete rewrites
+- [lean](https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/audit-prompts/lean-audit-master-prompt.md): lean / bloat & dependency transparency — dead code, redundancy, AI slop, safe strip-down
 
 ## Standards
 

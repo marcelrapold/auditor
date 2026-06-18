@@ -1,7 +1,3 @@
-# SHA-256 checksums for auditor prompts and standards.
-# Verify a fetched file before executing it; regenerate with:
-#   sha256sum audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md
-
 c58492dd01b64460c5c9de4d2eb07e53590a688a97edf6ff7161c48542e9f652 *audit-prompts/accessibility-audit-master-prompt.md
 b3377cca11bf9f30bae20021e099b6f903fa6a1d2db341394ba5341ee8cd430e *audit-prompts/ai-llm-audit-master-prompt.md
 e7231652a9b68dd7c2f2a300eeaa9967f049206eb99afb2d0203f90ae4f7dab0 *audit-prompts/api-audit-master-prompt.md
@@ -10,8 +6,9 @@ cbb755bfbcbf6d10b19bf1e4d4e95aefbb6b7d417d0549f5ef241dd3623eb88c *audit-prompts/
 1d57a6b77e041844191e924d1c0c2e97db0437ce409fa3b1d5f661b9fe129d85 *audit-prompts/data-audit-master-prompt.md
 afaad3168640d047af7082f93721ff6169f8c67ee0937f2a7a785fad21a0a798 *audit-prompts/documentation-audit-master-prompt.md
 1c163b9bb26d4a8d56a60d4a3155f8719e735557c0830735b15709683de18380 *audit-prompts/frontend-audit-master-prompt.md
-fba0cafbb356b2559b40ff891ce77106a019e6a231603c53dfce78451bf83b83 *audit-prompts/full-audit-master-prompt.md
+34d463516a14a0557045644d9b52e6e3bac47a7d2230c92c39a153db574001fd *audit-prompts/full-audit-master-prompt.md
 26ae6a7f36ee3cd7e44539238ab833026a585b38884c3334ab785c19e35ce440 *audit-prompts/infrastructure-audit-master-prompt.md
+9322253707945af22ebb32104bb4657dff584869a23798091985f0226e336e58 *audit-prompts/lean-audit-master-prompt.md
 eade468bffad5ee4143e0461502ccc8c607846fb4861c6b672b2a0af52031d4f *audit-prompts/performance-audit-master-prompt.md
 b98bdf8671d2640b8582f0bec2a7e35f07ac1a67ec457496d239b0e9e8174ae4 *audit-prompts/repo-audit-master-prompt.md
 435e1661ad34a4398d41715763c243cd4c76d9efb4d01b933f05768dca4ccc73 *audit-prompts/security-audit-master-prompt.md

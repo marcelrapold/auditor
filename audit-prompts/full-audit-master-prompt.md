@@ -42,6 +42,7 @@ Ask these questions and wait for answers. Offer the options; accept free-form to
 | `accessibility` | Deep accessibility (WCAG) | a web/mobile UI held to a11y standards |
 | `documentation` | Documentation quality | any repo with docs / a README |
 | `content` | Content & messaging | any prose: marketing, blog, essays, posts, product copy |
+| `lean` | Lean / bloat & dependency transparency | any repository — to challenge dead code, redundancy, dependency bloat, and AI slop |
 
 `full repo` = run **Phase 0 reconnaissance** (below), then every audit whose "run it when"
 condition the target meets. Declare audits marked **not applicable** explicitly; never skip silently.
@@ -130,7 +131,7 @@ resolve. Detect existing audit issues by label and update rather than duplicate.
 
 Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/`
 
-- Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content}-audit-master-prompt.md`
+- Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content,lean}-audit-master-prompt.md`
 - Standards: `ISSUE-OUTPUT-STANDARD.md`, `DOCUMENTATION-STANDARD.md` (+ `.en.md`)
 - This orchestrator: `audit-prompts/full-audit-master-prompt.md`
 - Human overview + language switcher: `https://auditor.rapold.io`

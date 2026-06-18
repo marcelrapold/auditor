@@ -81,7 +81,7 @@ export const ui = {
     proofAfter: "After",
     proofCta: "See the full run (#97)",
     audEyebrow: "The library",
-    audTitle: "Twelve stack-agnostic audits, one shared methodology",
+    audTitle: "Thirteen stack-agnostic audits, one shared methodology",
     audLead:
       'Each is a self-contained master prompt: a multi-phase spec, not a one-shot "review my code" question. Run several against the same repo and their findings merge into one priority-sorted tracker — no duplicates — because every audit emits the same issue contract.',
     howEyebrow: "The method",
@@ -183,7 +183,7 @@ export const ui = {
     proofAfter: "Nachher",
     proofCta: "Ganzen Lauf ansehen (#97)",
     audEyebrow: "Die Bibliothek",
-    audTitle: "Zwölf stack-agnostische Audits, eine gemeinsame Methodik",
+    audTitle: "Dreizehn stack-agnostische Audits, eine gemeinsame Methodik",
     audLead:
       "Jedes ist ein eigenständiger Master-Prompt: eine mehrphasige Spezifikation, keine einmalige „review my code“-Frage. Mehrere gegen dasselbe Repo laufen lassen — ihre Befunde fließen ohne Duplikate in einen einzigen, prioritätssortierten Tracker, weil jedes Audit denselben Issue-Kontrakt liefert.",
     howEyebrow: "Die Methode",
@@ -225,6 +225,7 @@ const auditBlurbDe: Record<string, string> = {
   accessibility: "Tiefes A11y: Semantik, Tastatur, Fokus, Screenreader, Kontrast, Formulare, Zoom, Motorik, Motion, Kognition.",
   documentation: "Doku-Qualität vs. Standard: Repo-Kopf, Onboarding, Doc-Code-Drift, Schreibstil, Diátaxis, Repo-Health.",
   content: "Inhalt & Botschaft: These challengen, Zielgruppen-Fit, Belege & Originalität, Struktur, Stimme, konkrete Umformulierungen.",
+  lean: "Schlankheit: toter Code, ungenutzte/Phantom-Deps, Duplikation, AI-Slop, Dependency-Transparenz — sicherer Strip-down ohne Über-Löschen.",
 };
 
 const principleDe: { title: string; body: string }[] = [
