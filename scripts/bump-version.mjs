@@ -37,6 +37,24 @@ for (const rel of FILES) {
   console.log(`${rel}: ${n} pin(s) updated`);
 }
 
+// The landing-page badge surfaces the release tag from a single constant.
+{
+  const rel = "web/lib/content.ts";
+  const p = join(ROOT, rel);
+  const before = readFileSync(p, "utf8");
+  let n = 0;
+  const after = before.replace(
+    /(export const VERSION = ")v\d+\.\d+\.\d+(")/,
+    (_m, a, b) => {
+      n++;
+      return `${a}${version}${b}`;
+    },
+  );
+  if (n) writeFileSync(p, after);
+  total += n;
+  console.log(`${rel}: ${n} pin(s) updated`);
+}
+
 console.log(`\n${total} pin(s) set to ${version}.`);
 console.log("Next: regenerate checksums, then commit and tag (see RELEASING.md):");
 console.log(

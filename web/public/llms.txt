@@ -43,7 +43,7 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/audit-prompts/full
 ## Standards
 
 - [ISSUE-OUTPUT-STANDARD](https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/ISSUE-OUTPUT-STANDARD.md): the mandatory GitHub-issue output contract (tracking issue + per-finding issues)
-- [DOCUMENTATION-STANDARD](https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/DOCUMENTATION-STANDARD.md): the Google-grade documentation standard the `documentation` audit measures against
+- [DOCUMENTATION-STANDARD](https://raw.githubusercontent.com/marcelrapold/auditor/v0.7.0/DOCUMENTATION-STANDARD.md): the documentation standard (five repo profiles + a 0–100 rubric) the `documentation` audit measures against
 
 ## Notes
 

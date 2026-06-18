@@ -153,7 +153,7 @@ access to the target repository for the issue phase.
 
 1. **Open your AI coding agent** in the target's working directory, or give it a GitHub URL.
 2. **Paste the chosen master prompt** in full (open the file on GitHub and use "Copy raw file"),
-   then fill in the small config block at its top — every prompt starts with one:
+   then fill in the config block at its top — every prompt starts with one:
 
    ```text
    TARGET:       <local repo path or GitHub URL>

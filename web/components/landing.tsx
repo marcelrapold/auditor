@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck } from "lucide-react";
+import { CommandBlock, CopyCommandButton } from "@/components/copy-command";
 import { GitHubMark } from "@/components/icons";
 import { MobileNav } from "@/components/mobile-nav";
 import { Reveal } from "@/components/reveal";
@@ -7,7 +8,15 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AUDIT_COUNT, PROMPTS, REPO } from "@/lib/content";
+import {
+  AUDIT_COMMAND,
+  AUDIT_COUNT,
+  PROMPTS,
+  REPO,
+  SAMPLE_FINDING,
+  SCORECARD,
+  VERSION,
+} from "@/lib/content";
 import { DESCRIPTION, SITE_URL } from "@/lib/site";
 import {
   type Lang,
@@ -57,6 +66,7 @@ export function Landing({ lang }: { lang: Lang }) {
         <Hero lang={lang} />
         <AgentEntry lang={lang} />
         <Principles lang={lang} />
+        <Proof lang={lang} />
         <Audits lang={lang} />
         <HowItWorks lang={lang} />
         <Standards lang={lang} />
@@ -143,7 +153,7 @@ function Hero({ lang }: { lang: Lang }) {
         <Reveal immediate>
           <Badge className="mx-auto">
             <span className="size-1.5 rounded-full bg-primary" />
-            {AUDIT_COUNT} {tt.heroBadge}
+            {AUDIT_COUNT} {tt.heroBadge} · {VERSION}
           </Badge>
         </Reveal>
         <Reveal immediate>
@@ -156,24 +166,25 @@ function Hero({ lang }: { lang: Lang }) {
             {tt.heroSub}
           </p>
         </Reveal>
-        <Reveal delay={0.15}>
+        <Reveal delay={0.14}>
+          <p className="mx-auto mt-5 max-w-prose text-pretty text-base font-medium text-foreground/90">
+            {tt.heroContrast}
+          </p>
+        </Reveal>
+        <Reveal delay={0.18}>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a href={REPO} target="_blank" rel="noreferrer" className={cn(buttonVariants({ size: "lg" }))}>
-              <GitHubMark className="size-4" />
-              {tt.heroCtaGithub}
-            </a>
-            <a
-              href={`${REPO}/blob/main/DOCUMENTATION-STANDARD.md`}
-              target="_blank"
-              rel="noreferrer"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
-            >
-              {tt.heroCtaStandard}
+            <CopyCommandButton
+              command={AUDIT_COMMAND}
+              label={tt.heroCtaCopy}
+              copiedLabel={tt.agentCopied}
+            />
+            <a href="#proof" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
+              {tt.heroCtaProof}
               <ArrowRight aria-hidden className="size-4" />
             </a>
           </div>
         </Reveal>
-        <Reveal delay={0.2}>
+        <Reveal delay={0.22}>
           <p className="mt-8 font-mono text-xs uppercase tracking-widest text-muted-foreground">
             {tt.heroMeta}
           </p>
@@ -219,21 +230,41 @@ function AgentEntry({ lang }: { lang: Lang }) {
   return (
     <Section id="use" eyebrow={tt.agentEyebrow} title={tt.agentTitle} lead={tt.agentLead}>
       <div className="rounded-xl border border-border bg-card p-6">
-        <p className="font-mono text-sm text-muted-foreground">
-          <span className="text-primary">$</span> {tt.agentCmdVerb}{" "}
-          <span className="text-foreground">github.com/your/repo</span> {tt.agentCmdUsing}{" "}
-          <span className="text-foreground">auditor.rapold.io</span>
-        </p>
-        <p className="mt-4 text-sm text-muted-foreground">
+        <CommandBlock
+          command={AUDIT_COMMAND}
+          verb={tt.agentCmdVerb}
+          using={tt.agentCmdUsing}
+          copyLabel={tt.agentCopy}
+          copiedLabel={tt.agentCopied}
+          hint={tt.agentCopyHint}
+        />
+        <p className="mt-4 border-t border-border/60 pt-4 text-sm text-muted-foreground">
           {tt.agentExplain.replace("{count}", String(AUDIT_COUNT))}
         </p>
-        <p className="mt-4 border-t border-border/60 pt-4 font-mono text-xs text-muted-foreground/80">
+        <p className="mt-4 font-mono text-xs text-muted-foreground/80">
           {tt.agentNotePre}{" "}
           <a href="/llms.txt" className="text-primary underline-offset-2 hover:underline">
             auditor.rapold.io/llms.txt
           </a>{" "}
           {tt.agentNotePost}
         </p>
+      </div>
+      <div className="mt-6">
+        <h3 className="font-medium">{tt.trustTitle}</h3>
+        <dl className="mt-4 grid gap-4 sm:grid-cols-3">
+          {tt.trust.map((item) => (
+            <div key={item.q} className="rounded-xl border border-border bg-card p-5">
+              <dt className="text-sm font-medium">{item.q}</dt>
+              <dd className="mt-2 text-sm text-muted-foreground">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <div className="mt-8">
+        <a href="#audits" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
+          {tt.agentCtaSeeAudits.replace("{count}", String(AUDIT_COUNT))}
+          <ArrowRight aria-hidden className="size-4" />
+        </a>
       </div>
     </Section>
   );
@@ -254,6 +285,75 @@ function Principles({ lang }: { lang: Lang }) {
           </Reveal>
         ))}
       </div>
+    </Section>
+  );
+}
+
+function Proof({ lang }: { lang: Lang }) {
+  const tt = t(lang);
+  return (
+    <Section id="proof" eyebrow={tt.proofEyebrow} title={tt.proofTitle} lead={tt.proofLead}>
+      <div className="grid gap-4 sm:grid-cols-3">
+        {SCORECARD.map((s) => (
+          <Reveal key={s.audit} delay={0}>
+            <div className="rounded-xl border border-border bg-card p-6">
+              <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                {s.audit}
+              </p>
+              <p className="mt-3 flex items-baseline gap-2">
+                <span className="text-3xl font-semibold text-primary">{s.grade}</span>
+                <span className="font-mono text-sm text-muted-foreground">{s.score}/100</span>
+              </p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+      <Reveal>
+        <div className="mt-4 rounded-xl border border-border bg-card p-6">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge variant="outline" className="font-mono">
+              {SAMPLE_FINDING.severity}
+            </Badge>
+            <h3 className="font-mono text-sm font-semibold">{SAMPLE_FINDING.title}</h3>
+          </div>
+          <dl className="mt-4 space-y-1.5 font-mono text-xs">
+            <div className="flex flex-wrap gap-x-2">
+              <dt className="w-16 shrink-0 text-muted-foreground">{tt.proofEvidence}</dt>
+              <dd className="text-foreground">{SAMPLE_FINDING.evidence}</dd>
+            </div>
+            <div className="flex flex-wrap gap-x-2">
+              <dt className="w-16 shrink-0 text-muted-foreground">{tt.proofBefore}</dt>
+              <dd className="text-muted-foreground line-through">{SAMPLE_FINDING.before}</dd>
+            </div>
+            <div className="flex flex-wrap gap-x-2">
+              <dt className="w-16 shrink-0 text-muted-foreground">{tt.proofAfter}</dt>
+              <dd className="text-primary">{SAMPLE_FINDING.after}</dd>
+            </div>
+          </dl>
+          <a
+            href={`${REPO}/issues/${SAMPLE_FINDING.issue}`}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 inline-flex items-center gap-1 font-mono text-xs text-primary underline-offset-2 hover:underline"
+          >
+            Issue #{SAMPLE_FINDING.issue}
+            <ArrowRight aria-hidden className="size-3" />
+          </a>
+        </div>
+      </Reveal>
+      <Reveal>
+        <div className="mt-8">
+          <a
+            href={`${REPO}/issues/97`}
+            target="_blank"
+            rel="noreferrer"
+            className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
+          >
+            {tt.proofCta}
+            <ArrowRight aria-hidden className="size-4" />
+          </a>
+        </div>
+      </Reveal>
     </Section>
   );
 }
@@ -348,8 +448,18 @@ function CallToAction({ lang }: { lang: Lang }) {
                 {tt.ctaTitle}
               </h2>
               <p className="mx-auto mt-4 max-w-prose text-muted-foreground">{tt.ctaLead}</p>
+              <p className="mx-auto mt-5 max-w-prose font-mono text-xs text-muted-foreground/80">
+                <a
+                  href={`${REPO}/issues/97`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary underline-offset-2 hover:underline"
+                >
+                  {tt.proofStrip}
+                </a>
+              </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <a href={REPO} target="_blank" rel="noreferrer" className={cn(buttonVariants({ size: "lg" }))}>
+                <a href={PROMPTS} target="_blank" rel="noreferrer" className={cn(buttonVariants({ size: "lg" }))}>
                   <GitHubMark className="size-4" />
                   {tt.ctaBtnGet}
                 </a>
