@@ -87,6 +87,11 @@ export const ui = {
     apViewPrompt: "View the full prompt",
     apAllAudits: "All audits",
     apOthers: "Explore the other audits",
+    apFlowTarget: "Your codebase",
+    apFlowLenses: "specialists, in parallel",
+    apFlowIssues: "Priority-sorted issues",
+    apFlowVerify:
+      "Each finding is evidence-bound and survives ≥2-of-3 adversarial skeptics.",
     audEyebrow: "The library",
     audTitle: "{count} stack-agnostic audits, one shared methodology",
     audLead:
@@ -197,6 +202,11 @@ export const ui = {
     apViewPrompt: "Vollständigen Prompt ansehen",
     apAllAudits: "Alle Audits",
     apOthers: "Die anderen Audits ansehen",
+    apFlowTarget: "Dein Code",
+    apFlowLenses: "Spezialisten, parallel",
+    apFlowIssues: "Priorisierte Issues",
+    apFlowVerify:
+      "Jeder Befund ist belegbasiert und übersteht ≥2-von-3 adversarielle Skeptiker.",
     audEyebrow: "Die Bibliothek",
     audTitle: "{count} stack-agnostische Audits, eine gemeinsame Methodik",
     audLead:

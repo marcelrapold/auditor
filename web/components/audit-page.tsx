@@ -1,23 +1,25 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { AuditDiagram, auditLenses } from "@/components/audit-diagram";
 import { CopyCommandButton } from "@/components/copy-command";
 import { GitHubMark } from "@/components/icons";
 import { Reveal } from "@/components/reveal";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AUDITS, AUDIT_COMMAND, PROMPTS } from "@/lib/content";
+import { AUDIT_COMMAND, PROMPTS } from "@/lib/content";
 import { auditDetail } from "@/lib/audit-details";
 import { glossify } from "@/lib/glossary";
-import { type Lang, t } from "@/lib/i18n";
+import { audits, type Lang, t } from "@/lib/i18n";
 
 /** A per-audit detail page: approach + concrete use cases, for deep-linking. */
 export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
   const tt = t(lang);
-  const audit = AUDITS.find((a) => a.name === name);
+  const audit = audits(lang).find((a) => a.name === name);
   const detail = auditDetail(name, lang);
   if (!audit || !detail) return null;
 
   const Icon = audit.icon;
+  const lenses = auditLenses(audit.blurb);
   const home = lang === "de" ? "/de" : "/";
   const langHref = lang === "de" ? `/audits/${name}` : `/de/audits/${name}`;
 
@@ -81,6 +83,12 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
                 {tt.apViewPrompt}
               </a>
             </div>
+          </div>
+        </section>
+
+        <section className="border-b border-border/60 py-12">
+          <div className="mx-auto max-w-3xl px-5">
+            <AuditDiagram lenses={lenses} lang={lang} />
           </div>
         </section>
 
