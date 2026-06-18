@@ -18,6 +18,7 @@ export const ui = {
       'Not another "audit my code" prompt — these make your agent prove every finding before it files it.',
     heroCtaCopy: "Copy the command",
     heroCtaProof: "See a real run",
+    heroCtaHint: "Copies a template — swap in your repo URL before running.",
     heroMeta: "evidence-bound · ≥2-of-3 adversarial verification · 30/60/90 roadmap",
     agentEyebrow: "Run it",
     agentTitle: "Point your AI agent at auditor.rapold.io",
@@ -58,7 +59,7 @@ export const ui = {
       "The library is dogfooded on itself — pointed at this very repo, with the backlog filed as public GitHub issues. This page got its own content audit; across the full repo, every lens scored A− to A. Below: the real backlog, the grades, and one finding in full.",
     proofAnnotation:
       "The real backlog from auditing this very page — 23 findings, every one now fixed.",
-    proofVerifyHint: "Click any issue to verify on GitHub.",
+    proofVerifyHint: "Open any issue to check the evidence on GitHub.",
     proofFindings: "findings",
     proofRows: [
       'No visible output proof — it preaches "evidence", ships prose',
@@ -108,6 +109,7 @@ export const ui = {
       "Kein weiterer „audit mein Code“-Prompt — diese zwingen deinen Agenten, jeden Befund zu belegen, bevor er ihn einreicht.",
     heroCtaCopy: "Befehl kopieren",
     heroCtaProof: "Echten Lauf ansehen",
+    heroCtaHint: "Kopiert eine Vorlage — ersetze die Repo-URL, bevor du sie ausführst.",
     heroMeta: "belegbasiert · ≥2-von-3 adversariell verifiziert · 30/60/90-Roadmap",
     agentEyebrow: "Loslegen",
     agentTitle: "Richte deinen KI-Agenten auf auditor.rapold.io",
@@ -148,7 +150,7 @@ export const ui = {
       "Die Bibliothek wird auf sich selbst angewendet — auf genau dieses Repo gerichtet, das Backlog als öffentliche GitHub-Issues. Diese Seite bekam ihr eigenes Content-Audit; über das ganze Repo bewertete jede Linse A− bis A. Unten: der echte Backlog, die Noten und ein Finding in voller Tiefe.",
     proofAnnotation:
       "Der echte Backlog aus dem Audit genau dieser Seite — 23 Befunde, jeder davon jetzt behoben.",
-    proofVerifyHint: "Klick ein Issue an und prüf es auf GitHub.",
+    proofVerifyHint: "Öffne ein Issue und prüfe den Beleg auf GitHub.",
     proofFindings: "Befunde",
     proofRows: [
       'Kein sichtbarer Output-Beweis — predigt „Evidence“, liefert Prosa',

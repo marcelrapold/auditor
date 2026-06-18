@@ -188,6 +188,9 @@ function Hero({ lang }: { lang: Lang }) {
             </a>
           </div>
         </Reveal>
+        <Reveal immediate delay={0.2}>
+          <p className="mt-3 text-xs text-muted-foreground">{tt.heroCtaHint}</p>
+        </Reveal>
         <Reveal immediate delay={0.22}>
           <p className="mt-8 font-mono text-xs uppercase tracking-widest text-muted-foreground">
             {tt.heroMeta}
