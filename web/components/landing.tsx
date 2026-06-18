@@ -150,11 +150,22 @@ function Hero({ lang }: { lang: Lang }) {
   return (
     <section id="top" className="relative overflow-hidden border-b border-border/60">
       <div className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-      <div className="pointer-events-none absolute -top-40 left-1/2 size-[min(40rem,90vw)] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 left-1/2 size-[min(40rem,90vw)] -translate-x-1/2"
+      >
+        <div className="size-full rounded-full bg-primary/10 blur-3xl animate-aurora-1" />
+      </div>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-[6%] top-6 size-[min(26rem,65vw)]"
+      >
+        <div className="size-full rounded-full bg-primary/5 blur-3xl animate-aurora-2" />
+      </div>
       <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-12 text-center md:py-32">
         <Reveal immediate>
           <Badge className="mx-auto">
-            <span className="size-1.5 rounded-full bg-primary" />
+            <span className="size-1.5 rounded-full bg-primary animate-badge-pulse" />
             {AUDIT_COUNT} {tt.heroBadge} · {VERSION}
           </Badge>
         </Reveal>

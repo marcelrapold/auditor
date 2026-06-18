@@ -104,7 +104,7 @@ export const ui = {
     heroBadge: "Audits · MIT",
     heroTitle: "Mach aus jedem KI-Agenten einen Schwarm spezialisierter Auditoren",
     heroSub:
-      "Kopiere einen Master-Prompt in deinen KI-Coding-Agenten. Er führt viele Spezialisten parallel aus, lässt unabhängige Skeptiker jeden Befund angreifen und reicht nur das Überlebende ein — als nach Priorität sortierte GitHub-Issues.",
+      "Kopiere einen Master-Prompt in deinen KI-Coding-Agenten. Er lässt viele Spezialisten parallel laufen und jeden Befund von unabhängigen Skeptikern auf die Probe stellen — nur was standhält, landet als GitHub-Issue in einem nach Priorität sortierten Backlog.",
     heroContrast:
       "Kein weiterer „audit mein Code“-Prompt — diese zwingen deinen Agenten, jeden Befund zu belegen, bevor er ihn einreicht.",
     heroCtaCopy: "Befehl kopieren",
@@ -121,7 +121,7 @@ export const ui = {
     agentCopied: "Kopiert",
     agentCopiedAnnounce: "Befehl in die Zwischenablage kopiert",
     agentCopyFailed: "Kopieren fehlgeschlagen — Befehl markieren und Strg/Cmd-C drücken",
-    agentCopyHint: "Kopiere, setz dein Repo ein, füg es in deinen Agenten ein.",
+    agentCopyHint: "Kopiere ihn, setze deine Repo-URL ein, füge ihn in deinen Agenten ein.",
     agentCtaSeeAudits: "Alle {count} Audits ansehen",
     agentExplain:
       "Er fragt dann: Ausgabesprache (Deutsch / English), welche der {count} Audits (oder das ganze Repo) und ob Issues erstellt werden dürfen — dann führt er sie aus und öffnet einen nach Priorität sortierten Tracker.",
@@ -147,7 +147,7 @@ export const ui = {
     proofEyebrow: "Beweise statt Behauptungen",
     proofTitle: "Wir haben die ganze Suite auf das eigene Repo gerichtet",
     proofLead:
-      "Die Bibliothek wird auf sich selbst angewendet — auf genau dieses Repo gerichtet, das Backlog als öffentliche GitHub-Issues. Diese Seite bekam ihr eigenes Content-Audit; über das ganze Repo bewertete jede Linse A− bis A. Unten: der echte Backlog, die Noten und ein Finding in voller Tiefe.",
+      "Die Bibliothek wird auf sich selbst angewendet — auf genau dieses Repo gerichtet, das Backlog als öffentliche GitHub-Issues. Diese Seite bekam ihr eigenes Content-Audit; über das ganze Repo erreichte jede Linse A− bis A. Unten: der echte Backlog, die Noten und ein Finding in voller Tiefe.",
     proofAnnotation:
       "Der echte Backlog aus dem Audit genau dieser Seite — 23 Befunde, jeder davon jetzt behoben.",
     proofVerifyHint: "Öffne ein Issue und prüfe den Beleg auf GitHub.",

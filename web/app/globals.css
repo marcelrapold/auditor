@@ -183,6 +183,57 @@
     background-size: 22px 22px;
   }
 
+  /* Hero ambient motion — a slow emerald aurora drifting behind the grid plus a
+     soft "live" pulse on the badge dot. Atmosphere over interaction; transform/
+     opacity only (compositor-cheap) and fully frozen under reduced-motion. */
+  @keyframes aurora-drift-1 {
+    0%,
+    100% {
+      transform: translate3d(-6%, -3%, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(7%, 5%, 0) scale(1.12);
+    }
+  }
+  @keyframes aurora-drift-2 {
+    0%,
+    100% {
+      transform: translate3d(5%, 3%, 0) scale(1.08);
+    }
+    50% {
+      transform: translate3d(-6%, -5%, 0) scale(0.95);
+    }
+  }
+  @keyframes badge-pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(0.78);
+    }
+  }
+  .animate-aurora-1 {
+    animation: aurora-drift-1 24s ease-in-out infinite;
+    will-change: transform;
+  }
+  .animate-aurora-2 {
+    animation: aurora-drift-2 30s ease-in-out infinite;
+    will-change: transform;
+  }
+  .animate-badge-pulse {
+    animation: badge-pulse 2.6s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-aurora-1,
+    .animate-aurora-2,
+    .animate-badge-pulse {
+      animation: none;
+    }
+  }
+
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
