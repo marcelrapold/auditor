@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowDown, ArrowRight, CircleDot, Search, ShieldCheck } from "lucide-react";
 import { CommandBlock, CopyCommandButton } from "@/components/copy-command";
+import { HeroWorkflow } from "@/components/hero-workflow";
 import { GitHubMark } from "@/components/icons";
 import { MobileNav } from "@/components/mobile-nav";
 import { Reveal } from "@/components/reveal";
@@ -156,12 +157,7 @@ function Hero({ lang }: { lang: Lang }) {
       >
         <div className="size-full rounded-full bg-primary/10 blur-3xl animate-aurora-1" />
       </div>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-[6%] top-6 size-[min(26rem,65vw)]"
-      >
-        <div className="size-full rounded-full bg-primary/5 blur-3xl animate-aurora-2" />
-      </div>
+      <HeroWorkflow />
       <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-12 text-center md:py-32">
         <Reveal immediate>
           <Badge className="mx-auto">
