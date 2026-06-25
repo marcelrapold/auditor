@@ -1,7 +1,7 @@
 import { REPO } from "./content";
 
 /** A single scorecard row from a real audit run. */
-export type ScoreRow = {
+type ScoreRow = {
   /** Audit name — matches AUDITS[].name in content.ts. */
   audit: string;
   grade: string;
@@ -10,14 +10,14 @@ export type ScoreRow = {
 
 /** An audit that Phase 0 declared not applicable, with its reason.
  *  The reason is a stable key localized via i18n (reportReasons), never prose here. */
-export type NotApplicable = {
+type NotApplicable = {
   audit: string;
   /** i18n key into `reportReasons` — keeps the reason translatable. */
   reasonKey: string;
 };
 
 /** One headline finding the run filed, linking its real GitHub issue. */
-export type Finding = {
+type Finding = {
   /** The real GitHub issue number (github.com/marcelrapold/auditor/issues/<issue>). */
   issue: number;
   severity: "P0" | "P1" | "P2" | "P3";
@@ -28,7 +28,7 @@ export type Finding = {
 };
 
 /** The cross-audit dedup exhibit — the orchestrator's payoff. */
-export type DedupExhibit = {
+type DedupExhibit = {
   /** The merged backlog item's real issue number. */
   issue: number;
   /** Lenses that independently reported it before the merge. */
@@ -113,8 +113,6 @@ export const REPORTS: Report[] = [
     },
   },
 ];
-
-export const REPORT_SLUGS = REPORTS.map((r) => r.slug);
 
 export function getReport(slug: string): Report | undefined {
   return REPORTS.find((r) => r.slug === slug);
