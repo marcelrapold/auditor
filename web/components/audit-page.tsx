@@ -5,9 +5,10 @@ import { Reveal } from "@/components/reveal";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AUDITS, PROMPTS, auditCommand } from "@/lib/content";
+import { AUDITS, PROMPTS, auditCommand, auditTitle } from "@/lib/content";
 import { auditDetail } from "@/lib/audit-details";
 import { glossify } from "@/lib/glossary";
+import { SITE_URL } from "@/lib/site";
 import { type Lang, t } from "@/lib/i18n";
 
 /** A per-audit detail page: approach + concrete use cases, for deep-linking. */
@@ -20,6 +21,36 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
   const Icon = audit.icon;
   const home = lang === "de" ? "/de" : "/";
   const langHref = lang === "de" ? `/audits/${name}` : `/de/audits/${name}`;
+
+  // Canonical URLs mirror the visual breadcrumb and the page's `alternates`.
+  const title = auditTitle(audit);
+  const base = lang === "de" ? "/de" : "";
+  const pageUrl = `${SITE_URL}${base}/audits/${name}`;
+  const homeUrl = `${SITE_URL}${base || "/"}`;
+  const auditsUrl = `${SITE_URL}${base}/#audits`;
+
+  const articleLd = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: title,
+    name: title,
+    description: detail.tagline,
+    url: pageUrl,
+    inLanguage: lang === "de" ? "de" : "en",
+    isPartOf: { "@type": "WebSite", name: "auditor", url: SITE_URL },
+    author: { "@type": "Person", name: "Marcel Rapold" },
+    image: `${pageUrl}/opengraph-image`,
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "auditor", item: homeUrl },
+      { "@type": "ListItem", position: 2, name: tt.nav.audits, item: auditsUrl },
+      { "@type": "ListItem", position: 3, name: audit.name, item: pageUrl },
+    ],
+  };
 
   const copy = (
     <CopyCommandButton
@@ -138,6 +169,14 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
         </section>
       </main>
       <SiteFooter lang={lang} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
     </div>
   );
 }

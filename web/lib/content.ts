@@ -52,7 +52,8 @@ export const SAMPLE_FINDING = {
 } as const;
 
 /** Six real findings from this page's own content audit (#123) — backlog exhibit.
- *  Titles are localized in i18n (proofRows), matched by index. */
+ *  Titles are localized in i18n (proofRowsByIssue), keyed by the issue number `n` —
+ *  reordering this list re-orders the localized titles to match (no index drift). */
 export const BACKLOG_SAMPLE = [
   { n: 100, sev: "P1" },
   { n: 103, sev: "P1" },

@@ -1,0 +1,18 @@
+# Code owners for auditor.
+#
+# These rules request a review from the listed owner whenever a matching path
+# changes. Later rules win, so the more specific path-based rules below override
+# the catch-all. Syntax: https://docs.github.com/articles/about-code-owners
+
+# Default owner for everything in the repo.
+*                       @marcelrapold
+
+# Release surface — the prompts, their checksums, the build/CI scripts, and the
+# GitHub configuration. Changes here ship to consumers, so they need review.
+/scripts/               @marcelrapold
+/CHECKSUMS.txt          @marcelrapold
+/audit-prompts/         @marcelrapold
+/.github/               @marcelrapold
+
+# Web app (the landing page deployed to auditor.rapold.io).
+/web/                   @marcelrapold
