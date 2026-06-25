@@ -12,15 +12,19 @@ specialist prompts from the public GitHub repo below.
 ## How to run an audit (orchestrator protocol)
 
 1. Ask the user: (a) the **target** (repo path, GitHub URL, and/or live URL); (b) the **output
-   language** — Deutsch or English; (c) **which audits** to run (pick from the list, or "full
-   repo" to auto-detect applicable ones); (d) whether you may **create GitHub issues** or only
-   preview; (e) whether **active testing** is authorized (default: read-only).
+   language** — Deutsch or English; (c) **which audits** to run — **unless the request already
+   named one** (e.g. "Run the content audit using auditor.rapold.io"): then take that as the
+   selection, run that single audit only, and skip this question; otherwise let them pick from the
+   list, or say "full repo" to auto-detect applicable ones; (d) whether you may **create GitHub
+   issues** or only preview; (e) whether **active testing** is authorized (default: read-only).
 2. For each selected audit, fetch its prompt (raw URLs below), set `OUTPUT_LANG` to the chosen
    language, fill its config block, and execute it per its own phases.
 3. If several audits run, deduplicate overlapping findings into one consolidated, severity-sorted
    backlog with a cross-audit scorecard.
 4. Emit issues per ISSUE-OUTPUT-STANDARD.md: a master tracking issue first, then a sub-tracker per
    audit, then one issue per confirmed finding — preview-first, created only on approval.
+5. If a single **pre-selected** audit ran, after delivering its backlog offer once: "Want me to
+   run the remaining audits (full-repo sweep) as well?" — and only continue on an explicit yes.
 
 Full orchestrator instructions:
 https://raw.githubusercontent.com/marcelrapold/auditor/v0.8.0/audit-prompts/full-audit-master-prompt.md
