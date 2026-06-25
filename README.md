@@ -279,6 +279,7 @@ auditor/
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── ISSUE_TEMPLATE/             findings + new-template + chooser config
 ├── web/                            landing page (Next.js 16) → auditor.rapold.io
+├── mcp/                            stdio MCP server (exposes the prompts as agent tools)
 └── audit-prompts/
     ├── full-audit-master-prompt.md                (orchestrator)
     ├── security-audit-master-prompt.md
@@ -291,7 +292,9 @@ auditor/
     ├── ai-llm-audit-master-prompt.md
     ├── compliance-privacy-audit-master-prompt.md
     ├── accessibility-audit-master-prompt.md
-    └── documentation-audit-master-prompt.md
+    ├── documentation-audit-master-prompt.md
+    ├── content-audit-master-prompt.md
+    └── lean-audit-master-prompt.md
 ```
 
 The landing page lives in `web/` — its stack, local development, and deployment are documented in

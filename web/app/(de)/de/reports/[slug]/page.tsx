@@ -37,7 +37,6 @@ export async function generateMetadata({
       title: prose.title,
       description: prose.summary,
       publishedTime: report.date,
-      images: [`${SITE_URL}/de/opengraph-image`],
     },
   };
 }

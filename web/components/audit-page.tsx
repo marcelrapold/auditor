@@ -42,7 +42,9 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
     inLanguage: lang === "de" ? "de" : "en",
     isPartOf: { "@type": "WebSite", name: "auditor", url: SITE_URL },
     author: { "@type": "Person", name: "Marcel Rapold" },
-    image: `${pageUrl}/opengraph-image`,
+    // The per-audit hero is a real, stable asset; the bare `/opengraph-image`
+    // path 404s (Next serves it only at a hashed URL), so don't reference it here.
+    ...(hero ? { image: `${SITE_URL}${hero}` } : {}),
   };
 
   const breadcrumbLd = {
@@ -92,10 +94,13 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
                 sizes="100vw"
                 className="object-cover object-right"
               />
-              {/* Left-weighted scrim so the headline/CTA stay legible over the image. */}
+              {/* Scrim for headline/CTA legibility (SC 1.4.3). In dark mode (default) it
+                  fades to reveal the photo; in light mode it stays strong everywhere,
+                  because muted text over a near-black photo would otherwise fail contrast —
+                  so the light-theme hero reads as a subtle texture, the dark one as the full image. */}
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30 md:to-transparent"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/80 dark:via-background/80 dark:to-transparent"
               />
             </>
           ) : (

@@ -7,6 +7,32 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- **MCP server (`mcp/`)** — a dependency-light stdio Model Context Protocol server that exposes the
+  verified, version-pinned audit prompts as native agent tools (`list_audits`, `get_audit_prompt`,
+  `get_orchestrator`, `get_standard`) for Claude Desktop, Claude Code, Cursor, and any MCP-capable
+  agent. Mirrors the canonical `AUDITS` catalogue and reads prompts live from `audit-prompts/`.
+- **Per-audit detail pages** — `/audits/<key>` (German mirror `/de/audits/<key>`) with long-form
+  copy, an audit-specific activation prompt, and per-audit Open Graph images, for deep-linking and
+  SEO. Short vanity slugs (e.g. `/security-audit`, `/a11y-audit`) 308-redirect to the canonical path.
+- **Sample-report gallery** — `/reports` and `/reports/<slug>` rendering the real #97 self-audit run
+  (scorecard, not-applicable reasons, headline findings, and the cross-audit dedup exhibit), every
+  field mapped to a verifiable GitHub artifact and localized EN/DE.
+- **Per-audit photographic hero images** ("Verified Systems Lab") shown on the audit detail pages and
+  the homepage audit cards, auto-detected via the `public/<key>.webp` convention.
+
+### Changed
+- The landing page is now a multi-route site (home, per-audit details, reports) sharing a common
+  header/footer/nav chrome, rather than a single page.
+- Vercel deploys are git-connected and automatic (production on push to `main`, previews per branch),
+  with the monorepo build unblocked (Root Directory = `web`).
+
+### Fixed
+- **CI/release hardening** — automated `CHECKSUMS.txt` regeneration and verification, a version-pin
+  verification gate so release pins can't silently drift, an ESLint / jsx-a11y gate for `web/`, and a
+  CI workflow for the `mcp/` package.
+- Dropped dead exports in `reports.ts` flagged by the lean audit.
+
 ## [0.8.0] - 2026-06-18
 
 ### Added

@@ -108,7 +108,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
           "body": "The EAA deadline is approaching and you need to know where the product fails conformance before an auditor or a complaint finds out. The accessibility agent runs a full WCAG 2.2 AA sweep — semantics, keyboard operability, focus management, contrast, target size — and maps each failure to its success-criterion number and legal context."
         }
       ],
-      "output": "A 0-100 scorecard per dimension plus priority-sorted German GitHub issues, each with a management summary, the evidence, a before/after fix, and a 30/60/90 roadmap."
+      "output": "A 0-100 scorecard per dimension plus priority-sorted GitHub issues, each with a management summary, the evidence, a before/after fix, and a 30/60/90 roadmap."
     },
     "de": {
       "tagline": "Sechzehn Frontend-Spezialisten prüfen ein UI — jeder Befund verifiziert, bevor er eingereicht wird.",
@@ -127,7 +127,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
           "body": "Die EAA-Frist rückt näher und du musst wissen, wo das Produkt die Konformität verfehlt, bevor ein Prüfer oder eine Beschwerde es findet. Der Accessibility-Agent fährt einen vollständigen WCAG-2.2-AA-Sweep — Semantik, Keyboard-Bedienbarkeit, Focus-Management, Kontrast, Target Size — und ordnet jedem Fehler seine Success-Criterion-Nummer und den rechtlichen Kontext zu."
         }
       ],
-      "output": "Eine 0-100-Scorecard pro Dimension plus nach Priorität sortierte deutsche GitHub-Issues, jedes mit Management-Summary, Beleg, Before/After-Fix und einer 30/60/90-Roadmap."
+      "output": "Eine 0-100-Scorecard pro Dimension plus nach Priorität sortierte GitHub-Issues, jedes mit Management-Summary, Beleg, Before/After-Fix und einer 30/60/90-Roadmap."
     }
   },
   "api": {
@@ -148,7 +148,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
           "body": "You generate client SDKs from an OpenAPI spec that no longer matches the handlers. The audit lints the spec and produces a contract-drift matrix per operation — removed fields, narrowed types, changed defaults, wrong status codes — so the generated clients stop breaking against real responses."
         }
       ],
-      "output": "A scorecard graded per dimension plus a priority-sorted tracking issue and one German GitHub issue per finding, each with a management summary and a before/after fix."
+      "output": "A scorecard graded per dimension plus a priority-sorted tracking issue and one GitHub issue per finding, each with a management summary and a before/after fix."
     },
     "de": {
       "tagline": "Prüfe deine API gegen ihren veröffentlichten Contract — und gegen das, was der Code tatsächlich tut.",
@@ -167,7 +167,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
           "body": "Du generierst Client-SDKs aus einer OpenAPI-Spec, die nicht mehr zu den Handlern passt. Das Audit lintet die Spec und erstellt eine Contract-Drift-Matrix pro Operation — entfernte Felder, verengte Typen, geänderte Defaults, falsche Status-Codes — damit die generierten Clients nicht länger an echten Responses brechen."
         }
       ],
-      "output": "Eine pro Dimension benotete Scorecard plus ein nach Priorität sortiertes Tracking-Issue und pro Befund ein deutsches GitHub-Issue, jedes mit Management-Summary und Vorher/Nachher-Fix."
+      "output": "Eine pro Dimension benotete Scorecard plus ein nach Priorität sortiertes Tracking-Issue und pro Befund ein GitHub-Issue, jedes mit Management-Summary und Vorher/Nachher-Fix."
     }
   },
   "performance": {
@@ -236,11 +236,11 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
       "useCases": [
         {
           "title": "Vor einer riskanten Produktiv-Migration",
-          "body": "Du willst eine NOT-NULL-Spalte hinzufügen, eine grosse Tabelle umschreiben oder einen destruktiven Backfill fahren. Der Audit prüft jede Migration auf Locking- und Blocking-Risiko, Reversibilität und einen Rollback-Pfad und markiert jede destruktive Operation ohne Sicherheitsnetz — und sequenziert den Fix als Expand/Contract-Plan mit Backfill und Rollback."
+          "body": "Du willst eine NOT-NULL-Spalte hinzufügen, eine große Tabelle umschreiben oder einen destruktiven Backfill fahren. Der Audit prüft jede Migration auf Locking- und Blocking-Risiko, Reversibilität und einen Rollback-Pfad und markiert jede destruktive Operation ohne Sicherheitsnetz — und sequenziert den Fix als Expand/Contract-Plan mit Backfill und Rollback."
         },
         {
           "title": "Wenn falsche Rows im Reporting auftauchen",
-          "body": "Die Billing-Reconciliation bricht oder ein Join liefert Rows, die es nicht geben dürfte. Der Audit reasoned über — und prüft mit Read-only-Zugriff stichprobenartig auf — Orphans, Duplikate und Nulls in Pflichtfeldern, führt sie auf einen fehlenden FK-, UNIQUE- oder NOT-NULL-Constraint zurück und liefert die Cleanup-Query plus den Constraint, der es künftig verhindert."
+          "body": "Die Billing-Reconciliation bricht oder ein Join liefert Rows, die es nicht geben dürfte. Der Audit prüft per Reasoning — und mit Read-only-Zugriff stichprobenartig — auf Orphans, Duplikate und Nulls in Pflichtfeldern, führt sie auf einen fehlenden FK-, UNIQUE- oder NOT-NULL-Constraint zurück und liefert die Cleanup-Query plus den Constraint, der es künftig verhindert."
         },
         {
           "title": "Multi-Tenant-SaaS mit PII",
@@ -348,26 +348,26 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
           "body": "A new profiling or LLM feature goes live without a DPIA or an EU AI Act risk tier. The audit classifies the feature, checks Art. 22 safeguards and AI-transparency duties, and traces whether the data leaves the EEA without a valid transfer mechanism."
         }
       ],
-      "output": "A per-dimension scorecard, a verified data-flow / RoPA map, and a priority-sorted findings register where each finding cites its article and ships a concrete before/after fix, turned into German GitHub issues under one tracking issue."
+      "output": "A per-dimension scorecard, a verified data-flow / RoPA map, and a priority-sorted findings register where each finding cites its article and ships a concrete before/after fix, turned into GitHub issues under one tracking issue."
     },
     "de": {
-      "tagline": "Findet, wo du personenbezogene Daten ohne Rechtsgrundlage, Consent oder Loeschmoeglichkeit verarbeitest.",
-      "approach": "Primaere Linse ist die DSGVO, erweitert um ePrivacy, den EU AI Act und CCPA, wo sie greifen. Ein Schwarm spezialisierter Agents baut eine verifizierte Data-Flow- / RoPA-Karte und prueft dann Rechtsgrundlage, Consent und Cookies, Transparenz, Betroffenenrechte, Aufbewahrung, Drittlandtransfers, Auftragsverarbeiter-Vertraege und Breach-Readiness. Consent wird per Network-Trace geprueft, nicht ueber das Banner-UI, und Loesch- und Auskunftsrechte werden End-to-End im Code verifiziert; jeder Befund zitiert einen konkreten Artikel und ein File, eine Tabelle, ein Cookie oder eine Policy-Klausel.",
+      "tagline": "Findet, wo du personenbezogene Daten ohne Rechtsgrundlage, Consent oder Löschmöglichkeit verarbeitest.",
+      "approach": "Primäre Linse ist die DSGVO, erweitert um ePrivacy, den EU AI Act und CCPA, wo sie greifen. Ein Schwarm spezialisierter Agents baut eine verifizierte Data-Flow- / RoPA-Karte und prüft dann Rechtsgrundlage, Consent und Cookies, Transparenz, Betroffenenrechte, Aufbewahrung, Drittlandtransfers, Auftragsverarbeiter-Verträge und Breach-Readiness. Consent wird per Network-Trace geprüft, nicht über das Banner-UI, und Lösch- und Auskunftsrechte werden End-to-End im Code verifiziert; jeder Befund zitiert einen konkreten Artikel und ein File, eine Tabelle, ein Cookie oder eine Policy-Klausel.",
       "useCases": [
         {
-          "title": "Cookie-Banner, das luegt",
-          "body": "Marketing liefert ein Consent-Banner aus, aber Analytics- und Ad-Pixel feuern trotzdem beim ersten Laden. Ein Network-Trace faengt jeden nicht-essenziellen Tag, der vor dem Opt-in laeuft, benennt die Zeile, die ihn injiziert, und mappt ihn auf ePrivacy und Art. 6 mit einem Gate-before-Consent-Fix."
+          "title": "Cookie-Banner, das lügt",
+          "body": "Marketing liefert ein Consent-Banner aus, aber Analytics- und Ad-Pixel feuern trotzdem beim ersten Laden. Ein Network-Trace fängt jeden nicht-essenziellen Tag, der vor dem Opt-in läuft, benennt die Zeile, die ihn injiziert, und mappt ihn auf ePrivacy und Art. 6 mit einem Gate-before-Consent-Fix."
         },
         {
-          "title": "Ein Nutzer stellt einen Loeschantrag",
-          "body": "Der Support verspricht Loeschung in der Datenschutzerklaerung, aber niemand hat verfolgt, wo die Daten wirklich liegen. Das Audit folgt jeder Kategorie personenbezogener Daten und zeigt, wo die Loeschung nicht bis in Backups, Logs oder Drittanbieter durchschlaegt, gemessen an Art. 17."
+          "title": "Ein Nutzer stellt einen Löschantrag",
+          "body": "Der Support verspricht Löschung in der Datenschutzerklärung, aber niemand hat verfolgt, wo die Daten wirklich liegen. Das Audit folgt jeder Kategorie personenbezogener Daten und zeigt, wo die Löschung nicht bis in Backups, Logs oder Drittanbieter durchschlägt, gemessen an Art. 17."
         },
         {
           "title": "AI-Feature-Launch in der EU",
-          "body": "Ein neues Profiling- oder LLM-Feature geht ohne DPIA und ohne EU-AI-Act-Risikoklasse live. Das Audit klassifiziert das Feature, prueft Art.-22-Schutzmassnahmen und AI-Transparenzpflichten und verfolgt, ob die Daten ohne gueltigen Transfermechanismus den EWR verlassen."
+          "body": "Ein neues Profiling- oder LLM-Feature geht ohne DPIA und ohne EU-AI-Act-Risikoklasse live. Das Audit klassifiziert das Feature, prüft Art.-22-Schutzmaßnahmen und AI-Transparenzpflichten und verfolgt, ob die Daten ohne gültigen Transfermechanismus den EWR verlassen."
         }
       ],
-      "output": "Eine Scorecard je Dimension, eine verifizierte Data-Flow- / RoPA-Karte und ein nach Prioritaet sortiertes Befundregister, in dem jeder Befund seinen Artikel zitiert und einen konkreten Before/After-Fix liefert, ueberfuehrt in deutsche GitHub-Issues unter einem Tracking-Issue."
+      "output": "Eine Scorecard je Dimension, eine verifizierte Data-Flow- / RoPA-Karte und ein nach Priorität sortiertes Befundregister, in dem jeder Befund seinen Artikel zitiert und einen konkreten Before/After-Fix liefert, überführt in GitHub-Issues unter einem Tracking-Issue."
     }
   },
   "accessibility": {
@@ -414,7 +414,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     "en": {
       "tagline": "Checks your docs against the standard and against the code that proves them right or wrong.",
       "approach": "Specialist agents walk each critical reader journey with docs only, then verify every claim against reality: documented commands run against the scripts, env vars are checked against what the code reads, and code samples are traced or executed. It scores head-matter, onboarding, doc-code drift, writing quality, and Diátaxis fit on a 0-100 rubric, judging each page against the job it is meant to do.",
-      "output": "A rubric scorecard with grade band plus a drift register and prioritized German GitHub issues, each with a before/after fix.",
+      "output": "A rubric scorecard with grade band plus a drift register and prioritized GitHub issues, each with a before/after fix.",
       "useCases": [
         {
           "title": "Before open-sourcing a repo",
@@ -433,7 +433,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     "de": {
       "tagline": "Prüft deine Doku gegen den Standard und gegen den Code, der sie bestätigt oder widerlegt.",
       "approach": "Spezialisten-Agents gehen jede kritische Leser-Journey nur mit der Doku durch und verifizieren dann jede Aussage gegen die Realität: dokumentierte Commands laufen gegen die Scripts, Env-Variablen werden gegen den lesenden Code geprüft, Code-Beispiele werden nachvollzogen oder ausgeführt. Bewertet werden Repo-Kopf, Onboarding, Doc-Code-Drift, Schreibstil und Diátaxis-Passung auf einer 0-100-Rubrik — jede Seite gemessen an dem Job, den sie erfüllen soll.",
-      "output": "Eine Rubrik-Scorecard mit Notenband plus ein Drift-Register und priorisierte deutsche GitHub-Issues, jedes mit einem Vorher/Nachher-Fix.",
+      "output": "Eine Rubrik-Scorecard mit Notenband plus ein Drift-Register und priorisierte GitHub-Issues, jedes mit einem Vorher/Nachher-Fix.",
       "useCases": [
         {
           "title": "Vor dem Open-Sourcing",

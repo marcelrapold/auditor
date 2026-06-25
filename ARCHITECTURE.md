@@ -3,10 +3,11 @@
 This document records how the repository is structured and the design decisions behind it.
 
 > [!NOTE]
-> **Summary.** `auditor` is a monorepo with two parts: a library of audit *master prompts*
-> (`audit-prompts/`) and a Next.js landing page (`web/`). Two normative standards govern how the
-> prompts behave and what they output. Everything is provider-agnostic Markdown plus one small
-> static site.
+> **Summary.** `auditor` is a monorepo with three parts: a library of audit *master prompts*
+> (`audit-prompts/`), a Next.js landing page (`web/`), and a stdio MCP server (`mcp/`) that exposes
+> the prompts as native agent tools. Two normative standards govern how the prompts behave and what
+> they output. Everything is provider-agnostic Markdown plus one small static site and one small
+> server.
 
 ## Layout
 
@@ -14,6 +15,7 @@ This document records how the repository is structured and the design decisions 
 auditor/
 ├── audit-prompts/   the 13 audit master prompts (the product)
 ├── web/             the landing page (Next.js 16) → auditor.rapold.io
+├── mcp/             a stdio MCP server exposing the prompts as native agent tools
 ├── templates/       a canonical README skeleton implementing the doc standard
 ├── DOCUMENTATION-STANDARD.md (+ .en.md)   the doc-quality yardstick
 └── ISSUE-OUTPUT-STANDARD.md   the mandatory GitHub-issue output contract
@@ -63,3 +65,7 @@ Each prompt also shares a severity scale (P0–P3), a finding schema, and a mand
 ## Web app
 
 See [`web/README.md`](web/README.md) for the `web/` stack, local development, and deployment.
+
+## MCP server
+
+See [`mcp/README.md`](mcp/README.md) for the `mcp/` stdio server, its tools, and installation.

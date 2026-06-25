@@ -3,7 +3,9 @@ name: docs
 on:
   push:
     branches: [main]
+    paths: ["**/*.md", ".github/workflows/docs.yml"]
   pull_request:
+    paths: ["**/*.md", ".github/workflows/docs.yml"]
 
 permissions:
   contents: read

@@ -6,9 +6,12 @@
  * This mirrors the canonical `AUDITS` list in `web/lib/content.ts`. It is kept
  * as a standalone, dependency-free copy on purpose: the MCP package must build
  * and run on its own without importing the Next.js `web/` workspace (which pulls
- * in React, lucide-react, etc.). The `prompts` CI gate plus `CHECKSUMS.txt`
- * keep the two lists honest — and `npm test` asserts every `file` here resolves
- * to a real prompt on disk, so drift fails loudly.
+ * in React, lucide-react, etc.). The parity test in `mcp/test/lib.test.js`
+ * verifies this catalogue: it asserts the catalogue's audit keys exactly equal
+ * the set of `<key>` derived from the `audit-prompts/<key>-audit-master-prompt.md`
+ * files on disk (excluding the orchestrator), so the catalogue cannot silently
+ * diverge from the prompt files — the single source of truth. `web/lib/content.ts`
+ * is pinned to the same prompt-file key set by an equivalent test on the web side.
  */
 
 export type AuditEntry = {

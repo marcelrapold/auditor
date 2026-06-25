@@ -22,7 +22,6 @@ export function generateMetadata(): Metadata {
       url: PATH,
       title: tt.repIndexTitle,
       description: tt.repIndexLead,
-      images: [`${SITE_URL}/de/opengraph-image`],
     },
   };
 }
