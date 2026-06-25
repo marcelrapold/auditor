@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CopyCommandButton } from "@/components/copy-command";
 import { GitHubMark } from "@/components/icons";
@@ -7,6 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AUDITS, PROMPTS, auditCommand, auditTitle } from "@/lib/content";
 import { auditDetail } from "@/lib/audit-details";
+import { heroSrc } from "@/lib/heroes";
 import { glossify } from "@/lib/glossary";
 import { SITE_URL } from "@/lib/site";
 import { type Lang, t } from "@/lib/i18n";
@@ -19,6 +21,7 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
   if (!audit || !detail) return null;
 
   const Icon = audit.icon;
+  const hero = heroSrc(name);
   const home = lang === "de" ? "/de" : "/";
   const langHref = lang === "de" ? `/audits/${name}` : `/de/audits/${name}`;
 
@@ -72,9 +75,33 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
       </a>
       <SiteHeader lang={lang} nav={[]} langHref={langHref} />
       <main id="main">
-        <section className="relative overflow-hidden border-b border-border/60">
-          <div className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-          <div className="relative mx-auto max-w-3xl px-5 py-16 md:py-20">
+        <section
+          className={cn(
+            "relative overflow-hidden border-b border-border/60",
+            hero && "md:min-h-[480px] md:flex md:items-center",
+          )}
+        >
+          {hero ? (
+            <>
+              <Image
+                src={hero}
+                alt=""
+                aria-hidden
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-right"
+              />
+              {/* Left-weighted scrim so the headline/CTA stay legible over the image. */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30 md:to-transparent"
+              />
+            </>
+          ) : (
+            <div className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
+          )}
+          <div className="relative mx-auto w-full max-w-3xl px-5 py-16 md:py-20">
             <a
               href={`${home}#audits`}
               className="inline-flex items-center gap-1 rounded-md text-sm text-muted-foreground transition-colors hover:text-foreground"
