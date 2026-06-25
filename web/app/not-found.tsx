@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,9 +30,9 @@ export default function NotFound() {
           repository.
         </p>
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-          <a href="/" className={cn(buttonVariants())}>
+          <Link href="/" className={cn(buttonVariants())}>
             Back to home
-          </a>
+          </Link>
           <a
             href={REPO}
             target="_blank"
