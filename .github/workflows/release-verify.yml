@@ -1,13 +1,13 @@
-name: prompts
+name: release-verify
 
-# No `paths` filter: the checksum verification is the supply-chain trust anchor
-# external agents rely on, so it must run on EVERY push/PR — a change anywhere
-# (not just under the gated prompt paths) could otherwise let checksum drift
-# ship. The structure + checksum checks are fast and dependency-free.
+# Self-verifying releases: on every vX.Y.Z tag, assert that all version pins in
+# the tagged tree (orchestrator prompt URLs, llms.txt URLs, the landing-page
+# VERSION constant) plus the CHECKSUMS.txt trust anchor match the tag itself.
+# A mismatch fails the release rather than shipping a stale or broken pin.
 on:
   push:
-    branches: [main]
-  pull_request:
+    tags:
+      - "v*"
 
 permissions:
   contents: read
@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  structure:
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -27,9 +27,11 @@ jobs:
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: web/.nvmrc
-      - name: Canonical prompt structure (interoperability)
-        run: node scripts/check-prompts.mjs
-      - name: Verify CHECKSUMS.txt is in sync (single-source regen)
+      - name: Verify every version pin equals the release tag
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: node scripts/verify-pins.mjs
+      - name: Verify CHECKSUMS.txt matches the tagged content
         run: node scripts/checksums.mjs --check
       - name: Verify prompt checksums (untrusted-fetch trust anchor)
         run: sha256sum -c CHECKSUMS.txt

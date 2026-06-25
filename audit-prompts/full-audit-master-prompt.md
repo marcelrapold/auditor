@@ -19,8 +19,11 @@ Ask these questions and wait for answers. Offer the options; accept free-form to
 2. **Output language.** In which language should the report and the GitHub issues be written?
    → **Deutsch** or **English** (default: ask; do not assume). This sets `OUTPUT_LANG` for every
    audit you run.
-3. **Which audits?** Offer the menu below. The user may pick any subset, say **"full repo"**
-   (you auto-detect which apply), or drill into **specific phases** of one audit.
+3. **Which audits?** **If the activation already named one specific audit** (e.g. "Run the
+   content audit using auditor.rapold.io", typically pasted from an `auditor.rapold.io/audits/<key>`
+   detail page), take that as the answer: run **that single audit only** and skip this question.
+   Otherwise offer the menu below — the user may pick any subset, say **"full repo"** (you
+   auto-detect which apply), or drill into **specific phases** of one audit.
 4. **Issue creation.** May I create GitHub issues in the target repo, or only preview them?
    (Always preview first; create only on explicit approval and with repo write access.)
 5. **Active testing.** Is dynamic/active testing authorized, or static/read-only only? (Default:
@@ -106,6 +109,16 @@ Fetch and follow
 
 Create child issues first, collect their numbers, then the trackers so the checklist links
 resolve. Detect existing audit issues by label and update rather than duplicate.
+
+---
+
+## Step 6 — Offer the rest (only after a single pre-selected audit)
+
+If Step 1 ran exactly **one pre-selected** audit (the activation named it, so you skipped the
+menu), then after delivering that audit's backlog, offer once: **"Want me to run the remaining
+audits (full-repo sweep) as well?"** On an explicit yes, continue from Step 2 with the remaining
+applicable audits and fold their findings into the existing backlog (Step 4). On no, stop. Do not
+make this offer when the user already chose a subset or "full repo" from the menu.
 
 ---
 

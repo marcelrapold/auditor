@@ -2,61 +2,50 @@
 // Single source of truth for the release tag pinned in fetch URLs.
 //
 // The orchestrator prompt and llms.txt instruct external agents to fetch the
-// specialist prompts from an immutable tag. That tag is duplicated across both
-// files; this script bumps every pin atomically so a release never ships a
-// stale or mismatched URL. See RELEASING.md for the full release flow.
+// specialist prompts from an immutable tag. That tag is duplicated across
+// several files (see scripts/pin-locations.mjs); this script bumps every pin
+// atomically so a release never ships a stale or mismatched URL, then
+// regenerates the CHECKSUMS.txt trust anchor. See RELEASING.md for the full
+// release flow.
 //
 // Usage: node scripts/bump-version.mjs vX.Y.Z
 import { readFileSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { PIN_LOCATIONS, VERSION_RE } from "./pin-locations.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const version = process.argv[2];
-if (!version || !/^v\d+\.\d+\.\d+$/.test(version)) {
+if (!version || !VERSION_RE.test(version)) {
   console.error("Usage: node scripts/bump-version.mjs vX.Y.Z");
   process.exit(1);
 }
 
-// Every pinned fetch URL looks like .../marcelrapold/auditor/vX.Y.Z/...
-const FILES = ["audit-prompts/full-audit-master-prompt.md", "web/public/llms.txt"];
-const PIN = /(marcelrapold\/auditor\/)v\d+\.\d+\.\d+(\/)/g;
-
 let total = 0;
-for (const rel of FILES) {
-  const p = join(ROOT, rel);
+for (const { file, re } of PIN_LOCATIONS) {
+  const p = join(ROOT, file);
   const before = readFileSync(p, "utf8");
   let n = 0;
-  const after = before.replace(PIN, (_m, a, b) => {
+  // Group 1 of each pin regex is the literal vX.Y.Z token to rewrite.
+  const after = before.replace(re(), (m, token) => {
     n++;
-    return `${a}${version}${b}`;
+    return m.replace(token, version);
   });
   if (n) writeFileSync(p, after);
   total += n;
-  console.log(`${rel}: ${n} pin(s) updated`);
-}
-
-// The landing-page badge surfaces the release tag from a single constant.
-{
-  const rel = "web/lib/content.ts";
-  const p = join(ROOT, rel);
-  const before = readFileSync(p, "utf8");
-  let n = 0;
-  const after = before.replace(
-    /(export const VERSION = ")v\d+\.\d+\.\d+(")/,
-    (_m, a, b) => {
-      n++;
-      return `${a}${version}${b}`;
-    },
-  );
-  if (n) writeFileSync(p, after);
-  total += n;
-  console.log(`${rel}: ${n} pin(s) updated`);
+  console.log(`${file}: ${n} pin(s) updated`);
 }
 
 console.log(`\n${total} pin(s) set to ${version}.`);
-console.log("Next: regenerate checksums, then commit and tag (see RELEASING.md):");
-console.log(
-  "  sha256sum audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md > CHECKSUMS.txt",
-);
+
+// Regenerate the checksums so the trust anchor matches the bumped tree. Done
+// here (not left as a manual reminder) so a version bump can't ship a stale
+// CHECKSUMS.txt. Inherits stdout/stderr so its summary line is visible.
+console.log("Regenerating CHECKSUMS.txt ...");
+execFileSync(process.execPath, [join(ROOT, "scripts/checksums.mjs")], {
+  stdio: "inherit",
+});
+
+console.log("\nNext: commit and tag (see RELEASING.md).");

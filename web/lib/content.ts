@@ -22,8 +22,17 @@ export const PROMPTS = `${REPO}/blob/main/audit-prompts`;
 /** Latest release tag — single-sourced via scripts/bump-version.mjs. */
 export const VERSION = "v0.8.0";
 
-/** The one activation command; copied verbatim (the leading "$" is visual only). */
+/** The generic activation, copied verbatim (the leading "$" is visual only). It names
+ *  no audit, so the orchestrator runs its "which audit(s)?" menu. Lives on the home page. */
 export const AUDIT_COMMAND = "Audit github.com/your/repo using auditor.rapold.io";
+
+/** The lean, audit-specific activation for a `/audits/<name>` detail page. It names the
+ *  single audit (so the orchestrator skips the menu and runs only that one, then offers the
+ *  rest) and omits the repo placeholder — it's pasted into a session where the target is
+ *  already in context. See `cmd` on each audit for the natural-language name used. */
+export function auditCommand(audit: Audit): string {
+  return `Run the ${audit.cmd} using auditor.rapold.io`;
+}
 
 /** Top of the scorecard from this repo's own #97 self-audit run. */
 export const SCORECARD = [
@@ -43,7 +52,8 @@ export const SAMPLE_FINDING = {
 } as const;
 
 /** Six real findings from this page's own content audit (#123) — backlog exhibit.
- *  Titles are localized in i18n (proofRows), matched by index. */
+ *  Titles are localized in i18n (proofRowsByIssue), keyed by the issue number `n` —
+ *  reordering this list re-orders the localized titles to match (no index drift). */
 export const BACKLOG_SAMPLE = [
   { n: 100, sev: "P1" },
   { n: 103, sev: "P1" },
@@ -55,6 +65,9 @@ export const BACKLOG_SAMPLE = [
 
 export type Audit = {
   name: string;
+  /** Natural-language audit name used in the per-audit activation command
+   *  (`Run the <cmd> using auditor.rapold.io`). The orchestrator maps it back to a menu key. */
+  cmd: string;
   file: string;
   blurb: string;
   mapsTo: string;
@@ -64,6 +77,7 @@ export type Audit = {
 export const AUDITS: Audit[] = [
   {
     name: "security",
+    cmd: "security audit",
     file: "security-audit-master-prompt.md",
     blurb:
       "14 domains: injection, authN/Z, secrets, supply chain, IaC, CI/CD, business logic, privacy, LLM.",
@@ -72,6 +86,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "repo",
+    cmd: "repo audit",
     file: "repo-audit-master-prompt.md",
     blurb:
       "Whole-repo engineering: architecture, stack consistency, docs, tests, deps, CI/CD, git hygiene.",
@@ -80,6 +95,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "frontend",
+    cmd: "frontend audit",
     file: "frontend-audit-master-prompt.md",
     blurb:
       "16-agent sweep: usability, psychology, visual design, a11y, performance, SEO, copy, CRO.",
@@ -88,6 +104,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "api",
+    cmd: "API audit",
     file: "api-audit-master-prompt.md",
     blurb:
       "Resource modeling, HTTP semantics, error model, versioning, idempotency, rate limits, DX.",
@@ -96,6 +113,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "performance",
+    cmd: "performance audit",
     file: "performance-audit-master-prompt.md",
     blurb:
       "Hotspots, N+1, caching, concurrency, leaks, load behavior, resilience, FinOps.",
@@ -104,6 +122,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "data",
+    cmd: "data audit",
     file: "data-audit-master-prompt.md",
     blurb:
       "Schema and modeling, constraints, migration safety, transactions, integrity, backup/DR.",
@@ -112,6 +131,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "infrastructure",
+    cmd: "infrastructure audit",
     file: "infrastructure-audit-master-prompt.md",
     blurb:
       "IaC, cloud security, IAM, secrets, containers, k8s, CI/CD, HA, DR, observability, cost.",
@@ -120,6 +140,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "ai-llm",
+    cmd: "AI/LLM audit",
     file: "ai-llm-audit-master-prompt.md",
     blurb:
       "Prompt injection, jailbreaks, output handling, agent/tool safety, RAG, hallucination, evals.",
@@ -128,6 +149,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "compliance-privacy",
+    cmd: "compliance & privacy audit",
     file: "compliance-privacy-audit-master-prompt.md",
     blurb:
       "Lawful basis, consent/cookies, data-subject rights, retention, transfers, breach readiness.",
@@ -136,6 +158,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "accessibility",
+    cmd: "accessibility audit",
     file: "accessibility-audit-master-prompt.md",
     blurb:
       "Semantics, keyboard, focus, screen reader, contrast, forms, zoom, motor, motion, cognitive.",
@@ -144,6 +167,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "documentation",
+    cmd: "documentation audit",
     file: "documentation-audit-master-prompt.md",
     blurb:
       "Docs quality vs the standard: head-matter, onboarding, doc–code drift, writing, Diátaxis.",
@@ -152,6 +176,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "content",
+    cmd: "content audit",
     file: "content-audit-master-prompt.md",
     blurb:
       "Content & messaging: thesis challenge, audience fit, evidence & originality, structure, voice, concrete rewrites.",
@@ -160,6 +185,7 @@ export const AUDITS: Audit[] = [
   },
   {
     name: "lean",
+    cmd: "lean audit",
     file: "lean-audit-master-prompt.md",
     blurb:
       "Bloat, redundancy & dependency transparency: dead code, unused/phantom deps, duplication, AI slop — a safe strip-down that never over-deletes.",
@@ -170,6 +196,30 @@ export const AUDITS: Audit[] = [
 
 /** Number of audits — derive UI copy from this, never hardcode. */
 export const AUDIT_COUNT = AUDITS.length;
+
+/** Capitalized display title for SEO/OG (`<title>`, og:title), derived from the command
+ *  phrase: "security audit" → "Security audit", "AI/LLM audit" stays as-is. The page h1
+ *  keeps the lowercase-slug brand style on purpose; this only affects search/share metadata. */
+export function auditTitle(audit: Audit): string {
+  return audit.cmd.charAt(0).toUpperCase() + audit.cmd.slice(1);
+}
+
+/** Human aliases people actually type or share, on top of the predictable `<name>-audit`. */
+const AUDIT_ALIASES: Record<string, string[]> = {
+  "ai-llm": ["ai-audit", "llm-audit"],
+  "compliance-privacy": ["privacy-audit", "compliance-audit"],
+  accessibility: ["a11y-audit"],
+  documentation: ["docs-audit"],
+  infrastructure: ["infra-audit"],
+};
+
+/** Short, shareable vanity paths that 308-redirect to the canonical `/audits/<name>`.
+ *  Every audit gets `<name>-audit`; some add a human alias. Single-sourced for next.config —
+ *  keep it dependency-light (no icon access) so the config can import it cheaply. */
+export const AUDIT_SHORT_SLUGS: { slug: string; name: string }[] = AUDITS.flatMap((a) => [
+  { slug: `${a.name}-audit`, name: a.name },
+  ...(AUDIT_ALIASES[a.name] ?? []).map((slug) => ({ slug, name: a.name })),
+]);
 
 export type Principle = { title: string; body: string; icon: LucideIcon };
 

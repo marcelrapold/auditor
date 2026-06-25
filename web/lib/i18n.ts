@@ -1,6 +1,33 @@
-import { AUDITS, PHASES, PRINCIPLES, STANDARDS, type Audit } from "./content";
+import { AUDITS, BACKLOG_SAMPLE, PHASES, PRINCIPLES, STANDARDS, type Audit } from "./content";
 
 export type Lang = "en" | "de";
+
+// Proof-table finding titles, keyed by the BACKLOG_SAMPLE issue number `n` (stable),
+// not by array position — reordering content.ts can no longer mistranslate a row.
+const proofRowsByIssue: Record<Lang, Record<number, string>> = {
+  en: {
+    100: 'No visible output proof — it preaches "evidence", ships prose',
+    103: "Activation command is not copyable",
+    104: '"any AI agent" — an unsupported universal claim',
+    107: "End-CTA repeats the hero instead of closing",
+    113: '"Google-grade" — an unsupported superlative',
+    122: 'Hero badge "copy & paste" duplicates the subhead',
+  },
+  de: {
+    100: 'Kein sichtbarer Output-Beweis — predigt „Evidence“, liefert Prosa',
+    103: "Aktivierungs-Befehl ist nicht kopierbar",
+    104: '„any AI agent“ — unbelegte Universalbehauptung',
+    107: "End-CTA wiederholt den Hero statt zu schließen",
+    113: '„Google-grade“ — unbelegter Superlativ',
+    122: 'Hero-Badge „copy & paste“ doppelt den Subhead',
+  },
+};
+
+// Public array shape consumed by landing.tsx (by index, paired with BACKLOG_SAMPLE).
+// Derived from the keyed source above in BACKLOG_SAMPLE order, so a content.ts reorder
+// re-orders these titles to match instead of silently mistranslating.
+const proofRowsFor = (lang: Lang): string[] =>
+  BACKLOG_SAMPLE.map((b) => proofRowsByIssue[lang][b.n] ?? "");
 
 // UI chrome strings.
 export const ui = {
@@ -67,14 +94,6 @@ export const ui = {
       "The real backlog from auditing this very page — 23 findings, every one now fixed.",
     proofVerifyHint: "Open any issue to check the evidence on GitHub.",
     proofFindings: "findings",
-    proofRows: [
-      'No visible output proof — it preaches "evidence", ships prose',
-      "Activation command is not copyable",
-      '"any AI agent" — an unsupported universal claim',
-      "End-CTA repeats the hero instead of closing",
-      '"Google-grade" — an unsupported superlative',
-      'Hero badge "copy & paste" duplicates the subhead',
-    ],
     proofEvidence: "Evidence",
     proofBefore: "Before",
     proofAfter: "After",
@@ -224,14 +243,6 @@ export const ui = {
       "Der echte Backlog aus dem Audit genau dieser Seite — 23 Befunde, jeder davon jetzt behoben.",
     proofVerifyHint: "Öffne ein Issue und prüfe den Beleg auf GitHub.",
     proofFindings: "Befunde",
-    proofRows: [
-      'Kein sichtbarer Output-Beweis — predigt „Evidence“, liefert Prosa',
-      "Aktivierungs-Befehl ist nicht kopierbar",
-      '„any AI agent“ — unbelegte Universalbehauptung',
-      "End-CTA wiederholt den Hero statt zu schließen",
-      '„Google-grade“ — unbelegter Superlativ',
-      'Hero-Badge „copy & paste“ doppelt den Subhead',
-    ],
     proofEvidence: "Beleg",
     proofBefore: "Vorher",
     proofAfter: "Nachher",
@@ -337,24 +348,26 @@ const auditBlurbDe: Record<string, string> = {
   lean: "Schlankheit: toter Code, ungenutzte/Phantom-Deps, Duplikation, AI-Slop, Dependency-Transparenz — sicherer Strip-down ohne Über-Löschen.",
 };
 
-const principleDe: { title: string; body: string }[] = [
-  {
+// German prose for each principle, keyed by the principle's English `title` (stable),
+// not by array position — reordering PRINCIPLES can no longer mistranslate a card.
+const principleDe: Record<string, { title: string; body: string }> = {
+  "Evidence or it didn't happen": {
     title: "Beleg oder nichts",
     body: "Jeder Befund nennt ein konkretes Artefakt — file:line, einen Query-Plan, einen Request, einen Config-Wert, eine gemessene Metrik. Kein Beleg, kein Befund.",
   },
-  {
+  "Adversarial self-challenge": {
     title: "Adversarielle Selbst-Challenge",
     body: "Kein Befund überlebt, bevor unabhängige Skeptiker-Agenten ihn zu widerlegen versucht haben — er muss mindestens zwei von drei überstehen, sonst wird er verworfen. Wer eine feindselige Lesart nicht übersteht, ist kein Befund.",
   },
-  {
+  "Blind-spot hunting": {
     title: "Blind-Spot-Jagd",
     body: "Ein Completeness-Critic fragt jede Runde, welche Oberfläche, welcher Use-Case oder welche Annahme ungeprüft blieb. Lücken werden deklariert, nie verschwiegen.",
   },
-  {
+  "Actionable issue tracker": {
     title: "Umsetzbarer Issue-Tracker",
     body: "Ausgabe sind GitHub-Issues, angeführt von einem nach Priorität sortierten Tracking-Issue, jedes mit Management-Summary und Vorher/Nachher-Fix. Ein Befund, den du nicht umsetzen kannst, ist nur eine Meinung.",
   },
-];
+};
 
 const phaseDe: Record<string, { title: string; body: string }> = {
   "0": { title: "Reconnaissance", body: "Faktisches Inventar + Surface-Map. Noch keine Meinungen." },
@@ -514,7 +527,9 @@ export function reportDedupProse(lang: Lang, key: string): { title: string; body
 }
 
 export function t(lang: Lang) {
-  return ui[lang];
+  // proofRows is derived from BACKLOG_SAMPLE (keyed by issue number), not stored as a
+  // hand-ordered literal — so it stays correct if content.ts reorders the backlog.
+  return { ...ui[lang], proofRows: proofRowsFor(lang) };
 }
 
 export function audits(lang: Lang): Audit[] {
@@ -524,7 +539,7 @@ export function audits(lang: Lang): Audit[] {
 
 export function principles(lang: Lang) {
   if (lang === "en") return PRINCIPLES;
-  return PRINCIPLES.map((p, i) => ({ ...p, ...principleDe[i] }));
+  return PRINCIPLES.map((p) => ({ ...p, ...(principleDe[p.title] ?? {}) }));
 }
 
 export function phases(lang: Lang) {
