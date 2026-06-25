@@ -5,7 +5,7 @@ import { Reveal } from "@/components/reveal";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AUDITS, AUDIT_COMMAND, PROMPTS } from "@/lib/content";
+import { AUDITS, PROMPTS, auditCommand } from "@/lib/content";
 import { auditDetail } from "@/lib/audit-details";
 import { glossify } from "@/lib/glossary";
 import { type Lang, t } from "@/lib/i18n";
@@ -23,7 +23,7 @@ export function AuditDetailPage({ name, lang }: { name: string; lang: Lang }) {
 
   const copy = (
     <CopyCommandButton
-      command={AUDIT_COMMAND}
+      command={auditCommand(audit)}
       label={tt.heroCtaCopy}
       copiedLabel={tt.agentCopied}
       copiedAnnounce={tt.agentCopiedAnnounce}
