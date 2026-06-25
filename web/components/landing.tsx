@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowDown, ArrowRight, CircleDot, Search, ShieldCheck, Terminal } from "lucide-react";
 import { CommandBlock, CopyCommandButton } from "@/components/copy-command";
 import { GitHubMark } from "@/components/icons";
@@ -17,6 +18,7 @@ import {
   VERSION,
 } from "@/lib/content";
 import { glossify } from "@/lib/glossary";
+import { heroSrc } from "@/lib/heroes";
 import { DESCRIPTION, SITE_URL } from "@/lib/site";
 import {
   type Lang,
@@ -388,19 +390,36 @@ function Audits({ lang }: { lang: Lang }) {
       lead={tt.audLead}
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {auditsFor(lang).map((a, i) => (
-          <Reveal key={a.name} delay={(i % 3) * 0.05}>
-            <a
-              href={`${base}/${a.name}`}
-              className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary/50 hover:bg-accent/40 focus-visible:border-primary/50 focus-visible:bg-accent/40"
-            >
-              <a.icon aria-hidden className="size-5 text-primary" />
-              <h3 className="mt-4 font-mono text-sm font-semibold">{a.name}</h3>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{glossify(a.blurb, lang)}</p>
-              <p className="mt-4 font-mono text-xs text-muted-foreground">{glossify(a.mapsTo, lang)}</p>
-            </a>
-          </Reveal>
-        ))}
+        {auditsFor(lang).map((a, i) => {
+          const hero = heroSrc(a.name);
+          return (
+            <Reveal key={a.name} delay={(i % 3) * 0.05}>
+              <a
+                href={`${base}/${a.name}`}
+                className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50 hover:bg-accent/40 focus-visible:border-primary/50 focus-visible:bg-accent/40"
+              >
+                {hero && (
+                  <div className="relative aspect-video w-full overflow-hidden border-b border-border/60">
+                    <Image
+                      src={hero}
+                      alt=""
+                      aria-hidden
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-6">
+                  <a.icon aria-hidden className="size-5 text-primary" />
+                  <h3 className="mt-4 font-mono text-sm font-semibold">{a.name}</h3>
+                  <p className="mt-2 flex-1 text-sm text-muted-foreground">{glossify(a.blurb, lang)}</p>
+                  <p className="mt-4 font-mono text-xs text-muted-foreground">{glossify(a.mapsTo, lang)}</p>
+                </div>
+              </a>
+            </Reveal>
+          );
+        })}
       </div>
     </Section>
   );
