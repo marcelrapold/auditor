@@ -109,7 +109,7 @@ vercel rollback      # promote a previous production deployment
 cd web
 vercel link                                   # team: muraschal, project: auditor
 vercel git connect https://github.com/marcelrapold/auditor.git
-# Root Directory = web, Production Branch = main (set in Project → Settings, or via the API)
+# Root Directory = web, Production Branch = main (set in Project Settings, or via the API)
 ```
 
 The custom domain is attached via `vercel domains add auditor.rapold.io` (one-time).
