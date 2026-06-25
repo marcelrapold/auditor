@@ -38,7 +38,6 @@ const JSON_LD = {
   operatingSystem: "Any",
   description: DESCRIPTION,
   url: SITE_URL,
-  image: `${SITE_URL}/opengraph-image`,
   author: { "@type": "Person", name: "Marcel Rapold" },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   license: "https://opensource.org/licenses/MIT",

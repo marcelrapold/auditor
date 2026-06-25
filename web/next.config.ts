@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
   // `<root>/.next` and fail (ENOENT .next/package.json) once a second package (mcp/) existed.
   outputFileTracingRoot: join(__dirname, ".."),
 
+  images: {
+    // Negotiate AVIF first (~20-30% smaller than WebP) before falling back to WebP.
+    formats: ["image/avif", "image/webp"],
+    // Optimized variants are immutable (content-hashed by the `dpl` query param), so let
+    // browsers and the edge cache hold them for a year instead of revalidating every visit.
+    minimumCacheTTL: 31536000,
+  },
+
   // Short, shareable vanity URLs (e.g. /frontend-audit, /privacy-audit) that permanently
   // redirect to the canonical per-audit page in both languages. Derived from AUDITS so the
   // list never drifts from the audit catalogue.

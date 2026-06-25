@@ -315,7 +315,7 @@ export const ui = {
     repDedupFoundBy: "Unabhängig gefunden von",
     repMethodTitle: "Wie dieser Lauf arbeitete",
     repMethodLead:
-      "Recon wählte die anwendbaren Audits, ein Spezialisten-Schwarm führte sie parallel aus, Befunde wurden cross-pollinatet und dedupliziert, und jeder P0/P1 musste unabhängige Skeptiker überstehen, bevor er in den Bericht kam.",
+      "Recon wählte die anwendbaren Audits, ein Spezialisten-Schwarm führte sie parallel aus, Befunde wurden zusammengeführt und dedupliziert, und jeder P0/P1 musste unabhängige Skeptiker überstehen, bevor er in den Bericht kam.",
     repViewIssue: "Issue ansehen",
     repFullRun: "Ganzen Lauf ansehen",
     repEvidence: "Beleg",
@@ -344,7 +344,7 @@ const auditBlurbDe: Record<string, string> = {
   "compliance-privacy": "Datenschutz: Rechtsgrundlage, Consent/Cookies, Betroffenenrechte, Aufbewahrung, Transfers, Breach-Readiness.",
   accessibility: "Tiefes A11y: Semantik, Tastatur, Fokus, Screenreader, Kontrast, Formulare, Zoom, Motorik, Motion, Kognition.",
   documentation: "Doku-Qualität vs. Standard: Repo-Kopf, Onboarding, Doc-Code-Drift, Schreibstil, Diátaxis, Repo-Health.",
-  content: "Inhalt & Botschaft: These challengen, Zielgruppen-Fit, Belege & Originalität, Struktur, Stimme, konkrete Umformulierungen.",
+  content: "Inhalt & Botschaft: These hinterfragen, Zielgruppen-Fit, Belege & Originalität, Struktur, Stimme, konkrete Umformulierungen.",
   lean: "Schlankheit: toter Code, ungenutzte/Phantom-Deps, Duplikation, AI-Slop, Dependency-Transparenz — sicherer Strip-down ohne Über-Löschen.",
 };
 

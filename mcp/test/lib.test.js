@@ -7,8 +7,9 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 import {
   listAudits,
@@ -22,6 +23,20 @@ import {
 const here = dirname(fileURLToPath(import.meta.url));
 // repo root is one level up from mcp/
 const repoRoot = findRepoRoot(resolve(here, ".."));
+
+/**
+ * The set of audit keys derived from the prompt files on disk — the single
+ * source of truth. A file named `<key>-audit-master-prompt.md` contributes
+ * `<key>`; the orchestrator (`full-audit-master-prompt.md`) is excluded.
+ */
+function promptFileKeys() {
+  const SUFFIX = "-audit-master-prompt.md";
+  return new Set(
+    readdirSync(join(repoRoot, "audit-prompts"))
+      .filter((f) => f.endsWith(SUFFIX) && f !== "full-audit-master-prompt.md")
+      .map((f) => f.slice(0, -SUFFIX.length)),
+  );
+}
 
 test("findRepoRoot locates a directory with audit-prompts/ and CHECKSUMS.txt", () => {
   assert.equal(repoRoot, resolve(here, "..", ".."));
@@ -42,6 +57,20 @@ test("list_audits returns exactly 13 audits with keys, descriptions, and mapping
   assert.equal(new Set(keys).size, 13, "keys are unique");
   assert.ok(keys.includes("security"), "includes security");
   assert.ok(keys.includes("lean"), "includes lean");
+});
+
+test("catalogue keys exactly match the audit-prompts/ files (single source of truth)", () => {
+  // Pins the catalogue to the prompt files: the keys the MCP server advertises
+  // must be exactly the set of <key> from audit-prompts/<key>-audit-master-prompt.md
+  // (excluding the orchestrator). Catches a prompt added/removed/renamed without
+  // updating the catalogue, in either direction.
+  const catalogueKeys = new Set(listAudits().audits.map((a) => a.key));
+  const fileKeys = promptFileKeys();
+  assert.deepEqual(
+    [...catalogueKeys].sort(),
+    [...fileKeys].sort(),
+    "catalogue keys must equal the prompt-file key set",
+  );
 });
 
 test("every catalogued audit prompt resolves to non-empty content on disk", async () => {

@@ -300,7 +300,7 @@ export const STANDARDS: Standard[] = [
     name: "Issue-output standard",
     file: "ISSUE-OUTPUT-STANDARD.md",
     blurb:
-      "The mandatory contract every audit follows: a priority-sorted tracking issue first, then one German issue per finding, each with its own management summary.",
+      "The mandatory contract every audit follows: a priority-sorted tracking issue first, then one issue per finding, each with its own management summary.",
     icon: GitBranch,
   },
 ];
