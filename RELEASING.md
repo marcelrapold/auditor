@@ -20,11 +20,8 @@ version pin and the checksums are treated as part of the release surface — nev
 3. **Regenerate the checksums** so the trust anchor matches the tagged content:
 
    ```bash
-   sha256sum -b audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md > CHECKSUMS.txt
+   sha256sum audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md > CHECKSUMS.txt
    ```
-
-   The `-b` (binary) flag matches the committed format (`<hash> *<path>`); omitting it rewrites
-   every line to text mode and produces a spurious full-file diff.
 
    The `prompts` CI workflow runs `sha256sum -c CHECKSUMS.txt`, so a forgotten regen fails the
    build rather than shipping a broken trust anchor.
