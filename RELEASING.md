@@ -15,27 +15,36 @@ version pin and the checksums are treated as part of the release surface — nev
    node scripts/bump-version.mjs vX.Y.Z
    ```
 
-   This rewrites every pinned URL in `audit-prompts/full-audit-master-prompt.md` and
-   `web/public/llms.txt` atomically.
-3. **Regenerate the checksums** so the trust anchor matches the tagged content:
+   This rewrites every pinned URL in `audit-prompts/full-audit-master-prompt.md`,
+   `web/public/llms.txt`, and the `VERSION` constant in `web/lib/content.ts` atomically — the
+   pin locations are single-sourced in [`scripts/pin-locations.mjs`](scripts/pin-locations.mjs).
+   The same script then **regenerates `CHECKSUMS.txt`** automatically, so the trust anchor always
+   matches the bumped tree. (To regenerate the checksums on their own, run
+   `node scripts/checksums.mjs`.)
 
-   ```bash
-   sha256sum audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md > CHECKSUMS.txt
-   ```
-
-   The `prompts` CI workflow runs `sha256sum -c CHECKSUMS.txt`, so a forgotten regen fails the
-   build rather than shipping a broken trust anchor.
-4. Commit (`release: vX.Y.Z`), then tag and push:
+   The `prompts` CI workflow runs `node scripts/checksums.mjs --check` (and `sha256sum -c
+   CHECKSUMS.txt`) on every PR, so a forgotten or drifted regen fails the build rather than
+   shipping a broken trust anchor.
+3. Commit (`release: vX.Y.Z`), then tag and push:
 
    ```bash
    git tag -a vX.Y.Z -m "vX.Y.Z"
    git push origin main --tags
    ```
 
-5. Cut the GitHub release from the tag, pasting the changelog section.
+   The `release-verify` workflow runs on the tag and asserts that every pin and the checksums
+   equal `vX.Y.Z` — a mismatch fails the release. To check locally before tagging:
 
-## Why the pins live in two files
+   ```bash
+   node scripts/verify-pins.mjs vX.Y.Z
+   ```
+
+4. Cut the GitHub release from the tag, pasting the changelog section.
+
+## Why the pins live in several files
 
 `full-audit-master-prompt.md` is the orchestrator an agent reads; `llms.txt` is the machine entry
-point served at `auditor.rapold.io/llms.txt`. Both must point at the same immutable tag. The bump
-script is the single source that keeps them in lockstep.
+point served at `auditor.rapold.io/llms.txt`; `web/lib/content.ts` surfaces the tag on the landing
+page. All must point at the same immutable tag. [`scripts/pin-locations.mjs`](scripts/pin-locations.mjs)
+is the single list of where the pin lives — both `bump-version.mjs` (the writer) and
+`verify-pins.mjs` (the tag-time checker) import it, so the check can never drift from the writer.
