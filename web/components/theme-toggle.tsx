@@ -17,8 +17,16 @@ export function ThemeToggle({
   className?: string;
 }) {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []);
+  // `resolvedTheme` is only known on the client; gate the theme-specific label
+  // behind a mount flag to avoid a hydration mismatch. `useSyncExternalStore`
+  // gives us `false` on the server snapshot and `true` on the client snapshot
+  // without a setState-in-effect (which React Hooks rules flag as a cascading
+  // render). The store never changes, so `subscribe` is a no-op.
+  const mounted = React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const isDark = resolvedTheme === "dark";
 

@@ -28,13 +28,10 @@ export function Reveal({
     if (immediate) return;
     const el = ref.current;
     if (!el) return;
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setRevealed(true);
-      return;
-    }
+    // Note: prefers-reduced-motion users need no JS reveal — the `.reveal`
+    // rule in globals.css forces opacity:1 / transform:none / transition:none
+    // under `@media (prefers-reduced-motion: reduce)` regardless of
+    // data-revealed, so content is fully visible from first paint.
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
