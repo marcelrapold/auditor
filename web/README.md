@@ -84,25 +84,35 @@ document carries the correct `<html lang>`. To change the content (audits, phase
 
 ## Deploy to Vercel
 
-The Vercel project's **Root Directory must be `web`** (this is a monorepo; the site lives in a
-subfolder). Production domain: `auditor.rapold.io`.
+The Vercel project is **connected to GitHub** and deploys automatically:
 
-### Option A — Vercel CLI (copy-paste)
+- **Production** — every push to `main` ships to `auditor.rapold.io`.
+- **Preview** — every other branch / PR gets its own preview URL.
+
+Project settings that make this work (already configured): **Root Directory = `web`** (monorepo;
+the site lives in a subfolder), **Production Branch = `main`**, framework **Next.js**. Source of
+truth is git — never deploy uncommitted local state, or production drifts from `main`.
+
+The Vercel CLI is for **monitoring and preview**, not routine production deploys:
 
 ```bash
-# from the repo root
-npm i -g vercel            # or: npx vercel@latest
-
-# link this folder to a Vercel project (set Root Directory = web when asked)
 cd web
-vercel link
-
-# first production deploy
-vercel --prod
-
-# attach the custom domain to the project
-vercel domains add auditor.rapold.io
+vercel ls            # recent deployments
+vercel inspect <url> # logs / build output for a deployment
+vercel               # ad-hoc preview deploy of local changes (does not touch production)
+vercel rollback      # promote a previous production deployment
 ```
+
+### Re-connecting the GitHub integration (if ever disconnected)
+
+```bash
+cd web
+vercel link                                   # team: muraschal, project: auditor
+vercel git connect https://github.com/marcelrapold/auditor.git
+# Root Directory = web, Production Branch = main (set in Project → Settings, or via the API)
+```
+
+The custom domain is attached via `vercel domains add auditor.rapold.io` (one-time).
 
 `vercel domains add` prints the DNS record to create. Because `rapold.io` is on **Cloudflare**,
 add this record there (DNS-only, grey cloud — do not proxy a Vercel deploy):
