@@ -5,7 +5,7 @@ export type Lang = "en" | "de";
 // UI chrome strings.
 export const ui = {
   en: {
-    nav: { use: "Use it", audits: "Audits", how: "How it works", standards: "Standards" },
+    nav: { use: "Use it", audits: "Audits", how: "How it works", standards: "Standards", reports: "Reports" },
     skip: "Skip to content",
     langToggle: "Switch to German",
     newTab: "(opens in a new tab)",
@@ -109,13 +109,60 @@ export const ui = {
     proofStrip: "Every claim here survived the same audit — read the public backlog (#97).",
     ctaBtnGet: "Browse the prompts",
     ctaBtnQuick: "Quickstart",
+    // Reports gallery.
+    repIndexKicker: "Sample reports",
+    repIndexTitle: "Real audit runs, every finding traceable to a public issue",
+    repIndexLead:
+      "No fabricated demos. Each report below is a real run of the suite, rendered from the same data filed as public GitHub issues — open any link to verify the evidence yourself. We seed the gallery with this repo's own self-audit; more real runs are added as they ship.",
+    repIndexWhyTitle: "Why these are real, not staged",
+    repIndexWhy: [
+      {
+        t: "Evidence-bound",
+        d: "Every finding cites a concrete artifact (file:line, a config value) and links the GitHub issue where it lives.",
+      },
+      {
+        t: "Adversarially verified",
+        d: "No P0/P1 survives unless independent skeptics fail to refute it — ≥2 of 3, or it is dropped.",
+      },
+      {
+        t: "Publicly checkable",
+        d: "The scorecard, the not-applicable calls with reasons, and the cross-audit dedup all trace to one master tracker.",
+      },
+    ],
+    repViewReport: "View report",
+    repTracker: "Master tracker",
+    repTarget: "Target",
+    repDate: "Run date",
+    repBackToReports: "All reports",
+    repScorecardTitle: "Scorecard",
+    repScorecardLead: "Phase 0 selected {n} applicable audits; each lens scored independently.",
+    repNotApplicableTitle: "Declared not applicable",
+    repNotApplicableLead:
+      "Phase 0 named these out of scope — with a reason — rather than skipping them silently.",
+    repFindingsTitle: "Headline findings",
+    repFindingsLead: "A slice of the backlog, rendered natively. Open any issue to check the evidence on GitHub.",
+    repDedupTitle: "Cross-audit dedup",
+    repDedupLead:
+      "The payoff of running the audits together: the same gap found by several lenses, merged into one backlog item with every citation kept.",
+    repDedupFoundBy: "Found independently by",
+    repMethodTitle: "How this run worked",
+    repMethodLead:
+      "Recon selected the applicable audits, a specialist swarm ran them in parallel, findings were cross-pollinated and deduped, and every P0/P1 had to survive independent skeptics before it reached the report.",
+    repViewIssue: "View issue",
+    repFullRun: "See the full run",
+    repEvidence: "Evidence",
+    repBefore: "Before",
+    repAfter: "After",
+    repZeroP0: "0 P0",
+    repOneP1: "1 P1",
+    footerReports: "Reports",
     footerLicense: "auditor — MIT licensed",
     footerGithub: "GitHub",
     footerStandard: "Standard",
     footerChangelog: "Changelog",
   },
   de: {
-    nav: { use: "Nutzen", audits: "Audits", how: "Ablauf", standards: "Standards" },
+    nav: { use: "Nutzen", audits: "Audits", how: "Ablauf", standards: "Standards", reports: "Berichte" },
     skip: "Zum Inhalt springen",
     langToggle: "Auf Englisch wechseln",
     newTab: "(öffnet in neuem Tab)",
@@ -219,6 +266,53 @@ export const ui = {
     proofStrip: "Jede Aussage hier hat dasselbe Audit überstanden — lies das öffentliche Backlog (#97).",
     ctaBtnGet: "Prompts ansehen",
     ctaBtnQuick: "Quickstart",
+    // Berichte-Galerie.
+    repIndexKicker: "Beispiel-Berichte",
+    repIndexTitle: "Echte Audit-Läufe — jeder Befund auf ein öffentliches Issue zurückführbar",
+    repIndexLead:
+      "Keine erfundenen Demos. Jeder Bericht unten ist ein echter Lauf der Suite, gerendert aus denselben Daten, die als öffentliche GitHub-Issues eingereicht wurden — öffne jeden Link und prüfe den Beleg selbst. Wir starten die Galerie mit dem Self-Audit dieses Repos; weitere echte Läufe kommen dazu, sobald sie laufen.",
+    repIndexWhyTitle: "Warum diese echt und nicht inszeniert sind",
+    repIndexWhy: [
+      {
+        t: "Belegbasiert",
+        d: "Jeder Befund nennt ein konkretes Artefakt (file:line, einen Config-Wert) und verlinkt das GitHub-Issue, in dem er lebt.",
+      },
+      {
+        t: "Adversariell verifiziert",
+        d: "Kein P0/P1 überlebt, solange unabhängige Skeptiker ihn nicht widerlegen können — ≥2 von 3, sonst wird er verworfen.",
+      },
+      {
+        t: "Öffentlich prüfbar",
+        d: "Die Scorecard, die begründeten Nicht-anwendbar-Entscheide und die Cross-Audit-Dedupe führen alle auf einen Master-Tracker.",
+      },
+    ],
+    repViewReport: "Bericht ansehen",
+    repTracker: "Master-Tracker",
+    repTarget: "Ziel",
+    repDate: "Lauf-Datum",
+    repBackToReports: "Alle Berichte",
+    repScorecardTitle: "Scorecard",
+    repScorecardLead: "Phase 0 wählte {n} anwendbare Audits; jede Linse wurde unabhängig benotet.",
+    repNotApplicableTitle: "Als nicht anwendbar deklariert",
+    repNotApplicableLead:
+      "Phase 0 erklärte diese — mit Begründung — als außerhalb des Umfangs, statt sie still zu überspringen.",
+    repFindingsTitle: "Wichtigste Befunde",
+    repFindingsLead: "Ein Ausschnitt des Backlogs, nativ gerendert. Öffne ein Issue und prüfe den Beleg auf GitHub.",
+    repDedupTitle: "Cross-Audit-Dedupe",
+    repDedupLead:
+      "Der Mehrwert, die Audits zusammen laufen zu lassen: dieselbe Lücke von mehreren Linsen gefunden, zu einem Backlog-Item gemergt — jedes Zitat erhalten.",
+    repDedupFoundBy: "Unabhängig gefunden von",
+    repMethodTitle: "Wie dieser Lauf arbeitete",
+    repMethodLead:
+      "Recon wählte die anwendbaren Audits, ein Spezialisten-Schwarm führte sie parallel aus, Befunde wurden cross-pollinatet und dedupliziert, und jeder P0/P1 musste unabhängige Skeptiker überstehen, bevor er in den Bericht kam.",
+    repViewIssue: "Issue ansehen",
+    repFullRun: "Ganzen Lauf ansehen",
+    repEvidence: "Beleg",
+    repBefore: "Vorher",
+    repAfter: "Nachher",
+    repZeroP0: "0 P0",
+    repOneP1: "1 P1",
+    footerReports: "Berichte",
     footerLicense: "auditor — MIT-lizenziert",
     footerGithub: "GitHub",
     footerStandard: "Standard",
@@ -277,6 +371,147 @@ const standardBlurbDe: Record<string, string> = {
   "Issue-output standard":
     "Der verbindliche Vertrag, dem jedes Audit folgt: zuerst ein nach Priorität sortiertes Tracking-Issue, dann pro Befund ein Issue mit eigener Management-Summary.",
 };
+
+// --- Reports: localized prose for the data in reports.ts ---------------------
+// The hard facts (slugs, scores, issue numbers, dates) live in reports.ts; the
+// translatable prose is keyed here so both languages render from one source.
+
+type ReportProse = {
+  /** Per-report card title + one-line summary, keyed by report slug. */
+  title: string;
+  summary: string;
+};
+
+const reportProse: Record<Lang, Record<string, ReportProse>> = {
+  en: {
+    "self-audit": {
+      title: "Auditing this repo",
+      summary:
+        "The suite pointed at its own repository — 7 applicable audits, 4 declared not applicable with reasons, zero P0, one P1.",
+    },
+  },
+  de: {
+    "self-audit": {
+      title: "Dieses Repo auditieren",
+      summary:
+        "Die Suite auf das eigene Repository gerichtet — 7 anwendbare Audits, 4 mit Begründung als nicht anwendbar deklariert, null P0, ein P1.",
+    },
+  },
+};
+
+const reportVerdicts: Record<Lang, Record<string, string>> = {
+  en: {
+    selfAudit:
+      "Production-ready. All seven applicable audits scored A− to A (90–94), zero P0, exactly one P1; the only real residual risks concern the supply-chain trust model the product sells, not a live exposure.",
+  },
+  de: {
+    selfAudit:
+      "Production-ready. Alle sieben anwendbaren Audits liegen bei A− bis A (90–94), null P0, genau ein P1; die einzigen echten Restrisiken betreffen das Supply-Chain-Vertrauensmodell, das das Produkt verkauft, nicht eine Live-Exposition.",
+  },
+};
+
+const reportReasons: Record<Lang, Record<string, string>> = {
+  en: {
+    api: "No route.ts / Server Actions — fully static.",
+    data: "No database, schema, or ORM.",
+    aiLlm: "Prompts run in the external agent; no in-repo runtime.",
+    compliancePrivacy: "No forms, auth, or PII beyond Vercel Analytics.",
+  },
+  de: {
+    api: "Keine route.ts / Server-Actions — voll statisch.",
+    data: "Keine Datenbank, kein Schema, kein ORM.",
+    aiLlm: "Prompts laufen im externen Agenten; kein In-Repo-Runtime.",
+    compliancePrivacy: "Keine Formulare, kein Auth, keine PII außer Vercel Analytics.",
+  },
+};
+
+type FindingProse = { title: string; evidence?: string; before?: string; after?: string };
+
+const reportFindings: Record<Lang, Record<string, FindingProse>> = {
+  en: {
+    lang: {
+      title: '/de served the document with <html lang="en">',
+      evidence: "web/app/layout.tsx:71",
+      before: '/ and /de → <html lang="en">',
+      after: '/de → <html lang="de">',
+    },
+    checksums: {
+      title: "CHECKSUMS.txt is not verified in CI",
+      evidence: "CHECKSUMS.txt · .github/workflows",
+      before: 'Promises "verify-before-execute" — not enforced',
+      after: "A CI gate verifies checksums on every run",
+    },
+    pins: {
+      title: "~17 hand-maintained version pins with no single source of truth",
+      evidence: "scattered v0.5.0 pins across the repo",
+      before: "Each pin edited by hand, drift-prone",
+      after: "One source of truth, bumped by script",
+    },
+    enMeta: {
+      title: 'EN metadata hardcoded "German GitHub issues"',
+      evidence: "web/lib/site.ts",
+      before: "English copy claimed German-only output",
+      after: "Copy reflects German or English output",
+    },
+  },
+  de: {
+    lang: {
+      title: '/de lieferte das Dokument mit <html lang="en">',
+      evidence: "web/app/layout.tsx:71",
+      before: '/ und /de → <html lang="en">',
+      after: '/de → <html lang="de">',
+    },
+    checksums: {
+      title: "CHECKSUMS.txt wird in CI nicht verifiziert",
+      evidence: "CHECKSUMS.txt · .github/workflows",
+      before: 'Verspricht „verify-before-execute" — nicht erzwungen',
+      after: "Ein CI-Gate verifiziert die Checksummen bei jedem Lauf",
+    },
+    pins: {
+      title: "~17 hand-gepflegte Versions-Pins ohne Single Source of Truth",
+      evidence: "verstreute v0.5.0-Pins im Repo",
+      before: "Jeder Pin von Hand editiert, driftanfällig",
+      after: "Eine Single Source of Truth, per Skript gebumpt",
+    },
+    enMeta: {
+      title: 'EN-Metadaten hartcodieren „German GitHub issues"',
+      evidence: "web/lib/site.ts",
+      before: "Englische Copy behauptete nur deutsche Ausgabe",
+      after: "Copy spiegelt deutsche oder englische Ausgabe",
+    },
+  },
+};
+
+const reportDedup: Record<Lang, Record<string, { title: string; body: string }>> = {
+  en: {
+    checksums: {
+      title: '"CHECKSUMS.txt is not verified in CI"',
+      body: "Found independently by the repo, infrastructure, and security lenses and merged into a single backlog item — all three citations kept. The version-pins half was split off as its own fix.",
+    },
+  },
+  de: {
+    checksums: {
+      title: '„CHECKSUMS.txt wird in CI nicht verifiziert"',
+      body: "Unabhängig von der repo-, infrastructure- und security-Linse gefunden und zu einem einzigen Backlog-Item gemergt — alle drei Zitate erhalten. Die Versions-Pin-Hälfte wurde als eigener Fix abgespalten.",
+    },
+  },
+};
+
+export function reportProseFor(lang: Lang, slug: string): ReportProse | undefined {
+  return reportProse[lang][slug];
+}
+export function reportVerdict(lang: Lang, key: string): string {
+  return reportVerdicts[lang][key] ?? "";
+}
+export function reportReason(lang: Lang, key: string): string {
+  return reportReasons[lang][key] ?? "";
+}
+export function reportFinding(lang: Lang, key: string): FindingProse {
+  return reportFindings[lang][key] ?? { title: key };
+}
+export function reportDedupProse(lang: Lang, key: string): { title: string; body: string } {
+  return reportDedup[lang][key] ?? { title: key, body: "" };
+}
 
 export function t(lang: Lang) {
   return ui[lang];
