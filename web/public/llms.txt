@@ -2,8 +2,9 @@
 
 > A library of master prompts that turn any AI coding agent into a swarm of specialist auditors —
 > security, engineering, frontend, API, performance, data, infrastructure, AI/LLM, compliance,
-> accessibility, documentation, and content. Findings are evidence-bound, adversarially verified, and filed
-> as GitHub issues (German or English) led by a priority-sorted tracker.
+> accessibility, documentation, content, and lean (anti-bloat & dependency transparency). Findings
+> are evidence-bound, adversarially verified, and filed as GitHub issues (German or English) led by
+> a priority-sorted tracker.
 
 You (the AI agent) reached this file because someone pointed you at https://auditor.rapold.io.
 Act as the audit orchestrator: scope the work with the user, then fetch and run the right
