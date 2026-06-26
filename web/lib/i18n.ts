@@ -14,10 +14,10 @@ const proofRowsByIssue: Record<Lang, Record<number, string>> = {
     122: 'Hero badge "copy & paste" duplicates the subhead',
   },
   de: {
-    100: 'Kein sichtbarer Output-Beweis — predigt „Evidence“, liefert Prosa',
-    103: "Aktivierungs-Befehl ist nicht kopierbar",
+    100: 'Kein sichtbarer Ergebnis-Beleg — predigt „Evidence“, liefert Prosa',
+    103: "Aktivierungsbefehl lässt sich nicht kopieren",
     104: '„any AI agent“ — unbelegte Universalbehauptung',
-    107: "End-CTA wiederholt den Hero statt zu schließen",
+    107: "End-CTA wiederholt den Hero, statt abzuschliessen",
     113: '„Google-grade“ — unbelegter Superlativ',
     122: 'Hero-Badge „copy & paste“ doppelt den Subhead',
   },
@@ -181,13 +181,13 @@ export const ui = {
     footerChangelog: "Changelog",
   },
   de: {
-    nav: { use: "Nutzen", audits: "Audits", how: "Ablauf", standards: "Standards", reports: "Berichte" },
+    nav: { use: "Einsetzen", audits: "Audits", how: "Ablauf", standards: "Standards", reports: "Berichte" },
     skip: "Zum Inhalt springen",
     langToggle: "Auf Englisch wechseln",
     newTab: "(öffnet in neuem Tab)",
     ghRepo: "GitHub-Repository",
     menuOpen: "Menü öffnen",
-    menuClose: "Menü schließen",
+    menuClose: "Menü schliessen",
     navMobile: "Mobile Navigation",
     themeLight: "Zu hellem Design wechseln",
     themeDark: "Zu dunklem Design wechseln",
@@ -195,15 +195,15 @@ export const ui = {
     heroBadge: "Audits · MIT",
     heroTitle: "Mach aus jedem KI-Agenten einen Schwarm spezialisierter Auditoren",
     heroSub:
-      "Kopiere einen Master-Prompt in deinen KI-Coding-Agenten. Er lässt viele Spezialisten parallel laufen und jeden Befund von unabhängigen Skeptikern auf die Probe stellen — nur was standhält, landet als GitHub-Issue in einem nach Priorität sortierten Backlog.",
+      "Kopiere einen Master-Prompt in deinen KI-Coding-Agenten. Er setzt viele Spezialisten parallel ein, lässt jeden Befund von unabhängigen Skeptikern anfechten und reicht nur ein, was standhält — als nach Priorität sortierte GitHub-Issues.",
     heroContrast:
       "Kein weiterer „audit my code“-Prompt — diese zwingen deinen Agenten, jeden Befund zu belegen, bevor er ihn einreicht.",
     heroCtaCopy: "Befehl kopieren",
-    heroCtaProof: "Echten Lauf ansehen",
+    heroCtaProof: "Echten Durchlauf ansehen",
     heroCtaHint: "Kopiert eine Vorlage — ersetze die Repo-URL, bevor du sie ausführst.",
     heroMeta: "belegbasiert · ≥2-von-3 adversariell verifiziert · 30/60/90-Roadmap",
     agentEyebrow: "Loslegen",
-    agentTitle: "Richte deinen KI-Agenten auf auditor.rapold.io",
+    agentTitle: "Nutze auditor.rapold.io mit deinem KI-Agenten",
     agentLead:
       "Keine Installation — funktioniert mit jedem Agenten, der eine URL abrufen und Tools ausführen kann (läuft mit Claude Code). Sag ihm, er soll ein Repo mit auditor.rapold.io auditieren: er holt den Audit-Prompt — einen einzigen Einstiegspunkt, der Sprache und Umfang erfragt — und legt dann die Issues an.",
     agentCmdVerb: "Audit",
@@ -215,7 +215,7 @@ export const ui = {
     agentCopyHint: "Kopiere ihn, setze deine Repo-URL ein, füge ihn in deinen Agenten ein.",
     agentCtaSeeAudits: "Alle {count} Audits ansehen",
     agentExplain:
-      "Er fragt dann: Ausgabesprache (Deutsch / English), welche der {count} Audits (oder das ganze Repo) und ob Issues erstellt werden dürfen — dann führt er sie aus und öffnet einen nach Priorität sortierten Tracker.",
+      "Er fragt dann nach: Ausgabesprache (Deutsch / English), welche der {count} Audits (oder das ganze Repo) und ob er Issues erstellen darf — dann führt er sie aus und öffnet einen nach Priorität sortierten Tracker.",
     agentNotePre: "KI-Agenten: hole",
     agentNotePost: "und agiere als Audit-Orchestrator (Sprache + Umfang erfragen, dann ausführen).",
     trustTitle: "Ehrliche Antworten auf die naheliegenden Fragen",
@@ -225,20 +225,20 @@ export const ui = {
         a: "Jede file:line wird in der adversariellen Verifikation (Phase 3) anhand der echten Datei nachgeprüft; nicht verifizierbare Aussagen werden verworfen.",
       },
       {
-        q: "Verlässt mein Code meine Maschine?",
+        q: "Verlässt mein Code meinen Rechner?",
         a: "Nein — dein Agent holt nur den Prompt; dein Repo berührt unsere Domain nie.",
       },
       {
-        q: "Was kostet ein Lauf?",
-        a: "Nur die Tokens deines Agenten — beschränke dich auf einige Audits, um die Kosten zu steuern.",
+        q: "Was kostet ein Durchlauf?",
+        a: "Nur die Tokens deines Agenten — grenz den Umfang auf ein paar Audits ein, um die Kosten zu steuern.",
       },
     ],
     prinEyebrow: "Warum es anders ist",
     prinTitle: "Die meisten Audit-Prompts liefern unverifizierte Meinungen. Diese erzwingen Disziplin.",
     proofEyebrow: "Beweise statt Behauptungen",
-    proofTitle: "Wir haben die ganze Suite auf das eigene Repo gerichtet",
+    proofTitle: "Wir haben die ganze Suite auf das eigene Repo angesetzt",
     proofLead:
-      "Die Bibliothek wird auf sich selbst angewendet — auf genau dieses Repo gerichtet, das Backlog als öffentliche GitHub-Issues. Diese Seite bekam ihr eigenes Content-Audit; über das ganze Repo erreichte jede Linse A− bis A. Unten: der echte Backlog, die Noten und ein Finding in voller Tiefe.",
+      "Die Bibliothek prüft sich selbst — angesetzt auf genau dieses Repo, mit dem Backlog als öffentliche GitHub-Issues. Diese Seite bekam ihr eigenes Content-Audit; über das ganze Repo erreichte jeder Prüfbereich A− bis A. Unten: der echte Backlog, die Noten und ein Befund in voller Tiefe.",
     proofAnnotation:
       "Der echte Backlog aus dem Audit genau dieser Seite — 23 Befunde, jeder davon jetzt behoben.",
     proofVerifyHint: "Öffne ein Issue und prüfe den Beleg auf GitHub.",
@@ -246,19 +246,19 @@ export const ui = {
     proofEvidence: "Beleg",
     proofBefore: "Vorher",
     proofAfter: "Nachher",
-    proofCta: "Ganzen Lauf ansehen (#97)",
+    proofCta: "Ganzen Durchlauf ansehen (#97)",
     apKicker: "Audit-Vorlage",
-    apApproach: "Wie dieses Audit arbeitet",
+    apApproach: "So funktioniert dieses Audit",
     apUseCases: "Wann du es einsetzt",
     apOutput: "Was du bekommst",
-    apMaps: "Mappt auf",
+    apMaps: "Zugeordnet zu",
     apViewPrompt: "Vollständigen Prompt ansehen",
     apAllAudits: "Alle Audits",
     apOthers: "Die anderen Audits ansehen",
     audEyebrow: "Die Bibliothek",
     audTitle: "{count} stack-agnostische Audits, eine gemeinsame Methodik",
     audLead:
-      "Jedes ist ein eigenständiger Master-Prompt: eine mehrphasige Spezifikation, keine einmalige „review my code“-Frage. Mehrere gegen dasselbe Repo laufen lassen — ihre Befunde fließen ohne Duplikate in einen einzigen, prioritätssortierten Tracker, weil jedes Audit denselben Issue-Kontrakt liefert.",
+      "Jedes ist ein eigenständiger Master-Prompt: eine mehrphasige Spezifikation, keine einmalige „review my code“-Frage. Setz mehrere auf dasselbe Repo an — ihre Befunde fliessen ohne Doppelungen in einen einzigen, nach Priorität sortierten Tracker, weil jedes Audit demselben Issue-Vertrag folgt.",
     howEyebrow: "Die Methode",
     howTitle: "Sechs Phasen, jedes Mal",
     howLead:
@@ -267,26 +267,26 @@ export const ui = {
     howOutput: "Du bekommst — nach Priorität sortierte GitHub-Issues.",
     howParallel: "parallel",
     howGate: "übersteht ≥2 von 3",
-    stdEyebrow: "Die Maßstäbe",
-    stdTitle: "Zwei Maßstäbe. Jeder Bericht daran gemessen.",
+    stdEyebrow: "Die Massstäbe",
+    stdTitle: "Zwei Massstäbe. Jeder Bericht daran gemessen.",
     stdLead:
-      "Für sich allein nutzbar. Der eine bewertet 0–100 anhand einer Rubrik; der andere legt die exakte Issue-Form fest — so bleiben zwei Läufe vergleichbar, auch wenn die generierte Formulierung abweicht.",
+      "Für sich allein nutzbar. Der eine bewertet 0–100 anhand einer Rubrik; der andere legt die exakte Issue-Form fest — so bleiben zwei Durchläufe vergleichbar, auch wenn die generierte Formulierung abweicht.",
     ctaTitle: "Sieh, was dein KI-Agent findet, wenn er jede Aussage belegen muss.",
     ctaLead:
-      "Es ist kostenlos und MIT-lizenziert. Lass es auf einem Wegwerf-Branch laufen, lies Befunde, die 2-von-3 Skeptikern standhalten mussten, und behalte nur die Fixes, denen du zustimmst.",
+      "Es ist kostenlos und MIT-lizenziert. Setz es auf einem Wegwerf-Branch ein, lies Befunde, die 2-von-3 Skeptikern standhalten mussten, und behalte nur die Fixes, denen du zustimmst.",
     proofStrip: "Jede Aussage hier hat dasselbe Audit überstanden — lies das öffentliche Backlog (#97).",
     ctaBtnGet: "Prompts ansehen",
     ctaBtnQuick: "Quickstart",
     // Berichte-Galerie.
     repIndexKicker: "Beispiel-Berichte",
-    repIndexTitle: "Echte Audit-Läufe — jeder Befund auf ein öffentliches Issue zurückführbar",
+    repIndexTitle: "Echte Audit-Durchläufe — jeder Befund auf ein öffentliches Issue zurückführbar",
     repIndexLead:
-      "Keine erfundenen Demos. Jeder Bericht unten ist ein echter Lauf der Suite, gerendert aus denselben Daten, die als öffentliche GitHub-Issues eingereicht wurden — öffne jeden Link und prüfe den Beleg selbst. Wir starten die Galerie mit dem Self-Audit dieses Repos; weitere echte Läufe kommen dazu, sobald sie laufen.",
+      "Keine erfundenen Demos. Jeder Bericht unten ist ein echter Durchlauf der Suite, gerendert aus denselben Daten, die als öffentliche GitHub-Issues eingereicht wurden — öffne jeden Link und prüfe den Beleg selbst. Wir starten die Galerie mit dem Selbst-Audit dieses Repos; weitere echte Durchläufe kommen dazu, sobald sie vorliegen.",
     repIndexWhyTitle: "Warum diese echt und nicht inszeniert sind",
     repIndexWhy: [
       {
         t: "Belegbasiert",
-        d: "Jeder Befund nennt ein konkretes Artefakt (file:line, einen Config-Wert) und verlinkt das GitHub-Issue, in dem er lebt.",
+        d: "Jeder Befund nennt ein konkretes Artefakt (file:line, einen Config-Wert) und verlinkt das GitHub-Issue, in dem er steht.",
       },
       {
         t: "Adversariell verifiziert",
@@ -294,30 +294,30 @@ export const ui = {
       },
       {
         t: "Öffentlich prüfbar",
-        d: "Die Scorecard, die begründeten Nicht-anwendbar-Entscheide und die Cross-Audit-Dedupe führen alle auf einen Master-Tracker.",
+        d: "Die Scorecard, die begründeten Nicht-anwendbar-Entscheide und das audit-übergreifende Bereinigen von Doppelungen führen alle auf einen Master-Tracker zurück.",
       },
     ],
     repViewReport: "Bericht ansehen",
     repTracker: "Master-Tracker",
     repTarget: "Ziel",
-    repDate: "Lauf-Datum",
+    repDate: "Datum des Durchlaufs",
     repBackToReports: "Alle Berichte",
     repScorecardTitle: "Scorecard",
-    repScorecardLead: "Phase 0 wählte {n} anwendbare Audits; jede Linse wurde unabhängig benotet.",
+    repScorecardLead: "Phase 0 wählte {n} anwendbare Audits; jeder Prüfbereich wurde unabhängig benotet.",
     repNotApplicableTitle: "Als nicht anwendbar deklariert",
     repNotApplicableLead:
-      "Phase 0 erklärte diese — mit Begründung — als außerhalb des Umfangs, statt sie still zu überspringen.",
+      "Phase 0 erklärte diese — mit Begründung — als ausserhalb des Umfangs, statt sie still zu überspringen.",
     repFindingsTitle: "Wichtigste Befunde",
     repFindingsLead: "Ein Ausschnitt des Backlogs, nativ gerendert. Öffne ein Issue und prüfe den Beleg auf GitHub.",
-    repDedupTitle: "Cross-Audit-Dedupe",
+    repDedupTitle: "Audit-übergreifende Doppelbefunde",
     repDedupLead:
-      "Der Mehrwert, die Audits zusammen laufen zu lassen: dieselbe Lücke von mehreren Linsen gefunden, zu einem Backlog-Item gemergt — jedes Zitat erhalten.",
+      "Der Mehrwert, die Audits gemeinsam einzusetzen: dieselbe Lücke, von mehreren Prüfbereichen gefunden und zu einem Backlog-Item zusammengeführt — jedes Zitat bleibt erhalten.",
     repDedupFoundBy: "Unabhängig gefunden von",
-    repMethodTitle: "Wie dieser Lauf arbeitete",
+    repMethodTitle: "Wie dieser Durchlauf ablief",
     repMethodLead:
-      "Recon wählte die anwendbaren Audits, ein Spezialisten-Schwarm führte sie parallel aus, Befunde wurden zusammengeführt und dedupliziert, und jeder P0/P1 musste unabhängige Skeptiker überstehen, bevor er in den Bericht kam.",
+      "Recon wählte die anwendbaren Audits, ein Spezialisten-Schwarm führte sie parallel aus, die Befunde wurden zusammengeführt und um Doppelungen bereinigt, und jeder P0/P1 musste unabhängige Skeptiker überstehen, bevor er in den Bericht kam.",
     repViewIssue: "Issue ansehen",
-    repFullRun: "Ganzen Lauf ansehen",
+    repFullRun: "Ganzen Durchlauf ansehen",
     repEvidence: "Beleg",
     repBefore: "Vorher",
     repAfter: "Nachher",
@@ -333,9 +333,9 @@ export const ui = {
 
 // German prose for the data that lives in content.ts (icons/files/names stay shared).
 const auditBlurbDe: Record<string, string> = {
-  security: "14 Domänen: Injection, AuthN/Z, Secrets, Supply Chain, IaC, CI/CD, Business-Logik, Datenschutz, LLM.",
+  security: "14 Domänen: Injection, AuthN/Z, Secrets, Supply Chain, IaC, CI/CD, Business Logic, Datenschutz, LLM.",
   repo: "Repo-Engineering: Architektur, Stack-Konsistenz, Docs, Tests, Deps, CI/CD, Git-Hygiene.",
-  frontend: "16-Agenten-Frontend-Sweep: Usability, Psychologie, Visual Design, A11y, Performance, SEO, Copy, CRO.",
+  frontend: "16-Agenten-Frontend-Durchlauf: Usability, Psychologie, Visual Design, A11y, Performance, SEO, Copy, CRO.",
   api: "API-Design: Ressourcen-Modell, HTTP-Semantik, Error-Model, Versionierung, Idempotenz, Rate-Limits, DX.",
   performance: "Performance & Skalierung: Hotspots, N+1, Caching, Concurrency, Leaks, Lastverhalten, Resilienz, FinOps.",
   data: "Daten & Datenbank: Modellierung, Typen, Constraints, Migrations-Sicherheit, Transaktionen, Integrität, Backup/DR.",
@@ -345,7 +345,7 @@ const auditBlurbDe: Record<string, string> = {
   accessibility: "Tiefes A11y: Semantik, Tastatur, Fokus, Screenreader, Kontrast, Formulare, Zoom, Motorik, Motion, Kognition.",
   documentation: "Doku-Qualität vs. Standard: Repo-Kopf, Onboarding, Doc-Code-Drift, Schreibstil, Diátaxis, Repo-Health.",
   content: "Inhalt & Botschaft: These hinterfragen, Zielgruppen-Fit, Belege & Originalität, Struktur, Stimme, konkrete Umformulierungen.",
-  lean: "Schlankheit: toter Code, ungenutzte/Phantom-Deps, Duplikation, AI-Slop, Dependency-Transparenz — sicherer Strip-down ohne Über-Löschen.",
+  lean: "Schlankheit: toter Code, ungenutzte/Phantom-Deps, Duplikation, AI-Slop, Dependency-Transparenz — sicheres Verschlanken ohne Über-Löschen.",
 };
 
 // German prose for each principle, keyed by the principle's English `title` (stable),
@@ -356,7 +356,7 @@ const principleDe: Record<string, { title: string; body: string }> = {
     body: "Jeder Befund nennt ein konkretes Artefakt — file:line, einen Query-Plan, einen Request, einen Config-Wert, eine gemessene Metrik. Kein Beleg, kein Befund.",
   },
   "Adversarial self-challenge": {
-    title: "Adversarielle Selbst-Challenge",
+    title: "Adversarielle Selbstprüfung",
     body: "Kein Befund überlebt, bevor unabhängige Skeptiker-Agenten ihn zu widerlegen versucht haben — er muss mindestens zwei von drei überstehen, sonst wird er verworfen. Wer eine feindselige Lesart nicht übersteht, ist kein Befund.",
   },
   "Blind-spot hunting": {
@@ -370,9 +370,9 @@ const principleDe: Record<string, { title: string; body: string }> = {
 };
 
 const phaseDe: Record<string, { title: string; body: string }> = {
-  "0": { title: "Reconnaissance", body: "Faktisches Inventar + Surface-Map. Noch keine Meinungen." },
+  "0": { title: "Reconnaissance", body: "Faktisches Inventar + Oberflächen-Karte. Noch keine Meinungen." },
   "1": { title: "Spezialisten-Schwarm", body: "Viele Domänen-Experten parallel, jeder belegpflichtig." },
-  "2": { title: "Cross-Pollination", body: "Mergen, deduplizieren, Compound-Findings sichtbar machen." },
+  "2": { title: "Cross-Pollination", body: "Zusammenführen, Doppelungen entfernen, Verbund-Befunde sichtbar machen." },
   "3": { title: "Adversarielle Verifikation", body: "Unabhängige Skeptiker widerlegen jeden P0/P1; ≥2 von 3 zum Überleben." },
   "4": { title: "Benchmark", body: "Vergleich gegen benannte Best-in-Class-Referenzen und Standards." },
   "5": { title: "Synthese", body: "Bericht, Scorecard, Issues und eine 30/60/90-Roadmap." },
@@ -380,7 +380,7 @@ const phaseDe: Record<string, { title: string; body: string }> = {
 
 const standardBlurbDe: Record<string, string> = {
   "Documentation standard":
-    "Ein Dokumentationsstandard mit fünf Repo-Profilen und einer 0–100-Rubrik — derselbe Maßstab, an dem das Documentation-Audit misst.",
+    "Ein Dokumentationsstandard mit fünf Repo-Profilen und einer 0–100-Rubrik — derselbe Massstab, an dem das Documentation-Audit misst.",
   "Issue-output standard":
     "Der verbindliche Vertrag, dem jedes Audit folgt: zuerst ein nach Priorität sortiertes Tracking-Issue, dann pro Befund ein Issue mit eigener Management-Summary.",
 };
@@ -407,7 +407,7 @@ const reportProse: Record<Lang, Record<string, ReportProse>> = {
     "self-audit": {
       title: "Dieses Repo auditieren",
       summary:
-        "Die Suite auf das eigene Repository gerichtet — 7 anwendbare Audits, 4 mit Begründung als nicht anwendbar deklariert, null P0, ein P1.",
+        "Die Suite auf das eigene Repository angesetzt — 7 anwendbare Audits, 4 mit Begründung als nicht anwendbar deklariert, null P0, ein P1.",
     },
   },
 };
@@ -419,7 +419,7 @@ const reportVerdicts: Record<Lang, Record<string, string>> = {
   },
   de: {
     selfAudit:
-      "Production-ready. Alle sieben anwendbaren Audits liegen bei A− bis A (90–94), null P0, genau ein P1; die einzigen echten Restrisiken betreffen das Supply-Chain-Vertrauensmodell, das das Produkt verkauft, nicht eine Live-Exposition.",
+      "Production-ready. Alle sieben anwendbaren Audits liegen bei A− bis A (90–94), null P0, genau ein P1; die einzigen echten Restrisiken betreffen das Supply-Chain-Vertrauensmodell, das das Produkt vermarktet — keine akute Gefährdung im Betrieb.",
   },
 };
 
@@ -434,7 +434,7 @@ const reportReasons: Record<Lang, Record<string, string>> = {
     api: "Keine route.ts / Server-Actions — voll statisch.",
     data: "Keine Datenbank, kein Schema, kein ORM.",
     aiLlm: "Prompts laufen im externen Agenten; kein In-Repo-Runtime.",
-    compliancePrivacy: "Keine Formulare, kein Auth, keine PII außer Vercel Analytics.",
+    compliancePrivacy: "Keine Formulare, kein Auth, keine PII ausser Vercel Analytics.",
   },
 };
 
@@ -477,20 +477,20 @@ const reportFindings: Record<Lang, Record<string, FindingProse>> = {
     checksums: {
       title: "CHECKSUMS.txt wird in CI nicht verifiziert",
       evidence: "CHECKSUMS.txt · .github/workflows",
-      before: 'Verspricht „verify-before-execute" — nicht erzwungen',
-      after: "Ein CI-Gate verifiziert die Checksummen bei jedem Lauf",
+      before: 'Verspricht „verify-before-execute“ — nicht erzwungen',
+      after: "Ein CI-Gate verifiziert die Checksummen bei jedem Durchlauf",
     },
     pins: {
-      title: "~17 hand-gepflegte Versions-Pins ohne Single Source of Truth",
+      title: "~17 von Hand gepflegte Versions-Pins ohne Single Source of Truth",
       evidence: "verstreute v0.5.0-Pins im Repo",
-      before: "Jeder Pin von Hand editiert, driftanfällig",
-      after: "Eine Single Source of Truth, per Skript gebumpt",
+      before: "Jeder Pin von Hand bearbeitet, anfällig für Abweichungen",
+      after: "Eine Single Source of Truth, per Skript hochgezählt",
     },
     enMeta: {
-      title: 'EN-Metadaten hartcodieren „German GitHub issues"',
+      title: 'EN-Metadaten waren fest auf „German GitHub issues“ verdrahtet',
       evidence: "web/lib/site.ts",
-      before: "Englische Copy behauptete nur deutsche Ausgabe",
-      after: "Copy spiegelt deutsche oder englische Ausgabe",
+      before: "Der englische Text behauptete, die Ausgabe erfolge nur auf Deutsch",
+      after: "Der Text spiegelt deutsche oder englische Ausgabe wider",
     },
   },
 };
@@ -504,8 +504,8 @@ const reportDedup: Record<Lang, Record<string, { title: string; body: string }>>
   },
   de: {
     checksums: {
-      title: '„CHECKSUMS.txt wird in CI nicht verifiziert"',
-      body: "Unabhängig von der repo-, infrastructure- und security-Linse gefunden und zu einem einzigen Backlog-Item gemergt — alle drei Zitate erhalten. Die Versions-Pin-Hälfte wurde als eigener Fix abgespalten.",
+      title: '„CHECKSUMS.txt wird in CI nicht verifiziert“',
+      body: "Unabhängig vom repo-, infrastructure- und security-Prüfbereich gefunden und zu einem einzigen Backlog-Item zusammengeführt — alle drei Zitate bleiben erhalten. Der Teil zu den Versions-Pins wurde als eigener Fix abgespalten.",
     },
   },
 };
