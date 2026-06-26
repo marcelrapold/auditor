@@ -7,6 +7,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-06-26
+
 ### Added
 - **MCP server (`mcp/`)** — a dependency-light stdio Model Context Protocol server that exposes the
   verified, version-pinned audit prompts as native agent tools (`list_audits`, `get_audit_prompt`,
@@ -20,12 +22,29 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
   field mapped to a verifiable GitHub artifact and localized EN/DE.
 - **Per-audit photographic hero images** ("Verified Systems Lab") shown on the audit detail pages and
   the homepage audit cards, auto-detected via the `public/<key>.webp` convention.
+- **Native-language & locale integrity (`C15`)** in the `content` audit — a localization lens with a
+  locale input contract (`LOCALE`/`SOURCE_LANGUAGE`/`LOCALISATION_MODE`/`TERMINOLOGY_POLICY`), a
+  Phase-0 language brief + terminology matrix, a "Native Reader" blind-back-translation skeptic
+  (Phase 3), a mode-dependent scorecard dimension, and de-CH definition-of-done checks, so an audit
+  yields original-sounding copy in the target locale rather than translated source. de-CH (Swiss)
+  defaults to `ss`, never `ß`.
+- **`TERMINOLOGY.md`** — a bilingual EN/de-CH glossary (Binding + Advisory tiers) that serves as the
+  content audit's `STYLE_REFERENCE`; linked from `CONTRIBUTING.md`.
 
 ### Changed
 - The landing page is now a multi-route site (home, per-audit details, reports) sharing a common
   header/footer/nav chrome, rather than a single page.
 - Vercel deploys are git-connected and automatic (production on push to `main`, previews per branch),
   with the monorepo build unblocked (Root Directory = `web`).
+- **Cross-cutting de-CH locale rule** in `ISSUE-OUTPUT-STANDARD.md` (Swiss orthography, German
+  quotation marks, terminology consistency) inherited by all 13 audits, and the issue-label axis
+  canonicalized to `dimension:`/`effort:` (with `locale:de-CH`); `DOCUMENTATION-STANDARD.md`
+  orthography aligned to Swiss `ss`.
+- **Native Swiss-German site copy** — the entire German site (`web/lib/i18n.ts` and all 13 audit
+  detail pages) re-modeled into original de-CH by dogfooding the new `C15` lens on this repo:
+  English sentence architecture and Denglish removed, terminology unified, every protected technical
+  term preserved. Locked in by a `web/lib/locale-de-ch.test.ts` regression guard (no `ß`, a
+  morphology-aware Denglish denylist) and a corrected principle-translation assertion.
 
 ### Fixed
 - **CI/release hardening** — automated `CHECKSUMS.txt` regeneration and verification, a version-pin
@@ -142,7 +161,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
   `api`, `performance`, `data`, `infrastructure`, `ai-llm`.
 - README, MIT-Lizenz, `.gitignore`.
 
-[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.9.0
 [0.8.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.8.0
 [0.7.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.7.0
 [0.6.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.6.0
