@@ -34,12 +34,24 @@ VOICE:        <brand voice / style-guide reference, or infer from the existing c
 COMPARISON:   <named best-in-class references or competitors to benchmark against — or Phase 0 picks>
 DATA_ACCESS:  <may fetch live URLs / competitor pages to compare? or work from provided text only>
 OUTPUT_LANG:  <Deutsch (default) | English | ...>
+SOURCE_LANGUAGE:    <auto-detect (default) | English | Deutsch | ... — language of the source draft,
+                     used to detect interference>
+LOCALISATION_MODE:  <audit-only (default) | native-rewrite — native-rewrite preserves claims /
+                     evidence / meaning / technical correctness but may fully re-form sentence
+                     structure and word choice>
+TERMINOLOGY_POLICY: <infer from corpus (default) | provided glossary | strict glossary>
 ISSUE_TARGET: <owner/repo for gh issue creation — preview-first, create only on approval>
 ```
 
 If unknown, Phase 0 infers the content type, thesis, audience, awareness stage, and goal from the
 piece itself and states its assumptions explicitly. The thesis and the goal are the yardsticks;
 every finding is judged against whether it helps the reader believe the thesis and take the action.
+
+`OUTPUT_LANG` expresses the target **locale**, not merely the language: Deutsch defaults to Swiss
+**de-CH** (always *ss*, never *ß*). `VOICE` may point at an approved native corpus or glossary (a
+`STYLE_REFERENCE`) the rewrite must match. When `SOURCE_LANGUAGE` differs from the target locale the
+localisation apparatus (operating principle 9, lens C15, the Native Reader skeptic) runs in full;
+when they match it runs as a lighter native-quality check.
 
 ---
 
@@ -66,6 +78,20 @@ every finding is judged against whether it helps the reader believe the thesis a
 8. **Comparative lens — measure information gain.** Benchmark against the best existing content for
    this reader and goal. Commodity content that a reader could get from any of ten other sources is
    a finding even when every sentence is clean.
+9. **Native-language & locale integrity.** For any output whose target locale differs from the
+   source language — and as a lighter native-quality check when source == target — judge the text as
+   **original copy in its target locale**, never as a translation. Native-first test: an experienced
+   native copywriter in the target locale could plausibly have written it without ever seeing a
+   source-language original. Preserve **meaning, not sentence structure**. Precision over purism:
+   keep English for code identifiers, standards, established technical terms, UI labels, and
+   commands, and wherever it is materially more precise (CI/CD, OWASP, CVSS, SBOM, RAG, `file:line`,
+   GitHub-Issue, trust boundary, prompt injection, …). Terminology is **intentional**: each recurrent
+   term is explicitly kept / translated / rephrased and then used in **one canonical form**. Locale
+   rules are hard requirements; for de-CH: always *ss*, never *ß* (except immutable proper names,
+   code, legal titles, or verbatim quotes — each retained *ß* tagged `quote` | `code` | `legal`);
+   German „…" quotation marks, never an ASCII straight-quote closer; match the corpus register (the
+   auditor corpus uses *du*); comma decimals; orthography and anglicism tolerance only — **no** Swiss
+   dialect lexis (no Grüezi / Velo / parkieren / Natel).
 
 ### Severity scale
 
@@ -77,6 +103,11 @@ every finding is judged against whether it helps the reader believe the thesis a
 | **P3 — Low** | Polish: word choice, rhythm, a tighter headline option, redundancy, minor tone nits. |
 
 Each finding gets **effort (S/M/L/XL)** and **priority = impact × confidence ÷ effort**.
+
+**Localisation severity (C15).** P1 — systemic source-language interference in the hero, primary
+value proposition, primary CTA, or core navigation; a phrase that obscures the product's meaning; or
+trust-eroding terminology inconsistency in prominent content. P2 — recurring unnatural wording across
+a page or module. P3 — isolated awkwardness or a minor locale correction.
 
 ---
 
@@ -98,6 +129,16 @@ Build the shared brief every specialist receives:
   rewrites stay on-brand.
 - **Comparison set:** 2–3 best-in-class pieces for this reader and goal to benchmark against in
   Phase 4 (named in `COMPARISON` or chosen here).
+- **Language & localisation brief:** the target language and locale; the source language and its
+  likely interference; the intended register; the reader's technical fluency; protected English
+  terms; preferred German terms; suspected translation artefacts; and any explicitly protected
+  wording.
+- **Terminology matrix:** before any rewrite, build a matrix — *term | keep / translate / rephrase |
+  chosen form | rationale | scope* — so every recurrent term resolves to one canonical form.
+- **Localisation profile:** state it explicitly. Source == target ⇒ a native-quality check only;
+  source != target ⇒ the full apparatus (operating principle 9, lens C15, the Native Reader
+  skeptic). When the corpus shows parallel source + target strings (e.g. an English master with
+  localized siblings), the profile is source != target.
 
 Output: a structured brief (thesis, audience, awareness stage, goal, objections, voice, references)
 distributed to all Phase 1 agents.
@@ -188,6 +229,49 @@ Misleading or unsubstantiated claims, manipulative dark-pattern copy, undisclose
 exclusionary, non-inclusive, or culturally blind language. Anything that exposes the author to a
 credibility, legal, or trust hit is escalated with its harm chain.
 
+### C15 — Native-language & locale integrity
+Runs on the Phase 0 **localisation profile**. Two profiles: source == target ⇒ a lighter
+native-quality pass (orthography, terminology consistency, idiom); source != target ⇒ the full
+apparatus below. For non-source locales, systematically inspect for: English sentence architecture
+and literal translation; imported phrasal-verb logic; unnecessary Denglish verbs; false friends;
+unnatural collocations; noun-heavy stacks; inconsistent technical terminology; English terms that are
+neither protected nor more precise; translated idioms; register inconsistency across product copy /
+control jargon / engineering notes; locale-orthography violations; and CTAs, headings, or microcopy
+that are correct but not idiomatic.
+
+**Precision carve-outs (do not puristically replace):** GitHub, CI/CD, CVSS, OWASP, SBOM, RAG, code
+identifiers, file paths, commands, and framework terms. **Terms-of-art verbs anchored to a tool**
+(Git *mergen*; data *mappen* / *kartieren*) are kept and enforced in one canonical form; only
+anchorless translationese verbs (*laufen lassen*, *steelmannen*) are flagged.
+
+**Native-rewrite safety:** meaning-reshaping native-rewrite applies only to marketing / UX copy. For
+safety, legal, or factual content, restrict changes to orthography and terminology, and route any
+P0/P1 wording change through the accuracy lens (C9) with an explicit claims-preserved assertion.
+
+Each confirmed C15 finding states: the exact text and its location; the language pattern detected;
+why it sounds translated or non-native; a technically equivalent native rewrite (precision
+preserved); the terminology decision (keep / translate / rephrase); and whether it is systemic or
+isolated. Example:
+
+```json
+{
+  "id": "C15-004",
+  "title": "Hero subline reads as a literal translation of an English clause",
+  "severity": "P1",
+  "confidence": 0.9,
+  "effort": "S",
+  "location": "hero, line 2",
+  "quote": "Wir lassen deinen Code von einem Schwarm von Agenten laufen, um Risiken zu mappen.",
+  "language_pattern": "literal carry-over of English clause order + anchorless verb 'laufen lassen' (run)",
+  "evidence": "Blind back-translation snaps cleanly to 'We run your code through a swarm of agents to map risks' — same clause order, same verb choice; a native de-CH copywriter would not phrase 'lassen … laufen' here. 'mappen' is an anchored term-of-art and is kept.",
+  "fix": "Before: 'Wir lassen deinen Code von einem Schwarm von Agenten laufen, um Risiken zu mappen.' After: 'Ein Agenten-Schwarm prüft deinen Code und mappt die Risiken.'",
+  "terminology_decision": "keep 'mappen' (anchored, one canonical form); rephrase 'laufen lassen' → 'prüft'; keep 'Agent' / 'Schwarm'",
+  "native_rewrite": "Ein Agenten-Schwarm prüft deinen Code und mappt die Risiken.",
+  "locale": "de-CH",
+  "expected_impact": "Hero reads as original de-CH copy, not a translation; preserves the 'mappen' term-of-art while removing translationese that erodes trust in the primary value proposition."
+}
+```
+
 ---
 
 ## Phase 2 — Cross-pollination barrier
@@ -209,6 +293,19 @@ hard gate: if the steelmanned counter-argument stands unanswered, that is record
 finding. Then a **completeness critic** asks: which passage wasn't quoted, which claim wasn't
 checked, which reader objection wasn't tested?
 
+**The Native Reader (C15).** For C15-P1/P2 findings this skeptic **replaces** the standard
+three-skeptic panel. It works **without the source text** and runs a **blind back-translation**:
+translate the target text back into the source language; if it snaps to the source's sentence and
+clause order, the text is translationese and criterion (a) is met. It also checks that the proposed
+rewrite **preserves technical precision and voice** rather than over-correcting into artificial
+purism. A language finding survives only on **≥ 2 of 3**: (a) the text is demonstrably translated or
+non-native — the back-translation decides, not taste; (b) a more natural form exists **without losing
+precision** — the skeptic must **produce** that native alternative as evidence; (c) the fix improves
+flow, trust, or comprehension. Two cases deterministically **override** the "default to refuted"
+rule: a de-CH orthography violation (*ß*) and an English-verb-stem + German-inflection hybrid. An
+off-manifest technical-term swap additionally requires a **Context Defender** sign-off with a
+one-line precision-equivalence statement.
+
 ## Phase 4 — Benchmark
 
 Compare thesis sharpness, evidence, structure, and information gain against the named best-in-class
@@ -227,20 +324,31 @@ In `OUTPUT_LANG`:
    sharper one-sentence thesis if the current one is weak.
 3. **Content scorecard (0–100):** score each dimension (weights below), report the total and the
    **grade band** (Gold 90–100 / Silver 75–89 / Bronze 60–74 / Needs-work 40–59 / Inadequate <40),
-   mapping the C1–C14 findings onto the dimensions.
+   mapping the C1–C15 findings onto the dimensions. The weighting is **mode-dependent**.
+
+   When **source != target** (a localised piece), score a dedicated native-fit axis:
 
    | Dimension | Pts |
    |---|---|
-   | Thesis & argument integrity | 20 |
-   | Audience fit & message clarity | 20 |
-   | Evidence, credibility & originality | 15 |
-   | Structure & narrative | 15 |
-   | Voice, concision & line craft | 15 |
-   | Persuasion & engagement | 10 |
-   | Differentiation vs best-in-class | 5 |
+   | Thesis & argument integrity | 18 |
+   | Audience fit & clarity | 18 |
+   | Evidence, credibility & originality | 13 |
+   | Structure & narrative | 13 |
+   | Voice, concision & line craft | 13 |
+   | Persuasion & engagement | 9 |
+   | Differentiation vs best-in-class | 4 |
+   | Native-language quality & locale fit | 12 |
 
-   Re-weight for the content type (e.g., a pitch leans on persuasion/CTA; an essay on thesis and
-   originality) and state the re-weighting.
+   When **source == target**, add **no** new axis: fold ~3 points of native quality into *Voice,
+   concision & line craft* and keep the original seven weights (20 / 20 / 15 / 15 / 15 / 10 / 5 =
+   100). In **both** modes, **either** a locale-orthography error (*ß* in de-CH) **or** a precision
+   regression (trading a precise English term for a vaguer German one) caps the native-fit
+   contribution — the *Native-language quality & locale fit* axis in localised mode, or the points
+   folded into *Voice, concision & line craft* in same-language mode; the penalty is symmetric (an
+   orthography error and a precision regression weigh the same).
+
+   Re-weight further for the content type (e.g., a pitch leans on persuasion/CTA; an essay on thesis
+   and originality) and state the re-weighting.
 4. **Before/after rewrites:** the highest-leverage passages rewritten in place (headline, opening,
    value proposition, CTA), each with a one-line rationale.
 5. **Verified findings register:** the shared schema, sorted by priority; skeptic note on P0/P1.
@@ -251,7 +359,16 @@ In `OUTPUT_LANG`:
    thesis correctly after one read", "every superlative is backed by a cited specific").
 9. **Optional ready-to-publish rewrite:** for a low-scoring piece, attach a full rewritten draft
    that preserves voice and meaning.
-10. **GitHub issues (mandatory)** per [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md) —
+10. **Localisation verdict** (when localisation is in scope): native / mixed / translated-sounding;
+    the dominant interference patterns; whether they are systemic or isolated; and the single most
+    important language correction.
+11. **Terminology decision log:** *term | keep / translate / rephrase | approved form | rationale |
+    affected locations* — one canonical form per recurrent term.
+12. **Native-copy rewrite set:** the hero, primary value proposition, primary CTA, navigation
+    labels, highest-traffic headings, and the most repeated *ss/ß* and Denglish-verb offenders —
+    **not** a "jargon cluster", because here the jargon *is* the value proposition. Each native
+    rewrite binds to its content key / location, not free text; for German, default to de-CH.
+13. **GitHub issues (mandatory)** per [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md) —
     see the dedicated section below.
 
 ### Appendices
@@ -273,7 +390,11 @@ preview/dry-run first, created only on explicit authorization + repo access. Two
    **management summary** (2–3 sentences: what, impact on the reader/goal, one-line recommendation),
    then the full finding (severity, dimension, the **quoted passage** with location, evidence, a
    concrete **before → after** rewrite, effort, re-audit criterion). Labels: `audit`, `content`,
-   `sev:p0…p3`, `dimension:<x>`, `effort:S|M|L`; back-link to the tracking issue.
+   `sev:p0…p3`, `dimension:<x>`, `effort:S|M|L`; back-link to the tracking issue. For localisation
+   (C15) findings, add `dimension:localisation` (and optionally `locale:de-CH`), title the issue
+   `[P1][Lokalisierung] …` (the German word, not `[de-CH]`), and carry — in addition to the
+   standard fields — the **language pattern**, the **terminology decision**, the **before/after**,
+   and the **re-audit criterion**.
 
 For a low-scoring piece, optionally attach a **ready-to-publish rewritten draft** to the tracking
 issue or open it as a PR. Create child issues first, collect their numbers, then create/update the
@@ -298,7 +419,13 @@ rather than duplicate.
   "evidence": "The first concrete, specific benefit ('cut onboarding from days to minutes') appears at line 4; the first three sentences are generic context the reader already accepts and could apply to any competitor.",
   "fix": "Before: 'In today's fast-moving landscape...'. After: 'Cut new-hire onboarding from three days to twenty minutes.' Lead with the specific outcome; delete the generic preamble.",
   "expected_impact": "Moves the single most decision-relevant claim above the fold; reduces 5-second bounce for problem-aware visitors.",
-  "anticipated_refutation": "'The preamble sets context' — a problem-aware reader already has the context; the preamble costs the only seconds you get and says nothing a competitor couldn't."
+  "anticipated_refutation": "'The preamble sets context' — a problem-aware reader already has the context; the preamble costs the only seconds you get and says nothing a competitor couldn't.",
+
+  // C15-only — present only on native-language / localisation findings; otherwise omit these four:
+  "language_pattern": "literal translation of English clause order",
+  "terminology_decision": "keep 'mappen'; rephrase 'laufen lassen' → 'prüft'",
+  "locale": "de-CH",
+  "native_rewrite": "Ein Agenten-Schwarm prüft deinen Code und mappt die Risiken."
 }
 ```
 
@@ -325,4 +452,14 @@ rather than duplicate.
       second person, present/active.
 - [ ] Coverage and "claims checked vs unverifiable" appendices are complete and honest.
 - [ ] The source content was left unmodified; rewrites are proposals, not edits to the original.
+- [ ] The target locale was identified and recorded; the localisation profile (source == / != target)
+      was stated.
+- [ ] Every non-source rewrite passed the native-first (blind back-translation) test.
+- [ ] No *ß* remains in de-CH output except immutable quotes / code / legal names, each tagged.
+- [ ] Recurring terminology resolves to one approved form (terminology decision log attached).
+- [ ] English was kept only where protected, a standard, or materially more precise.
+- [ ] No rewrite traded technical precision for "more German"; each precision regression is logged
+      per swap.
+- [ ] The hero, primary CTA, navigation, and high-traffic headings were checked separately for
+      native quality.
 ```

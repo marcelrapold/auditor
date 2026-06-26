@@ -12,6 +12,7 @@ Every Markdown file follows the [`DOCUMENTATION-STANDARD.md`](DOCUMENTATION-STAN
 - Second person, present tense, active voice; short sentences; parallel lists.
 - Notes as GitHub alerts (`> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`) instead of emoji.
 - No dead links; no doc–code drift.
+- Use [`TERMINOLOGY.md`](TERMINOLOGY.md) as the German (de-CH)/English copy glossary — the content audit's `STYLE_REFERENCE` for binding and advisory term choices.
 
 ## Contributing a new audit template
 
