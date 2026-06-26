@@ -395,23 +395,44 @@ function Audits({ lang }: { lang: Lang }) {
             <Reveal key={a.name} delay={(i % 3) * 0.05}>
               <a
                 href={`${base}/${a.name}`}
-                className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50 hover:bg-accent/40 focus-visible:border-primary/50 focus-visible:bg-accent/40"
+                className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/50 focus-visible:border-primary/50"
               >
                 {hero && (
-                  <div className="relative aspect-video w-full overflow-hidden border-b border-border/60">
+                  <div className="relative aspect-[2/1] w-full overflow-hidden">
                     <Image
                       src={hero}
                       alt=""
                       aria-hidden
                       fill
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                    {/* Fade the image into the card so the title sits on solid black, not busy
+                        artwork. Bottom stays opaque (title legibility); hover lifts the middle
+                        to reveal more of the photo. */}
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 bg-gradient-to-t from-card from-15% via-card/80 to-transparent transition-colors duration-500 group-hover:via-card/55"
                     />
                   </div>
                 )}
-                <div className="flex flex-1 flex-col p-6">
-                  <a.icon aria-hidden className="size-5 text-primary" />
-                  <h3 className="mt-4 font-mono text-sm font-semibold">{a.name}</h3>
+                <div
+                  className={cn(
+                    "relative z-10 flex flex-1 flex-col px-6 pb-6",
+                    hero ? "-mt-10" : "pt-6",
+                  )}
+                >
+                  <a.icon
+                    aria-hidden
+                    className="size-5 text-primary transition-[filter] duration-300 group-hover:[filter:drop-shadow(0_0_8px_currentColor)]"
+                  />
+                  <h3 className="mt-3 flex items-center gap-1.5 font-mono text-sm font-semibold">
+                    {a.name}
+                    <ArrowRight
+                      aria-hidden
+                      className="size-3.5 -translate-x-1 text-primary opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                    />
+                  </h3>
                   <p className="mt-2 flex-1 text-sm text-muted-foreground">{glossify(a.blurb, lang)}</p>
                   <p className="mt-4 font-mono text-xs text-muted-foreground">{glossify(a.mapsTo, lang)}</p>
                 </div>
