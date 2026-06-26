@@ -7,6 +7,16 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-06-26
+
+### Changed
+- **`content` audit — formalized the localisation control inputs.** `LOCALISATION_MODE` gains a
+  third value `translate-and-rewrite` (produce target copy from the source when no usable target
+  draft exists, held to the same native-first bar), and both `LOCALISATION_MODE` and
+  `TERMINOLOGY_POLICY` now have an explicit "control effect" spec defining what each value does — so
+  a run's localisation behaviour is unambiguous rather than inferred. No structural change; the gate
+  stays green (13/13).
+
 ## [0.9.0] - 2026-06-26
 
 ### Added
@@ -161,7 +171,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
   `api`, `performance`, `data`, `infrastructure`, `ai-llm`.
 - README, MIT-Lizenz, `.gitignore`.
 
-[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/marcelrapold/auditor/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/marcelrapold/auditor/releases/tag/v0.9.1
 [0.9.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.9.0
 [0.8.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.8.0
 [0.7.0]: https://github.com/marcelrapold/auditor/releases/tag/v0.7.0
