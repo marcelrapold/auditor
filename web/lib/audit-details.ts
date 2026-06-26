@@ -32,7 +32,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Ein Security-Review über 14 Domains — jeder Befund belegt, jede Ausnutzbarkeit eingestuft.",
-      "approach": "Ein Spezialisten-Swarm prüft die 14 Security-Domains parallel: Injection, Authentication, Authorization, Secrets und Crypto, Supply Chain, Konfiguration, IaC, CI/CD, API, Business Logic, Frontend, Privacy, Logging und LLM. Zuerst kartiert Phase 0 die Angriffsfläche und die Trust Boundaries. Jeder Befund zitiert eine file:line oder ein Config-Artefakt, ordnet ihn OWASP, CWE, MITRE oder CIS zu und trägt eine Severity von P0 bis P3 samt CVSS-Schätzung. Jeden P0/P1 nehmen unabhängige Skeptiker auseinander, bevor er es in den Bericht schafft.",
+      "approach": "Ein Spezialisten-Schwarm prüft die 14 Security-Domains parallel: Injection, Authentication, Authorization, Secrets und Crypto, Supply Chain, Konfiguration, IaC, CI/CD, API, Business Logic, Frontend, Privacy, Logging und LLM. Zuerst kartiert Phase 0 die Angriffsfläche und die Trust Boundaries. Jeder Befund zitiert eine file:line oder ein Config-Artefakt, ordnet ihn OWASP, CWE, MITRE oder CIS zu und trägt eine Severity von P0 bis P3 samt CVSS-Schätzung. Jeden P0/P1 nehmen unabhängige Skeptiker auseinander, bevor er es in den Bericht schafft.",
       "useCases": [
         {
           "title": "Vor dem Production-Launch",
@@ -40,7 +40,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
         },
         {
           "title": "Übernommene Codebase prüfen",
-          "body": "Du hast einen Service ohne Security-Historie übernommen. Der Swarm baut von Grund auf ein Inventar der Angriffsfläche und benotet alle 14 Domains von A bis F, damit du siehst, wo du wirklich angreifbar bist — schwache JWT-Validierung, zu breite IAM, Dependencies mit bekannten CVEs — statt zu raten."
+          "body": "Du hast einen Service ohne Security-Historie übernommen. Der Schwarm baut von Grund auf ein Inventar der Angriffsfläche und benotet alle 14 Domains von A bis F, damit du siehst, wo du wirklich angreifbar bist — schwache JWT-Validierung, zu breite IAM, Dependencies mit bekannten CVEs — statt zu raten."
         },
         {
           "title": "CI/CD und IaC härten",
@@ -207,7 +207,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
           "body": "Ein langsamer Downstream-Call staute die Threads und riss den Service mit. Das Audit prüft die Timeout-Disziplin bei jedem externen Call, jagt Retries ohne Backoff und Jitter und markiert fehlende Circuit Breaker, fehlende Backpressure und fehlendes Load Shedding — und zeigt das Fehlerbild, wenn eine Dependency langsam ist, nicht nur tot."
         }
       ],
-      "output": "Eine pro Dimension benotete Scorecard plus ein nach Priorität sortierter Backlog aus GitHub-Issues, jedes mit Beleg, quantifizierten Kosten und einem Vorher/Nachher-Fix samt geschätzter Metrik-Verbesserung."
+      "output": "Eine pro Dimension benotete Scorecard plus ein nach Priorität sortiertes Backlog aus GitHub-Issues, jedes mit Beleg, quantifizierten Kosten und einem Vorher/Nachher-Fix samt geschätzter Metrik-Verbesserung."
     }
   },
   "data": {
@@ -232,7 +232,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Prüft, ob deine Daten verfälscht, verloren oder geleakt werden können — und belegt es mit Queries.",
-      "approach": "Unabhängig von der Datenbank-Engine prüft ein Swarm den Data Layer über elf Dimensionen: Schema und Normalisierung, Datentypen und Präzision, Constraints und referenzielle Integrität, Keys und Identity, Migrationssicherheit, Transaktionen und Concurrency, Integrität in der Praxis, Datenschutz, Lifecycle und Löschung, Pipelines sowie Backup/Recovery. Der Fokus liegt auf Korrektheit, nicht auf Query-Speed: Jede Stelle, an der die Datenbank ungültigen, verwaisten oder inkonsistenten State zulässt, ist ein Befund — belegt an einer Migrationsdatei, einem Constraint oder einem geschwärzten Row-Pattern. P0/P1-Befunde benennen einen konkreten Pfad zu Datenverlust, Korruption oder Leak und überstehen die adversariale Verifikation, bevor sie ausgeliefert werden.",
+      "approach": "Unabhängig von der Datenbank-Engine prüft ein Schwarm den Data Layer über elf Dimensionen: Schema und Normalisierung, Datentypen und Präzision, Constraints und referenzielle Integrität, Keys und Identity, Migrationssicherheit, Transaktionen und Concurrency, Integrität in der Praxis, Datenschutz, Lifecycle und Löschung, Pipelines sowie Backup/Recovery. Der Fokus liegt auf Korrektheit, nicht auf Query-Speed: Jede Stelle, an der die Datenbank ungültigen, verwaisten oder inkonsistenten State zulässt, ist ein Befund — belegt an einer Migrationsdatei, einem Constraint oder einem geschwärzten Row-Pattern. P0/P1-Befunde benennen einen konkreten Pfad zu Datenverlust, Korruption oder Leak und überstehen die adversarielle Verifikation, bevor sie ausgeliefert werden.",
       "useCases": [
         {
           "title": "Vor einer riskanten Produktiv-Migration",
@@ -324,7 +324,7 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
         },
         {
           "title": "Vor dem Skalieren eines öffentlichen LLM-Endpoints",
-          "body": "Du öffnest ein KI-Feature gleich für untrusted Traffic. Das Audit sucht nach den Cost-Caps pro Nutzer und global, die ausufernde Kosten und Missbrauch stoppen, nach den Evals, die deine High-Stakes-Pfade absichern, und nach dem Provider-Retention- und PII-Handling, das du brauchst, bevor Nutzerdaten deine Maschine verlassen."
+          "body": "Du öffnest ein KI-Feature gleich für untrusted Traffic. Das Audit sucht nach den Cost-Caps pro Nutzer und global, die ausufernde Kosten und Missbrauch stoppen, nach den Evals, die deine High-Stakes-Pfade absichern, und nach dem Provider-Retention- und PII-Handling, das du brauchst, bevor Nutzerdaten deinen Rechner verlassen."
         }
       ],
       "output": "Eine Scorecard pro Dimension, eine Trust-Boundary- und Data-Flow-Map und verifizierte Befunde als nach Priorität sortierte GitHub-Issues — jedes mit OWASP-LLM-Zuordnung, geschwärztem Repro und konkretem Vorher/Nachher-Fix."

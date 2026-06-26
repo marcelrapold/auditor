@@ -238,9 +238,9 @@ export const ui = {
     proofEyebrow: "Beweise statt Behauptungen",
     proofTitle: "Wir haben die ganze Suite auf das eigene Repo angesetzt",
     proofLead:
-      "Die Bibliothek prüft sich selbst — angesetzt auf genau dieses Repo, mit dem Backlog als öffentliche GitHub-Issues. Diese Seite bekam ihr eigenes Content-Audit; über das ganze Repo erreichte jeder Prüfbereich A− bis A. Unten: der echte Backlog, die Noten und ein Befund in voller Tiefe.",
+      "Die Bibliothek prüft sich selbst — angesetzt auf genau dieses Repo, mit dem Backlog als öffentliche GitHub-Issues. Diese Seite bekam ihr eigenes Content-Audit; über das ganze Repo erreichte jeder Prüfbereich A− bis A. Unten: das echte Backlog, die Noten und ein Befund in voller Tiefe.",
     proofAnnotation:
-      "Der echte Backlog aus dem Audit genau dieser Seite — 23 Befunde, jeder davon jetzt behoben.",
+      "Das echte Backlog aus dem Audit genau dieser Seite — 23 Befunde, jeder davon jetzt behoben.",
     proofVerifyHint: "Öffne ein Issue und prüfe den Beleg auf GitHub.",
     proofFindings: "Befunde",
     proofEvidence: "Beleg",
