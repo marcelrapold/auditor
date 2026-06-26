@@ -31,23 +31,23 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
       "output": "A priority-sorted GitHub tracking issue plus one issue per confirmed finding — each with a management summary, OWASP/CWE/MITRE mapping, redacted evidence, CVSS, and a before/after fix."
     },
     "de": {
-      "tagline": "Ein Security-Review über 14 Domains — jeder Befund evidenzbasiert und nach Exploitability bewertet.",
-      "approach": "Ein Spezialisten-Swarm prüft die 14 Security-Domains parallel: Injection, Authentication, Authorization, Secrets und Crypto, Supply Chain, Konfiguration, IaC, CI/CD, API, Business Logic, Frontend, Privacy, Logging und LLM. Phase 0 mappt zuerst die Angriffsfläche und die Trust Boundaries; jeder Befund zitiert eine file:line oder einen Config-Artefakt, mappt auf OWASP, CWE, MITRE oder CIS und trägt eine P0–P3-Severity mit CVSS-Schätzung. Jeder P0/P1 wird von unabhängigen Skeptikern angegriffen, bevor er es in den Report schafft.",
+      "tagline": "Ein Security-Review über 14 Domains — jeder Befund belegt, jede Ausnutzbarkeit eingestuft.",
+      "approach": "Ein Spezialisten-Swarm prüft die 14 Security-Domains parallel: Injection, Authentication, Authorization, Secrets und Crypto, Supply Chain, Konfiguration, IaC, CI/CD, API, Business Logic, Frontend, Privacy, Logging und LLM. Zuerst kartiert Phase 0 die Angriffsfläche und die Trust Boundaries. Jeder Befund zitiert eine file:line oder ein Config-Artefakt, ordnet ihn OWASP, CWE, MITRE oder CIS zu und trägt eine Severity von P0 bis P3 samt CVSS-Schätzung. Jeden P0/P1 nehmen unabhängige Skeptiker auseinander, bevor er es in den Bericht schafft.",
       "useCases": [
         {
           "title": "Vor dem Production-Launch",
-          "body": "Du bist kurz vor dem Release und willst wissen, was ein Angreifer erreichen kann. Der Audit mappt Entry Points und Trust Boundaries und legt unauthentifizierte mutierende Endpoints, IDOR/BOLA-Lücken und exponierte Secrets als P0 offen — je mit konkretem Exploitation-Pfad und Before/After-Fix."
+          "body": "Du stehst kurz vor dem Release und willst wissen, was ein Angreifer erreichen kann. Das Audit kartiert Entry Points und Trust Boundaries und legt unauthentifizierte, verändernde Endpoints, IDOR/BOLA-Lücken und offengelegte Secrets als P0 offen — jeweils mit konkretem Exploit-Pfad und Vorher/Nachher-Fix."
         },
         {
           "title": "Übernommene Codebase prüfen",
-          "body": "Du hast einen Service ohne Security-Historie übernommen. Der Swarm baut ein Attack-Surface-Inventory von Grund auf und benotet alle 14 Domains A–F, damit du die echte Exposure siehst — schwache JWT-Validierung, zu breite IAM, Dependencies mit bekannten CVEs — statt zu raten."
+          "body": "Du hast einen Service ohne Security-Historie übernommen. Der Swarm baut von Grund auf ein Inventar der Angriffsfläche und benotet alle 14 Domains von A bis F, damit du siehst, wo du wirklich angreifbar bist — schwache JWT-Validierung, zu breite IAM, Dependencies mit bekannten CVEs — statt zu raten."
         },
         {
           "title": "CI/CD und IaC härten",
-          "body": "Deine Pipelines und Terraform sind organisch gewachsen. Der Audit prüft auf Secrets in CI, pull_request_target-Risiken, public Buckets, fehlende Encryption at Rest und zu breite Rollen und mappt jede Lücke auf ein CIS-Control mit konkreter Remediation."
+          "body": "Deine Pipelines und dein Terraform sind organisch gewachsen. Das Audit sucht nach Secrets in der CI, pull_request_target-Risiken, öffentlichen Buckets, fehlender Encryption at Rest und zu breiten Rollen — und ordnet jede Lücke einem CIS-Control samt konkreter Korrekturmassnahme zu."
         }
       ],
-      "output": "Ein priorisiertes GitHub-Tracking-Issue plus ein Issue je bestätigtem Befund — jeweils mit Management-Summary, OWASP/CWE/MITRE-Mapping, redacted Evidence, CVSS und Before/After-Fix."
+      "output": "Ein priorisiertes GitHub-Tracking-Issue plus ein Issue je bestätigtem Befund — jeweils mit Management-Summary, OWASP/CWE/MITRE-Zuordnung, geschwärztem Beleg, CVSS und Vorher/Nachher-Fix."
     }
   },
   "repo": {
@@ -72,22 +72,22 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Ein Engineering-Review fürs ganze Repo, gemessen an Google Eng, SRE und SLSA.",
-      "approach": "Ein Review auf Principal-Engineer-Niveau, das zehn Spezialisten parallel über Architektur, Stack-Konsistenz, Docs, Code-Qualität, Tests, Security, Dependencies, CI/CD, Observability und Git-/Release-Hygiene laufen lässt. Die Linse ist innere Kohärenz: deklarierter Standard gegen tatsächliche Praxis — Doc-Code-Drift, .env-vs-Code und Lint-Config-vs-Realität werden aktiv geprüft, nicht angenommen. Jeder Befund nennt file:line, wird gegen benannte Referenz-Repos benchmarkt und muss unabhängige Skeptiker überstehen, bevor er in den Bericht kommt.",
+      "approach": "Ein Review auf Principal-Engineer-Niveau: Zehn Spezialisten prüfen parallel Architektur, Stack-Konsistenz, Docs, Code-Qualität, Tests, Security, Dependencies, CI/CD, Observability und Git- und Release-Hygiene. Im Fokus steht die innere Kohärenz — der deklarierte Standard gegenüber der gelebten Praxis. Doc-Code-Drift, .env gegen Code und Lint-Config gegen Realität werden aktiv geprüft, nicht angenommen. Jeder Befund nennt seine file:line, wird an benannten Referenz-Repos gemessen und muss unabhängige Skeptiker überstehen, bevor er in den Bericht kommt.",
       "useCases": [
         {
           "title": "Ein fremdes Repo übernehmen",
-          "body": "Du hast gerade ein Repo geerbt und das README ist deine einzige Karte. Das Audit geht clone-to-running durch und markiert genau den Schritt, an dem das Setup bricht — plus dokumentierte Befehle und Env-Vars, die nicht mehr zu dem passen, was der Code liest."
+          "body": "Du hast gerade ein Repo geerbt, und das README ist deine einzige Karte. Das Audit geht den Weg vom Clone bis zum laufenden Service durch und markiert genau den Schritt, an dem das Setup bricht — dazu dokumentierte Befehle und Env-Variablen, die nicht mehr zu dem passen, was der Code tatsächlich liest."
         },
         {
-          "title": "Nachdem zwei Teams einen Code zusammenführten",
-          "body": "Ein Merger oder Reorg hat ein Repo mit zwei von allem zurückgelassen. Die Stack-Dimension listet konkurrierende Libraries (zwei HTTP-Clients, zwei Date-Libs), Version-Drift über Workspaces und gemischte Paradigmen — mit Usage-Counts und einem Konsolidierungspfad."
+          "title": "Nachdem zwei Teams eine Codebase zusammengeführt haben",
+          "body": "Eine Fusion oder Reorganisation hat ein Repo hinterlassen, in dem alles doppelt vorhanden ist. Der Prüfbereich Stack listet konkurrierende Libraries (zwei HTTP-Clients, zwei Date-Libs), Versions-Drift über die Workspaces hinweg und gemischte Paradigmen — mit Nutzungszahlen und einem Pfad zur Konsolidierung."
         },
         {
           "title": "Due Diligence vor einer Übergabe",
-          "body": "Du kaufst ein Repo oder gibst Ownership ab und brauchst eine ehrliche Baseline statt Bauchgefühl. Du bekommst eine board-taugliche Scorecard über alle zehn Dimensionen, eine Gesamtnote und das größte Konsistenz-Risiko gleich vorneweg benannt."
+          "body": "Du kaufst ein Repo oder gibst die Ownership ab und brauchst eine ehrliche Ausgangslage statt Bauchgefühl. Du erhältst eine board-taugliche Scorecard über alle zehn Dimensionen, eine Gesamtnote und — gleich vorneweg — das grösste Konsistenz-Risiko klar benannt."
         }
       ],
-      "output": "Eine benotete Zehn-Dimensionen-Scorecard plus verifizierte Befunde als prioritätssortierte GitHub-Issues, jeder mit file:line-Beleg und einem Vorher/Nachher-Fix."
+      "output": "Eine benotete Scorecard über zehn Dimensionen plus verifizierte Befunde als prioritätssortierte GitHub-Issues, jeder mit file:line-Beleg und einem Vorher/Nachher-Fix."
     }
   },
   "frontend": {
@@ -112,22 +112,22 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Sechzehn Frontend-Spezialisten prüfen ein UI — jeder Befund verifiziert, bevor er eingereicht wird.",
-      "approach": "Phase 0 kartiert das Produkt, seine Surfaces und die kritischen User Journeys, dann laufen 16 Spezialisten-Agenten parallel über Usability, Verhaltenspsychologie, Visual Design, WCAG-2.2-Accessibility, Core Web Vitals, technisches SEO, Microcopy, Conversion, IA, Responsive-Verhalten, Interaction States, Formulare, Code-Qualität, Trust, i18n und den ersten Eindruck. Jeder Befund nennt die verletzte Regel oder Guideline, belegt sie konkret — mit DOM-Selektor, file:line, gemessener Metrik oder zitiertem String — und übersteht nur, wenn mindestens zwei von drei unabhängigen Skeptikern ihn nicht widerlegen. Liegen Live-URL und Repo beide vor, gleichen die Agenten ab, was der Code behauptet, gegen das, was die Seite tatsächlich rendert.",
+      "approach": "Zuerst kartiert Phase 0 das Produkt, seine Oberflächen und die kritischen User Journeys. Danach prüfen 16 Spezialisten-Agenten parallel: Usability, Verhaltenspsychologie, Visual Design, WCAG-2.2-Accessibility, Core Web Vitals, technisches SEO, Microcopy, Conversion, IA, Responsive-Verhalten, Interaction States, Formulare, Code-Qualität, Trust, i18n und den ersten Eindruck. Jeder Befund nennt die verletzte Regel oder Guideline und belegt sie konkret — mit DOM-Selektor, file:line, gemessener Metrik oder zitiertem String. Er übersteht nur, wenn ihn mindestens zwei von drei unabhängigen Skeptikern nicht widerlegen können. Liegen Live-URL und Repo beide vor, gleichen die Agenten ab, was der Code behauptet, mit dem, was die Seite tatsächlich rendert.",
       "useCases": [
         {
           "title": "Review vor dem Launch",
-          "body": "Du bist Tage von einem Redesign entfernt und musst wissen, was wirklich kaputt ist — nicht, was in der Demo gut aussieht. Das Audit geht jede kritische Journey von Anfang bis Ende durch und legt die WCAG-A-Fehler, Dark Patterns und Conversion-Lecks offen, die den Launch blockieren — jedes mit Severity und konkretem Fix."
+          "body": "Du bist nur noch Tage von einem Redesign entfernt und musst wissen, was wirklich kaputt ist — nicht, was in der Demo gut aussieht. Das Audit geht jede kritische Journey von Anfang bis Ende durch und legt die WCAG-A-Fehler, Dark Patterns und Conversion-Verluste offen, die den Launch blockieren — jeweils mit Severity und konkretem Fix."
         },
         {
           "title": "Signup-Funnel mit Leck",
-          "body": "Traffic kommt an, aber kaum jemand schließt den Signup ab, und die Analytics zeigen dir nur, wo abgesprungen wird, nicht warum. Die CRO- und Formular-Agenten zählen jedes Feld, jeden Klick und jede Entscheidung zwischen Ankunft und Erfolgsereignis und markieren die Friction, fehlende Validierung und schwachen Trust-Signale genau an dem Schritt, an dem Nutzer abbrechen."
+          "body": "Traffic kommt an, aber kaum jemand schliesst den Signup ab, und die Analytics zeigen dir nur, wo die Leute abspringen, nicht warum. Die CRO- und Formular-Agenten zählen jedes Feld, jeden Klick und jede Entscheidung zwischen Ankunft und Erfolgsereignis — und benennen Reibung, fehlende Validierung und schwache Trust-Signale genau an dem Schritt, an dem die Nutzer abbrechen."
         },
         {
           "title": "Accessibility und rechtliches Risiko",
-          "body": "Die EAA-Frist rückt näher und du musst wissen, wo das Produkt die Konformität verfehlt, bevor ein Prüfer oder eine Beschwerde es findet. Der Accessibility-Agent fährt einen vollständigen WCAG-2.2-AA-Sweep — Semantik, Keyboard-Bedienbarkeit, Focus-Management, Kontrast, Target Size — und ordnet jedem Fehler seine Success-Criterion-Nummer und den rechtlichen Kontext zu."
+          "body": "Die EAA-Frist rückt näher, und du musst wissen, wo das Produkt die Konformität verfehlt, bevor ein Prüfer oder eine Beschwerde es aufdeckt. Der Accessibility-Agent führt einen vollständigen WCAG-2.2-AA-Durchlauf durch — Semantik, Bedienbarkeit per Tastatur, Focus-Management, Kontrast, Target Size — und ordnet jedem Fehler seine Success-Criterion-Nummer und den rechtlichen Kontext zu."
         }
       ],
-      "output": "Eine 0-100-Scorecard pro Dimension plus nach Priorität sortierte GitHub-Issues, jedes mit Management-Summary, Beleg, Before/After-Fix und einer 30/60/90-Roadmap."
+      "output": "Eine Scorecard von 0 bis 100 pro Dimension plus nach Priorität sortierte GitHub-Issues, jedes mit Management-Summary, Beleg, Vorher/Nachher-Fix und einer 30/60/90-Roadmap."
     }
   },
   "api": {
@@ -152,19 +152,19 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Prüfe deine API gegen ihren veröffentlichten Contract — und gegen das, was der Code tatsächlich tut.",
-      "approach": "Zwölf Spezialisten-Agenten prüfen eine API-Oberfläche über Resource-Modeling, HTTP-Semantik und Status-Codes, das Error-Envelope, Auth und Authorization auf Objektebene, Versioning, Pagination, Idempotency, Rate-Limits, Schema-Rigorosität, Docs, Webhooks und Observability. Jeder Befund nennt eine Handler-file:line, einen Schema-Pfad oder ein Request/Response-Paar und die verletzte Regel — RFC 9110, RFC 9457, OpenAPI 3.1, GraphQL-Spec oder gRPC-Konventionen. Jede Abweichung zwischen veröffentlichtem Contract und Implementierung wird als eigener Befund mit beiden Fundstellen erfasst.",
+      "approach": "Zwölf Spezialisten-Agenten prüfen eine API-Oberfläche entlang von Resource-Modeling, HTTP-Semantik und Status-Codes, dem Error-Envelope, Auth und Authorization auf Objektebene, Versioning, Pagination, Idempotency, Rate-Limits, Schema-Strenge, Docs, Webhooks und Observability. Jeder Befund nennt eine Handler-file:line, einen Schema-Pfad oder ein Request-Response-Paar und dazu die verletzte Regel — RFC 9110, RFC 9457, OpenAPI 3.1, GraphQL-Spec oder gRPC-Konventionen. Jede Abweichung zwischen veröffentlichtem Contract und Implementierung wird als eigener Befund mit beiden Fundstellen erfasst.",
       "useCases": [
         {
           "title": "Interne API für Partner öffnen",
-          "body": "Ein internes Endpoint-Set wird zum öffentlichen Contract. Das Audit gleicht jede Operation mit ihrer OpenAPI oder SDL ab, markiert Verben im Pfad und inkonsistente Collection-Patterns und deckt fehlende Page-Size-Limits und unauthentifizierte mutierende Endpoints auf, bevor externe Entwickler darauf bauen."
+          "body": "Ein internes Endpoint-Set wird zum öffentlichen Contract. Das Audit gleicht jede Operation mit ihrer OpenAPI oder SDL ab, markiert Verben im Pfad und inkonsistente Collection-Patterns und deckt fehlende Page-Size-Limits und unauthentifizierte, verändernde Endpoints auf, bevor externe Entwickler darauf bauen."
         },
         {
           "title": "Nachdem ein Payments-Endpoint doppelt abgebucht hat",
-          "body": "Ein Retry hat in Produktion eine zweite Charge erzeugt. Das Audit prüft Idempotency-Keys auf Money- und Side-Effect-POSTs, Optimistic Concurrency auf Read-Modify-Write-Pfaden und die Webhook-Delivery-Semantik und liefert das Idempotency-Key-Handling samt Storage als Vorher/Nachher-Fix."
+          "body": "Ein Retry hat in der Produktion eine zweite Abbuchung ausgelöst. Das Audit prüft Idempotency-Keys auf Money- und Side-Effect-POSTs, Optimistic Concurrency auf Read-Modify-Write-Pfaden und die Webhook-Delivery-Semantik — und liefert das Idempotency-Key-Handling samt Storage als Vorher/Nachher-Fix."
         },
         {
           "title": "Spec-Drift vor der SDK-Generierung bereinigen",
-          "body": "Du generierst Client-SDKs aus einer OpenAPI-Spec, die nicht mehr zu den Handlern passt. Das Audit lintet die Spec und erstellt eine Contract-Drift-Matrix pro Operation — entfernte Felder, verengte Typen, geänderte Defaults, falsche Status-Codes — damit die generierten Clients nicht länger an echten Responses brechen."
+          "body": "Du generierst Client-SDKs aus einer OpenAPI-Spec, die nicht mehr zu den Handlern passt. Das Audit lintet die Spec und erstellt eine Contract-Drift-Matrix pro Operation — entfernte Felder, verengte Typen, geänderte Defaults, falsche Status-Codes — damit die generierten Clients nicht länger an echten Responses scheitern."
         }
       ],
       "output": "Eine pro Dimension benotete Scorecard plus ein nach Priorität sortiertes Tracking-Issue und pro Befund ein GitHub-Issue, jedes mit Management-Summary und Vorher/Nachher-Fix."
@@ -192,19 +192,19 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Finde, wo das System langsam ist, wo es unter Last umkippt und wo es Ressourcen verschwendet.",
-      "approach": "Elf Spezialisten laufen parallel über serverseitige Latenz, Throughput und Skalierungsverhalten: algorithmische Hot Paths, Query-Effizienz und N+1-Muster, Caching, Concurrency, Leaks, Netzwerk-I/O, Resilienz und Kosten. Jeder Befund nennt ein konkretes Artefakt — eine Hot-Path-file:line, einen Query-Plan, eine gemessene Latenz, einen Profiler-Frame —, kennzeichnet sich als measured oder reasoned und übersteht die adversarielle Verifikation, bevor er landet. Jeder bestätigte Fix kommt mit geschätzter Metrik-Verbesserung und dem Lastniveau, ab dem der Pfad heute bricht.",
+      "approach": "Elf Spezialisten prüfen parallel die serverseitige Latenz, den Throughput und das Skalierungsverhalten: algorithmische Hot Paths, Query-Effizienz und N+1-Muster, Caching, Concurrency, Leaks, Netzwerk-I/O, Resilienz und Kosten. Jeder Befund nennt ein konkretes Artefakt — eine Hot-Path-file:line, einen Query-Plan, eine gemessene Latenz, einen Profiler-Frame — und kennzeichnet sich als gemessen oder hergeleitet. Er übersteht die adversarielle Verifikation, bevor er Bestand hat. Jeder bestätigte Fix kommt mit geschätzter Metrik-Verbesserung und dem Lastniveau, ab dem der Pfad heute bricht.",
       "useCases": [
         {
           "title": "Ein Endpoint wurde nach einem Release langsam",
-          "body": "Ein Request-Pfad, der früher schnell war, hängt jetzt, und der Trace zeigt auf die Datenbank. Das Audit jagt N+1-Muster pro Endpoint, liest den Query-Plan auf Full Scans und fehlende Indizes und quantifiziert jeden: Queries pro Request, p95 vorher gegen nachher und den Index oder die gebündelte Query, die es behebt."
+          "body": "Ein Request-Pfad, der früher schnell war, hängt jetzt — und der Trace zeigt auf die Datenbank. Das Audit jagt N+1-Muster pro Endpoint, liest im Query-Plan Full Scans und fehlende Indizes ab und quantifiziert jeden Fall: Queries pro Request, p95 vorher und nachher sowie den Index oder die gebündelte Query, die ihn behebt."
         },
         {
           "title": "Dimensionierung für 10x mehr Traffic",
-          "body": "Vor einem Launch oder einer Kampagne musst du wissen, ob das System hält. Das Audit denkt jeden kritischen Pfad bei 2x und 10x aktueller Last durch, benennt den ersten Bottleneck, der saturiert — eine Hot Row, ein globaler Lock, ein zu kleiner Connection-Pool —, und nennt das Lastniveau, ab dem es bricht, plus die realistische Decke nach der Behebung."
+          "body": "Vor einem Launch oder einer Kampagne musst du wissen, ob das System hält. Das Audit denkt jeden kritischen Pfad bei 2x und 10x der aktuellen Last durch, benennt den ersten Bottleneck, der an die Grenze kommt — eine Hot Row, ein globaler Lock, ein zu kleiner Connection-Pool — und nennt das Lastniveau, ab dem es bricht, samt der realistischen Obergrenze nach der Behebung."
         },
         {
           "title": "Eine langsame Dependency löste eine Kaskade aus",
-          "body": "Ein langsamer Downstream-Call staute Threads und riss den Service mit. Das Audit prüft Timeout-Disziplin bei jedem externen Call, jagt Retries ohne Backoff und Jitter und markiert fehlende Circuit Breaker, Backpressure und Load Shedding — und zeigt den Failure Mode, wenn eine Dependency langsam ist, nicht nur tot."
+          "body": "Ein langsamer Downstream-Call staute die Threads und riss den Service mit. Das Audit prüft die Timeout-Disziplin bei jedem externen Call, jagt Retries ohne Backoff und Jitter und markiert fehlende Circuit Breaker, fehlende Backpressure und fehlendes Load Shedding — und zeigt das Fehlerbild, wenn eine Dependency langsam ist, nicht nur tot."
         }
       ],
       "output": "Eine pro Dimension benotete Scorecard plus ein nach Priorität sortierter Backlog aus GitHub-Issues, jedes mit Beleg, quantifizierten Kosten und einem Vorher/Nachher-Fix samt geschätzter Metrik-Verbesserung."
@@ -231,23 +231,23 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
       "output": "A scorecard graded per dimension plus prioritized GitHub issues, each with evidence, severity, a before/after fix, and migrations sequenced with their safety plan."
     },
     "de": {
-      "tagline": "Prüft, ob deine Daten falsch, verloren oder geleakt werden können — und belegt es mit Queries.",
-      "approach": "Ein engine-agnostischer Swarm prüft den Data Layer über elf Dimensionen: Schema und Normalisierung, Datentypen und Präzision, Constraints und referenzielle Integrität, Keys und Identity, Migrationssicherheit, Transaktionen und Concurrency, Integrität in der Praxis, Datenschutz, Lifecycle und Löschung, Pipelines sowie Backup/Recovery. Der Fokus liegt auf Korrektheit, nicht auf Query-Speed — jede Stelle, an der die Datenbank ungültigen, verwaisten oder inkonsistenten State zulässt, ist ein Befund, belegt an einer Migrationsdatei, einem Constraint oder einem geschwärzten Row-Pattern. P0/P1-Befunde benennen einen konkreten Datenverlust-, Korruptions- oder Leak-Pfad und überstehen die adversariale Verifikation, bevor sie ausgeliefert werden.",
+      "tagline": "Prüft, ob deine Daten verfälscht, verloren oder geleakt werden können — und belegt es mit Queries.",
+      "approach": "Unabhängig von der Datenbank-Engine prüft ein Swarm den Data Layer über elf Dimensionen: Schema und Normalisierung, Datentypen und Präzision, Constraints und referenzielle Integrität, Keys und Identity, Migrationssicherheit, Transaktionen und Concurrency, Integrität in der Praxis, Datenschutz, Lifecycle und Löschung, Pipelines sowie Backup/Recovery. Der Fokus liegt auf Korrektheit, nicht auf Query-Speed: Jede Stelle, an der die Datenbank ungültigen, verwaisten oder inkonsistenten State zulässt, ist ein Befund — belegt an einer Migrationsdatei, einem Constraint oder einem geschwärzten Row-Pattern. P0/P1-Befunde benennen einen konkreten Pfad zu Datenverlust, Korruption oder Leak und überstehen die adversariale Verifikation, bevor sie ausgeliefert werden.",
       "useCases": [
         {
           "title": "Vor einer riskanten Produktiv-Migration",
-          "body": "Du willst eine NOT-NULL-Spalte hinzufügen, eine große Tabelle umschreiben oder einen destruktiven Backfill fahren. Der Audit prüft jede Migration auf Locking- und Blocking-Risiko, Reversibilität und einen Rollback-Pfad und markiert jede destruktive Operation ohne Sicherheitsnetz — und sequenziert den Fix als Expand/Contract-Plan mit Backfill und Rollback."
+          "body": "Du willst eine NOT-NULL-Spalte hinzufügen, eine grosse Tabelle umschreiben oder einen destruktiven Backfill ausführen. Das Audit prüft jede Migration auf Locking- und Blocking-Risiko, Reversibilität und einen Rollback-Pfad und markiert jede destruktive Operation ohne Sicherheitsnetz — und sequenziert den Fix als Expand/Contract-Plan mit Backfill und Rollback."
         },
         {
           "title": "Wenn falsche Rows im Reporting auftauchen",
-          "body": "Die Billing-Reconciliation bricht oder ein Join liefert Rows, die es nicht geben dürfte. Der Audit prüft per Reasoning — und mit Read-only-Zugriff stichprobenartig — auf Orphans, Duplikate und Nulls in Pflichtfeldern, führt sie auf einen fehlenden FK-, UNIQUE- oder NOT-NULL-Constraint zurück und liefert die Cleanup-Query plus den Constraint, der es künftig verhindert."
+          "body": "Die Billing-Reconciliation bricht, oder ein Join liefert Rows, die es nicht geben dürfte. Das Audit prüft per Reasoning — und mit Read-only-Zugriff stichprobenartig — auf Orphans, Duplikate und Nulls in Pflichtfeldern, führt sie auf einen fehlenden FK-, UNIQUE- oder NOT-NULL-Constraint zurück und liefert die Cleanup-Query samt dem Constraint, der es künftig verhindert."
         },
         {
           "title": "Multi-Tenant-SaaS mit PII",
-          "body": "Vor einem Compliance-Push oder Security-Review prüft der Audit, ob Tenant-Isolation im Data Layer erzwungen wird statt dem App-Code zu vertrauen, ob sensible Spalten nicht im Klartext liegen und ob ein GDPR-Recht-auf-Löschung eine Person wirklich überall löschen kann — inklusive Backups, Logs und Analytics."
+          "body": "Vor einem Compliance-Push oder Security-Review prüft das Audit, ob die Tenant-Isolation im Data Layer erzwungen wird, statt dem App-Code zu vertrauen, ob sensible Spalten nicht im Klartext liegen und ob das DSGVO-Recht auf Löschung eine Person wirklich überall entfernt — auch in Backups, Logs und Analytics."
         }
       ],
-      "output": "Eine Scorecard mit Note pro Dimension plus priorisierte GitHub-Issues, jedes mit Evidence, Severity, einem Before/After-Fix und Migrationen, die mit ihrem Safety-Plan sequenziert sind."
+      "output": "Eine Scorecard mit einer Note pro Dimension plus priorisierte GitHub-Issues, jedes mit Beleg, Severity, einem Vorher/Nachher-Fix und Migrationen, die mit ihrem Safety-Plan sequenziert sind."
     }
   },
   "infrastructure": {
@@ -271,23 +271,23 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
       "output": "A dimension-graded scorecard with a DORA snapshot, a blast-radius map, and a priority-sorted backlog of verified findings — each filed as a GitHub issue with evidence, a before/after fix, and a re-audit criterion."
     },
     "de": {
-      "tagline": "Prüft, wie dein System gebaut, ausgeliefert und betrieben wird — fragil, exponiert oder nicht wiederherstellbar, gefunden und behoben.",
-      "approach": "Zwölf Spezialisten-Durchläufe decken IaC-Qualität und Drift, Cloud-Security und Netzwerk-Exposure, IAM, Secrets, Container, Kubernetes, CI/CD, High Availability, Backup/DR, Observability, Cost und Environment-Parität ab. Jeder Befund belegt ein konkretes Artefakt — IaC file:line, eine Manifest- oder Pipeline-Stanza, eine CIS- oder Well-Architected-Control — und die zentrale Frage lautet immer: Was passiert, wenn das ausfällt, und kannst du dich erholen? P0–P1-Befunde werden danach von unabhängigen Skeptikern angegriffen, bevor sie es in den Report schaffen.",
+      "tagline": "Prüft, wie dein System gebaut, ausgeliefert und betrieben wird — und findet und behebt, was fragil, exponiert oder nicht wiederherstellbar ist.",
+      "approach": "Zwölf Spezialisten-Durchläufe decken IaC-Qualität und Drift, Cloud-Security und Netzwerk-Exposure, IAM, Secrets, Container, Kubernetes, CI/CD, High Availability, Backup/DR, Observability, Cost und Environment-Parität ab. Jeder Befund nennt ein konkretes Artefakt — eine IaC file:line, eine Manifest- oder Pipeline-Stanza, eine CIS- oder Well-Architected-Control. Die zentrale Frage lautet immer: Was passiert, wenn das ausfällt, und kannst du den Zustand wiederherstellen? Danach nehmen unabhängige Skeptiker jeden P0- und P1-Befund auseinander, bevor er es in den Bericht schafft.",
       "useCases": [
         {
           "title": "Vor einem Production-Launch",
-          "body": "Du bringst einen Service ins öffentliche Internet und willst wissen, was tatsächlich exponiert ist. Das Audit verfolgt Public-Exposure-Pfade — Security Groups offen auf 0.0.0.0/0 an sensiblen Ports, öffentliche Buckets und Datenbanken, fehlendes TLS oder Edge-Schutz — und meldet jeden mit der exakten IaC-Zeile und der verletzten CIS-Control."
+          "body": "Du bringst einen Service ins öffentliche Internet und willst wissen, was tatsächlich exponiert ist. Das Audit verfolgt die Public-Exposure-Pfade — Security Groups, die auf 0.0.0.0/0 an sensiblen Ports offen stehen, öffentliche Buckets und Datenbanken, fehlendes TLS oder fehlender Edge-Schutz — und meldet jeden mit der exakten IaC-Zeile und der verletzten CIS-Control."
         },
         {
           "title": "Nach einem Beinahe-Ausfall",
-          "body": "Ein Incident hat dich fragen lassen, ob du wirklich aus Code und Backups neu aufbauen kannst. Das Audit prüft Single Points of Failure auf Tier-0-Pfaden und ob Backups verschlüsselt und restore-getestet sind — nicht bloß vorhanden — und legt die nicht wiederherstellbaren Zustände und fehlenden DR-Runbooks offen, bevor es der nächste Ausfall tut."
+          "body": "Ein Incident hat dich fragen lassen, ob du wirklich aus Code und Backups neu aufbauen kannst. Das Audit prüft Single Points of Failure auf Tier-0-Pfaden und ob Backups verschlüsselt und restore-getestet sind — nicht bloss vorhanden — und legt die nicht wiederherstellbaren Zustände und fehlenden DR-Runbooks offen, bevor es der nächste Ausfall tut."
         },
         {
           "title": "Deploy-Pipeline härten",
-          "body": "Dein Team liefert schnell aus und du vermutest, dass die Gates nur Deko sind. Das Audit prüft, ob Build-, Test-, Scan- und Approval-Schritte wirklich blocken, kontrolliert Branch Protection und den Scope der Pipeline-Credentials und markiert Injection-Pfade wie pull_request_target — und zeigt, wo ein kaputter oder ungescannter Build in Prod landen kann."
+          "body": "Dein Team liefert schnell aus, und du vermutest, dass die Gates nur Deko sind. Das Audit prüft, ob Build-, Test-, Scan- und Approval-Schritte wirklich blockieren, kontrolliert die Branch Protection und den Scope der Pipeline-Credentials und markiert Injection-Pfade wie pull_request_target — und zeigt, wo ein kaputter oder ungescannter Build in der Prod landen kann."
         }
       ],
-      "output": "Eine nach Dimensionen benotete Scorecard mit DORA-Snapshot, eine Blast-Radius-Map und ein nach Priorität sortiertes Backlog verifizierter Befunde — jeder als GitHub-Issue mit Beleg, Before/After-Fix und Re-Audit-Kriterium."
+      "output": "Eine nach Dimensionen benotete Scorecard mit DORA-Snapshot, eine Blast-Radius-Map und ein nach Priorität sortiertes Backlog verifizierter Befunde — jeder als GitHub-Issue mit Beleg, Vorher/Nachher-Fix und Re-Audit-Kriterium."
     }
   },
   "ai-llm": {
@@ -312,22 +312,22 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Prüfe deine LLM-Features so, wie es ein Angreifer und ein ehrlicher Nutzer tun würden.",
-      "approach": "Provider- und Framework-agnostisch kartiert dieses Audit zuerst jede Stelle, an der ein LLM aufgerufen wird, und jede Trust-Boundary, an der untrusted Input — Nutzertext, abgerufene Dokumente, Tool-Ergebnisse — in einen Prompt gelangt. Zwölf Spezialisten prüfen dann Prompt-Injection, Jailbreaks, System-Prompt- und Secret-Leakage, Output-Handling, Tool-/Agent-Agency, RAG-Grounding, Halluzination, Evals und Kosten — jeder Befund auf die OWASP LLM Top 10 gemappt und P0–P3 bewertet. Jede Aussage ist auf ein konkretes Artefakt zurückgeführt und übersteht unabhängige Skeptiker, bevor sie eingereicht wird.",
+      "approach": "Unabhängig von Provider und Framework kartiert dieses Audit zuerst jede Stelle, an der ein LLM aufgerufen wird — und jede Trust Boundary, an der untrusted Input in einen Prompt gelangt: Nutzertext, abgerufene Dokumente, Tool-Ergebnisse. Danach prüfen zwölf Spezialisten Prompt-Injection, Jailbreaks, System-Prompt- und Secret-Leakage, Output-Handling, Tool- und Agent-Agency, RAG-Grounding, Halluzination, Evals und Kosten. Jeden Befund ordnen sie der OWASP LLM Top 10 zu und bewerten ihn von P0 bis P3. Jede Aussage ist auf ein konkretes Artefakt zurückgeführt und übersteht unabhängige Skeptiker, bevor sie eingereicht wird.",
       "useCases": [
         {
           "title": "RAG-Support-Bot ausliefern",
-          "body": "Dein Assistent antwortet aus internen Docs und einer geteilten Knowledge-Base. Das Audit prüft, ob das Retrieval die Berechtigungen pro Nutzer respektiert, ob der Bot bei fehlendem Kontext abbricht oder halluziniert und ob in einem abgerufenen Dokument versteckte Anweisungen den System-Prompt überschreiben können (indirekte Injection)."
+          "body": "Dein Assistent antwortet aus internen Docs und einer geteilten Knowledge-Base. Das Audit prüft, ob das Retrieval die Berechtigungen pro Nutzer respektiert, ob der Bot sich bei fehlendem Kontext zurückhält oder halluziniert und ob in einem abgerufenen Dokument versteckte Anweisungen den System-Prompt überschreiben können (indirekte Injection)."
         },
         {
           "title": "Einem Agenten echte Tools geben",
-          "body": "Dein Agent kann auf Modell-Geheiß E-Mails senden, die Datenbank abfragen oder interne APIs aufrufen. Das Audit prüft den Blast-Radius jedes Tools — kann es eine destruktive oder irreversible Aktion ohne Human-Gate auslösen? —, validiert die vom Modell erzeugten Argumente und verfolgt jeden Output-Sink auf XSS, SQL oder eval-Injection."
+          "body": "Dein Agent kann auf Geheiss des Modells E-Mails senden, die Datenbank abfragen oder interne APIs aufrufen. Das Audit prüft den Blast-Radius jedes Tools — kann es eine destruktive oder irreversible Aktion ohne Human-Gate auslösen? —, validiert die Argumente, die das Modell erzeugt, und verfolgt jeden Output-Sink auf XSS, SQL oder eval-Injection."
         },
         {
           "title": "Vor dem Skalieren eines öffentlichen LLM-Endpoints",
-          "body": "Du öffnest ein KI-Feature gleich für untrusted Traffic. Das Audit sucht die Cost-Caps pro Nutzer und global, die Runaway-Spend und Missbrauch stoppen, die Evals, die deine High-Stakes-Pfade absichern, und das Provider-Retention- und PII-Handling, das du brauchst, bevor Nutzerdaten deine Maschine verlassen."
+          "body": "Du öffnest ein KI-Feature gleich für untrusted Traffic. Das Audit sucht nach den Cost-Caps pro Nutzer und global, die ausufernde Kosten und Missbrauch stoppen, nach den Evals, die deine High-Stakes-Pfade absichern, und nach dem Provider-Retention- und PII-Handling, das du brauchst, bevor Nutzerdaten deine Maschine verlassen."
         }
       ],
-      "output": "Eine Scorecard pro Dimension, eine Trust-Boundary- und Data-Flow-Map und verifizierte Befunde als nach Priorität sortierte GitHub-Issues — jedes mit OWASP-LLM-Mapping, redigiertem Repro und konkretem Vorher/Nachher-Fix."
+      "output": "Eine Scorecard pro Dimension, eine Trust-Boundary- und Data-Flow-Map und verifizierte Befunde als nach Priorität sortierte GitHub-Issues — jedes mit OWASP-LLM-Zuordnung, geschwärztem Repro und konkretem Vorher/Nachher-Fix."
     }
   },
   "compliance-privacy": {
@@ -352,22 +352,22 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Findet, wo du personenbezogene Daten ohne Rechtsgrundlage, Consent oder Löschmöglichkeit verarbeitest.",
-      "approach": "Primäre Linse ist die DSGVO, erweitert um ePrivacy, den EU AI Act und CCPA, wo sie greifen. Ein Schwarm spezialisierter Agents baut eine verifizierte Data-Flow- / RoPA-Karte und prüft dann Rechtsgrundlage, Consent und Cookies, Transparenz, Betroffenenrechte, Aufbewahrung, Drittlandtransfers, Auftragsverarbeiter-Verträge und Breach-Readiness. Consent wird per Network-Trace geprüft, nicht über das Banner-UI, und Lösch- und Auskunftsrechte werden End-to-End im Code verifiziert; jeder Befund zitiert einen konkreten Artikel und ein File, eine Tabelle, ein Cookie oder eine Policy-Klausel.",
+      "approach": "Im Zentrum steht die DSGVO, erweitert um ePrivacy, den EU AI Act und CCPA, wo sie greifen. Ein Schwarm spezialisierter Agenten baut eine verifizierte Data-Flow- und RoPA-Karte und prüft dann Rechtsgrundlage, Consent und Cookies, Transparenz, Betroffenenrechte, Aufbewahrung, Drittlandtransfers, Auftragsverarbeiter-Verträge und Breach-Readiness. Den Consent prüft das Audit per Network-Trace, nicht über das Banner-UI; Lösch- und Auskunftsrechte verifiziert es End-to-End im Code. Jeder Befund zitiert einen konkreten Artikel und dazu ein File, eine Tabelle, ein Cookie oder eine Policy-Klausel.",
       "useCases": [
         {
           "title": "Cookie-Banner, das lügt",
-          "body": "Marketing liefert ein Consent-Banner aus, aber Analytics- und Ad-Pixel feuern trotzdem beim ersten Laden. Ein Network-Trace fängt jeden nicht-essenziellen Tag, der vor dem Opt-in läuft, benennt die Zeile, die ihn injiziert, und mappt ihn auf ePrivacy und Art. 6 mit einem Gate-before-Consent-Fix."
+          "body": "Marketing liefert ein Consent-Banner aus, aber Analytics- und Ad-Pixel feuern trotzdem schon beim ersten Laden. Ein Network-Trace fängt jeden nicht-essenziellen Tag, der vor dem Opt-in lädt, benennt die Zeile, die ihn einschleust, und ordnet ihn ePrivacy und Art. 6 zu — mit einem Gate-before-Consent-Fix."
         },
         {
           "title": "Ein Nutzer stellt einen Löschantrag",
-          "body": "Der Support verspricht Löschung in der Datenschutzerklärung, aber niemand hat verfolgt, wo die Daten wirklich liegen. Das Audit folgt jeder Kategorie personenbezogener Daten und zeigt, wo die Löschung nicht bis in Backups, Logs oder Drittanbieter durchschlägt, gemessen an Art. 17."
+          "body": "Der Support verspricht in der Datenschutzerklärung die Löschung, aber niemand hat verfolgt, wo die Daten wirklich liegen. Das Audit folgt jeder Kategorie personenbezogener Daten und zeigt — gemessen an Art. 17 —, wo die Löschung nicht bis in Backups, Logs oder zu Drittanbietern durchschlägt."
         },
         {
           "title": "AI-Feature-Launch in der EU",
-          "body": "Ein neues Profiling- oder LLM-Feature geht ohne DPIA und ohne EU-AI-Act-Risikoklasse live. Das Audit klassifiziert das Feature, prüft Art.-22-Schutzmaßnahmen und AI-Transparenzpflichten und verfolgt, ob die Daten ohne gültigen Transfermechanismus den EWR verlassen."
+          "body": "Ein neues Profiling- oder LLM-Feature geht ohne DPIA und ohne EU-AI-Act-Risikoklasse live. Das Audit klassifiziert das Feature, prüft die Schutzmassnahmen nach Art. 22 und die AI-Transparenzpflichten und verfolgt, ob die Daten ohne gültigen Transfermechanismus den EWR verlassen."
         }
       ],
-      "output": "Eine Scorecard je Dimension, eine verifizierte Data-Flow- / RoPA-Karte und ein nach Priorität sortiertes Befundregister, in dem jeder Befund seinen Artikel zitiert und einen konkreten Before/After-Fix liefert, überführt in GitHub-Issues unter einem Tracking-Issue."
+      "output": "Eine Scorecard je Dimension, eine verifizierte Data-Flow- und RoPA-Karte und ein nach Priorität sortiertes Befundregister, in dem jeder Befund seinen Artikel zitiert und einen konkreten Vorher/Nachher-Fix liefert — überführt in GitHub-Issues unter einem Tracking-Issue."
     }
   },
   "accessibility": {
@@ -392,22 +392,22 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Prüfe dein Produkt gegen WCAG 2.2 AA — mit Belegen und einem Konformitätsurteil.",
-      "approach": "Ein Schwarm von Spezialisten übernimmt je einen Ausschnitt der Disability-Experience — Tastatur, Screenreader, Fokus, Kontrast, Formulare, Zoom und Reflow, Target-Size, Motion und kognitive Last. Jeder Befund nennt ein konkretes Artefakt (einen DOM-Selektor, den berechneten Accessible Name, ein Kontrastverhältnis mit beiden Hex-Werten, eine Tastatur-Sequenz) und ist auf ein konkretes WCAG-Success-Criterion samt Level gemappt. Es laufen automatische Scanner und manuelle Checks, dann entsteht eine VPAT-fertige Konformitätstabelle, die benennt, was Automatisierung nicht findet.",
+      "approach": "Ein Schwarm von Spezialisten übernimmt je einen Ausschnitt der Erfahrung von Menschen mit Behinderung — Tastatur, Screenreader, Fokus, Kontrast, Formulare, Zoom und Reflow, Target Size, Motion und kognitive Last. Jeder Befund nennt ein konkretes Artefakt (einen DOM-Selektor, den berechneten Accessible Name, ein Kontrastverhältnis mit beiden Hex-Werten, eine Tastatur-Sequenz) und ist einem konkreten WCAG-Success-Criterion samt Level zugeordnet. Automatische Scanner und manuelle Checks kommen zum Einsatz; daraus entsteht eine VPAT-fertige Konformitätstabelle, die benennt, was die Automatisierung nicht findet.",
       "useCases": [
         {
           "title": "Deadline European Accessibility Act",
-          "body": "Der EAA ist in Kraft und du brauchst ein Konformitätsurteil für die Barrierefreiheitserklärung, keine vage To-do-Liste. Dieses Audit liefert ein WCAG-2.2-AA-Urteil (pass/partial/fail) mit VPAT-fertiger Konformitätstabelle und benennt deine konkrete rechtliche Exposition unter EAA, ADA und EN 301 549."
+          "body": "Der EAA ist in Kraft, und du brauchst ein Konformitätsurteil für die Barrierefreiheitserklärung, keine vage To-do-Liste. Dieses Audit liefert ein WCAG-2.2-AA-Urteil (pass/partial/fail) mit VPAT-fertiger Konformitätstabelle und benennt dein konkretes rechtliches Risiko unter EAA, ADA und EN 301 549."
         },
         {
           "title": "Design-System-Komponente prüfen",
-          "body": "Ein geteilter Button oder Modal, der bei Barrierefreiheit durchfällt, bricht jede Seite, die ihn nutzt. Das Audit dedupliziert auf die Wurzel-Komponente, statt dasselbe Issue 40-mal einzureichen, und markiert Compound-Barrieren — etwa fehlender Fokus-Indikator kombiniert mit Fokus-Verlust beim SPA-Routenwechsel — die Tastatur- und Screenreader-User stranden lassen."
+          "body": "Ein geteilter Button oder ein Modal, der bei der Barrierefreiheit durchfällt, bricht jede Seite, die ihn nutzt. Das Audit bündelt den Befund auf die Wurzel-Komponente, statt dasselbe Issue 40-mal einzureichen, und markiert Compound-Barrieren — etwa einen fehlenden Fokus-Indikator kombiniert mit Fokus-Verlust beim SPA-Routenwechsel —, die Tastatur- und Screenreader-User stranden lassen."
         },
         {
           "title": "Tastatur- und Screenreader-Pfade",
-          "body": "Mit der Maus sieht deine App gut aus, aber du bist sie nie mit Tastatur oder Screenreader durchgegangen. Dieses Audit prüft die Tab-Reihenfolge gegen die visuelle Ordnung, findet Keyboard-Traps und unbeschriftete Controls, checkt, dass Fokus in Modals und bei Routenwechseln gesetzt und zurückgegeben wird, und bestätigt, dass async Updates und Fehler tatsächlich announced werden."
+          "body": "Mit der Maus sieht deine App gut aus, aber du bist sie nie mit Tastatur oder Screenreader durchgegangen. Dieses Audit gleicht die Tab-Reihenfolge mit der visuellen Ordnung ab, findet Keyboard-Traps und unbeschriftete Controls, prüft, ob der Fokus in Modals und bei Routenwechseln gesetzt und zurückgegeben wird, und bestätigt, dass asynchrone Updates und Fehler tatsächlich angesagt werden."
         }
       ],
-      "output": "Ein Konformitätsurteil plus VPAT-fertige WCAG-2.2-Tabelle, eine Scorecard pro Dimension und nach Priorität sortierte GitHub-Issues — jedes auf sein Success Criterion gemappt, mit Vorher/Nachher-Fix und Re-Audit-Kriterium."
+      "output": "Ein Konformitätsurteil plus VPAT-fertige WCAG-2.2-Tabelle, eine Scorecard pro Dimension und nach Priorität sortierte GitHub-Issues — jedes seinem Success Criterion zugeordnet, mit Vorher/Nachher-Fix und Re-Audit-Kriterium."
     }
   },
   "documentation": {
@@ -432,20 +432,20 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Prüft deine Doku gegen den Standard und gegen den Code, der sie bestätigt oder widerlegt.",
-      "approach": "Spezialisten-Agents gehen jede kritische Leser-Journey nur mit der Doku durch und verifizieren dann jede Aussage gegen die Realität: dokumentierte Commands laufen gegen die Scripts, Env-Variablen werden gegen den lesenden Code geprüft, Code-Beispiele werden nachvollzogen oder ausgeführt. Bewertet werden Repo-Kopf, Onboarding, Doc-Code-Drift, Schreibstil und Diátaxis-Passung auf einer 0-100-Rubrik — jede Seite gemessen an dem Job, den sie erfüllen soll.",
+      "approach": "Spezialisten-Agenten gehen jede kritische Leser-Journey nur mit der Doku durch und prüfen dann jede Aussage an der Realität: Dokumentierte Commands werden gegen die Scripts ausgeführt, Env-Variablen mit dem Code abgeglichen, der sie liest, Code-Beispiele nachvollzogen oder ausgeführt. Bewertet werden Repo-Kopf, Onboarding, Doc-Code-Drift, Schreibstil und Diátaxis-Passung auf einer Rubrik von 0 bis 100 — jede Seite gemessen an dem Job, den sie erfüllen soll.",
       "output": "Eine Rubrik-Scorecard mit Notenband plus ein Drift-Register und priorisierte GitHub-Issues, jedes mit einem Vorher/Nachher-Fix.",
       "useCases": [
         {
           "title": "Vor dem Open-Sourcing",
-          "body": "Du machst ein Repo öffentlich, und das README ist die Eingangstür. Das Audit geht Clone bis erster grüner Test als neuer Leser durch, nennt den genauen Schritt, an dem er hängenbleibt, und markiert fehlende Value-Line, Badge-Reihe, Management-Summary und Architektur-Diagramm."
+          "body": "Du machst ein Repo öffentlich, und das README ist die Eingangstür. Das Audit geht als neuer Leser den Weg vom Clone bis zum ersten grünen Test durch, nennt den genauen Schritt, an dem er hängenbleibt, und markiert fehlende Value-Line, Badge-Reihe, Management-Summary und Architektur-Diagramm."
         },
         {
           "title": "Nach einem Refactor mit Umbenennungen",
-          "body": "Ein Refactor hat Scripts, Env-Variablen und Modulpfade umbenannt, die Doku beschreibt aber noch die alten Namen. Das Audit testet dokumentierte Commands gegen die package.json, Env-Variablen gegen den lesenden Code und .env.example gegen die Realität — und liefert ein Drift-Register, das für jeden Treffer Doku- und Code-Zeile zitiert."
+          "body": "Ein Refactor hat Scripts, Env-Variablen und Modulpfade umbenannt, aber die Doku beschreibt noch die alten Namen. Das Audit testet dokumentierte Commands gegen die package.json, gleicht Env-Variablen mit dem Code ab, der sie liest, und .env.example mit der Realität — und liefert ein Drift-Register, das für jeden Treffer die Doku- und die Code-Zeile zitiert."
         },
         {
           "title": "Übergabe eines Service an On-Call",
-          "body": "Du gibst einem anderen Team den Pager für einen Service, den es nicht gebaut hat. Das Audit prüft Runbooks, Rollback-Schritte und Referenz-Doku gegen die echte Infra und API-Oberfläche, sodass ein falscher Rollback-Schritt oder eine undokumentierte Pflicht-Config als P0/P1 auftaucht, bevor es um 3 Uhr nachts der Alarm tut."
+          "body": "Du gibst einem anderen Team den Pager für einen Service, den es nicht gebaut hat. Das Audit prüft Runbooks, Rollback-Schritte und Referenz-Doku an der echten Infra und der API-Oberfläche, sodass ein falscher Rollback-Schritt oder eine undokumentierte Pflicht-Config als P0/P1 auftaucht, bevor es um 3 Uhr nachts der Alarm tut."
         }
       ]
     }
@@ -472,22 +472,22 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
     },
     "de": {
       "tagline": "Prüft die Idee, nicht nur die Prosa — und schreibt um, was nicht trägt.",
-      "approach": "Es schickt deine Landing-Page, deinen Essay, Launch-Post oder deine Docs-Prosa durch vierzehn Linsen, die eine Sache testen: hält die Idee stand. Es steelmant das stärkste Gegenargument zu deiner These, prüft, ob der Text den Leser auf seiner tatsächlichen Awareness-Stage abholt, misst den Information Gain gegen Best-in-class-Content und verifiziert jede überprüfbare Aussage. Jeder bestätigte Befund liefert ein konkretes Before/After-Rewrite, kein „mach es knackiger“.",
+      "approach": "Das Audit schickt deine Landing-Page, deinen Essay, Launch-Post oder deine Docs-Prosa durch vierzehn Prüfbereiche, die alle eine Frage stellen: Hält die Idee stand? Es bildet den stärksten Gegenpunkt zu deiner These, prüft, ob der Text den Leser auf seiner tatsächlichen Awareness-Stage abholt, misst den Information Gain an Best-in-class-Content und verifiziert jede überprüfbare Aussage. Jeder bestätigte Befund liefert ein konkretes Vorher/Nachher-Rewrite, kein „mach es knackiger“.",
       "useCases": [
         {
           "title": "Vor einem Produkt-Launch-Post",
-          "body": "Du willst die Ankündigung veröffentlichen, und ein unbelegter Superlativ oder ein Versprechen, das das Produkt nicht hält, würde am ersten Tag Glaubwürdigkeit kosten. Das Audit markiert unbelegte Behauptungen als P0, verifiziert die Zahlen und Fähigkeiten, die du nennst, und gibt dir alles Unüberprüfbare zurück, damit du es vor dem Launch klärst."
+          "body": "Du willst die Ankündigung veröffentlichen, und ein unbelegter Superlativ oder ein Versprechen, das das Produkt nicht hält, kostet dich am ersten Tag Glaubwürdigkeit. Das Audit markiert unbelegte Behauptungen als P0, verifiziert die Zahlen und Fähigkeiten, die du nennst, und gibt dir alles Unüberprüfbare zurück, damit du es vor dem Launch klärst."
         },
         {
           "title": "Eine Landing-Page, die nicht konvertiert",
-          "body": "Traffic kommt an, springt aber ab, und du siehst nicht warum. Das Audit zeigt die Value Proposition unter drei Sätzen Throat-Clearing begraben, Copy auf der falschen Awareness-Stage und einen fehlenden oder unklaren Call-to-Action — jeden mit Fundstelle zitiert und direkt umgeschrieben."
+          "body": "Traffic kommt an, springt aber wieder ab, und du siehst nicht, warum. Das Audit zeigt die Value Proposition, begraben unter drei Sätzen Vorgeplänkel, Copy auf der falschen Awareness-Stage und einen fehlenden oder unklaren Call-to-Action — jeden mit Fundstelle zitiert und direkt umgeschrieben."
         },
         {
           "title": "Ein Essay, der sauber liest, aber nichts Neues sagt",
-          "body": "Jeder Satz stimmt, doch der Leser kann jeden Punkt aus dem Titel vorhersagen. Das Audit misst den Information Gain gegen die besten existierenden Texte für diesen Leser, markiert den Commodity-Content und benennt, wo dein einziger echter, nicht-offensichtlicher Insight zu wenig genutzt ist."
+          "body": "Jeder Satz stimmt, doch der Leser kann jeden Punkt schon aus dem Titel ableiten. Das Audit misst den Information Gain an den besten existierenden Texten für diesen Leser, markiert den Commodity-Content und benennt, wo dein einziger echter, nicht offensichtlicher Insight zu wenig genutzt wird."
         }
       ],
-      "output": "Eine 0–100-Content-Scorecard, ein expliziter Thesen-Verdict und nach Priorität sortierte GitHub-Issues — jedes mit zitierter Passage, Before/After-Rewrite und Re-Audit-Kriterium."
+      "output": "Eine Content-Scorecard von 0 bis 100, ein explizites Thesen-Urteil und nach Priorität sortierte GitHub-Issues — jedes mit zitierter Passage, Vorher/Nachher-Rewrite und Re-Audit-Kriterium."
     }
   },
   "lean": {
@@ -511,20 +511,20 @@ export const AUDIT_DETAILS: Record<string, { en: AuditDetail; de: AuditDetail }>
       "output": "A leanness scorecard plus prioritized GitHub issues, each with a removal class, the reachability proof, and a before/after fix with a revert note."
     },
     "de": {
-      "tagline": "Finde Bloat, dead code und ungenutzte Dependencies — ohne etwas Tragendes zu löschen.",
-      "approach": "Ein read-only Schlankheits-Audit über fünf Dimensionen: Dependency-Transparenz und Supply Chain, dead code und Orphan-Files, Duplikation, AI-Slop und defensives Boilerplate, sowie Over-Engineering. Es baut zuerst eine SBOM und eine Reachability-Map, dann gated es jede Entfernung hinter Chesterton's Fence und einem Resurrector-Skeptiker — jeder Schnitt landet in remove-now, investigate, deprecate oder protected, nie ein blindes Löschen.",
+      "tagline": "Finde Bloat, Dead Code und ungenutzte Dependencies — ohne etwas Tragendes zu löschen.",
+      "approach": "Ein read-only Schlankheits-Audit über fünf Dimensionen: Dependency-Transparenz und Supply Chain, Dead Code und Orphan-Files, Duplikation, AI-Slop und defensives Boilerplate sowie Over-Engineering. Das Audit baut zuerst eine SBOM und eine Reachability-Map und sichert dann jede Entfernung hinter Chesterton's Fence und einem Resurrector-Skeptiker ab — jeder Schnitt wird als remove-now, investigate, deprecate oder protected eingestuft, nie blind gelöscht.",
       "useCases": [
         {
           "title": "Du übernimmst eine AI-generierte Codebase",
-          "body": "Nach Monaten agent-geschriebenem Code vermutest du duplizierte Utilities, Code-wiederholende Kommentare und über-defensives Boilerplate, kannst es aber nicht belegen. Das Audit meldet die Duplikations-Dichte mit beiden Clone-Stellen, markiert log-and-continue Catch-Blöcke und benennt, welche Vereinfachungen verhaltens-äquivalent sind."
+          "body": "Nach Monaten von agentgeschriebenem Code vermutest du duplizierte Utilities, Kommentare, die nur den Code wiederholen, und übermässig defensives Boilerplate, kannst es aber nicht belegen. Das Audit meldet die Duplikations-Dichte mit beiden Clone-Stellen, markiert log-and-continue-Catch-Blöcke und benennt, welche Vereinfachungen verhaltensäquivalent sind."
         },
         {
           "title": "Dependency-Surface vor einem Release verschlanken",
-          "body": "Du willst Install- und Supply-Chain-Risiko senken, fürchtest aber einen kaputten Fresh-Install. Es trennt declared-but-unused Dependencies von Phantom-Deps (used-but-undeclared), erklärt, warum jedes transitive Package da ist, und prüft Lockfile und Lizenzen gegen Policy."
+          "body": "Du willst das Install- und Supply-Chain-Risiko senken, fürchtest aber einen kaputten Fresh-Install. Das Audit trennt deklarierte, aber ungenutzte Dependencies von Phantom-Deps (genutzt, aber nicht deklariert), erklärt, warum jedes transitive Package vorhanden ist, und prüft Lockfile und Lizenzen gegen die Policy."
         },
         {
-          "title": "Entscheiden, ob dead code wirklich tot ist",
-          "body": "Ein statisches Tool hat unused Exports und Orphan-Files markiert, aber Reflection, dynamische Imports und Out-of-Repo-Consumer lassen dich zögern. Das Audit verfolgt die Reachability-Map, nennt die ausgeschlossenen dynamischen Kanäle und labelt jeden Kandidaten als proven-dead oder nur suspected-dead."
+          "title": "Entscheiden, ob Dead Code wirklich tot ist",
+          "body": "Ein statisches Tool hat ungenutzte Exports und Orphan-Files markiert, aber Reflection, dynamische Imports und Out-of-Repo-Consumer lassen dich zögern. Das Audit verfolgt die Reachability-Map, nennt die ausgeschlossenen dynamischen Kanäle und kennzeichnet jeden Kandidaten als proven-dead oder nur suspected-dead."
         }
       ],
       "output": "Eine Schlankheits-Scorecard plus priorisierte GitHub-Issues, jedes mit Removal-Klasse, dem Reachability-Beleg und einem Vorher/Nachher-Fix samt Revert-Note."

@@ -64,8 +64,12 @@ describe("principles translation coverage", () => {
     const en = principles("en");
     expect(de.length).toBe(en.length);
     for (let i = 0; i < en.length; i++) {
-      // German must differ from English (i.e. a translation was actually applied)…
-      expect(de[i].title, `principle "${en[i].title}" not translated`).not.toBe(en[i].title);
+      // German title + body must be present. We deliberately do NOT assert
+      // de !== en: a legitimately protected English term (a standard, a code
+      // identifier) may stay identical, and forcing a difference would
+      // institutionalize translationese. de-CH locale validity (no ß, native
+      // phrasing, no Denglish) is enforced comprehensively in locale-de-ch.test.ts.
+      expect(de[i].title, `principle "${en[i].title}" has no German title`).toBeTruthy();
       expect(de[i].body).toBeTruthy();
       // …and the shared, non-localized field (icon) must be preserved.
       expect(de[i].icon).toBe(en[i].icon);
