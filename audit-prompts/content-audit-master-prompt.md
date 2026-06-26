@@ -36,10 +36,11 @@ DATA_ACCESS:  <may fetch live URLs / competitor pages to compare? or work from p
 OUTPUT_LANG:  <Deutsch (default) | English | ...>
 SOURCE_LANGUAGE:    <auto-detect (default) | English | Deutsch | ... — language of the source draft,
                      used to detect interference>
-LOCALISATION_MODE:  <audit-only (default) | native-rewrite — native-rewrite preserves claims /
-                     evidence / meaning / technical correctness but may fully re-form sentence
-                     structure and word choice>
-TERMINOLOGY_POLICY: <infer from corpus (default) | provided glossary | strict glossary>
+LOCALISATION_MODE:  <audit-only (default) | native-rewrite | translate-and-rewrite — how far the
+                     audit may reshape target-locale wording; values defined under "Localisation
+                     modes & terminology policy" below>
+TERMINOLOGY_POLICY: <infer from corpus (default) | provided glossary | strict glossary — defined
+                     under "Localisation modes & terminology policy" below>
 ISSUE_TARGET: <owner/repo for gh issue creation — preview-first, create only on approval>
 ```
 
@@ -52,6 +53,28 @@ every finding is judged against whether it helps the reader believe the thesis a
 `STYLE_REFERENCE`) the rewrite must match. When `SOURCE_LANGUAGE` differs from the target locale the
 localisation apparatus (operating principle 9, lens C15, the Native Reader skeptic) runs in full;
 when they match it runs as a lighter native-quality check.
+
+**Localisation modes & terminology policy (control effect).** These two inputs bound how the audit
+acts on localisation findings:
+
+- `LOCALISATION_MODE` — how far a confirmed finding may reshape target-locale wording:
+  - `audit-only` (default) — report the localisation finding with a suggested native form, but
+    propose **no** applied rewrite; the existing target text stays the unit of record.
+  - `native-rewrite` — for confirmed C15 findings, ship a native-target rewrite that **preserves
+    claims, evidence, meaning, and technical correctness** but may fully re-form sentence structure
+    and word choice. Assumes usable target-locale copy already exists.
+  - `translate-and-rewrite` — there is **no** usable target-locale copy yet (or it is to be
+    discarded): produce the target copy **from the source**, then hold it to the same native-first
+    bar as `native-rewrite`. Identical precision and terminology rules — the only difference is
+    whether a prior target draft exists.
+- `TERMINOLOGY_POLICY` — the authority of the Phase-0 terminology matrix:
+  - `infer from corpus` (default) — derive the keep / translate / rephrase decisions from the piece
+    itself; the matrix is advisory.
+  - `provided glossary` — a supplied glossary (`STYLE_REFERENCE`) seeds the matrix and its decisions
+    **bind**, but the audit may **extend** it for terms it does not cover.
+  - `strict glossary` — the supplied glossary is the **only** allowed source of terminology
+    decisions; a recurring term absent from it is flagged for a human decision rather than rephrased
+    on the audit's own judgement.
 
 ---
 
