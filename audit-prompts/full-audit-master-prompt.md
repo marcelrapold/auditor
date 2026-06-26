@@ -66,7 +66,7 @@ resulting audit selection for the user to confirm.
 For each chosen audit, **fetch its specialist prompt** and execute it:
 
 ```
-https://raw.githubusercontent.com/marcelrapold/auditor/v0.8.0/audit-prompts/<key>-audit-master-prompt.md
+https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.0/audit-prompts/<key>-audit-master-prompt.md
 ```
 
 (e.g. `…/security-audit-master-prompt.md`). Then:
@@ -97,7 +97,7 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.8.0/audit-prompts/<key
 ## Step 5 — Issue output (per `ISSUE-OUTPUT-STANDARD.md`)
 
 Fetch and follow
-`https://raw.githubusercontent.com/marcelrapold/auditor/v0.8.0/ISSUE-OUTPUT-STANDARD.md`. Produce, in
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.0/ISSUE-OUTPUT-STANDARD.md`. Produce, in
 **`OUTPUT_LANG`** (German or English as chosen), preview-first and created only on approval:
 
 1. **One master tracking issue** — `[AUDIT] Full repo — Master-Tracker & Roadmap`: management
@@ -142,7 +142,7 @@ make this offer when the user already chose a subset or "full repo" from the men
 
 ## Index (machine-readable)
 
-Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.8.0/`
+Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.0/`
 
 - Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content,lean}-audit-master-prompt.md`
 - Standards: `ISSUE-OUTPUT-STANDARD.md`, `DOCUMENTATION-STANDARD.md` (+ `.en.md`)
