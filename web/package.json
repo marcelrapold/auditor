@@ -5,7 +5,7 @@
   "description": "Landing page for the auditor master-prompt library. Atlas-conformant Next.js 16 + Tailwind v4.",
   "license": "MIT",
   "engines": {
-    "node": ">=22"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "next dev",
