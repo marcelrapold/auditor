@@ -414,7 +414,7 @@ function Audits({ lang }: { lang: Lang }) {
                       className="absolute inset-x-0 bottom-0 top-1/3 bg-gradient-to-t from-card via-card/70 to-transparent transition-colors duration-500 group-hover:via-card/40"
                     />
                     {/* Icon + title sit directly on the image, over the fade. */}
-                    <div className="absolute inset-x-0 bottom-0 flex items-center gap-2.5 px-6 pb-4">
+                    <div className="absolute inset-x-0 bottom-0 flex items-center gap-2.5 px-6 pb-5">
                       <a.icon
                         aria-hidden
                         className="size-6 shrink-0 text-primary transition-[filter] duration-300 group-hover:[filter:drop-shadow(0_0_10px_currentColor)]"
@@ -434,7 +434,7 @@ function Audits({ lang }: { lang: Lang }) {
                     <h3 className="font-mono text-base font-semibold">{a.name}</h3>
                   </div>
                 )}
-                <div className="flex flex-1 flex-col px-6 pb-6 pt-4">
+                <div className="flex flex-1 flex-col px-6 pb-6 pt-2">
                   <p className="flex-1 text-sm text-muted-foreground">{glossify(a.blurb, lang)}</p>
                   <p className="mt-4 font-mono text-xs text-muted-foreground">{glossify(a.mapsTo, lang)}</p>
                 </div>
