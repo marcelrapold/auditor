@@ -414,7 +414,7 @@ function Audits({ lang }: { lang: Lang }) {
                       className="absolute inset-x-0 bottom-0 top-1/3 bg-gradient-to-t from-card via-card/70 to-transparent transition-colors duration-500 group-hover:via-card/40"
                     />
                     {/* Icon + title sit directly on the image, over the fade. */}
-                    <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 px-6 pb-7">
+                    <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 px-6 pb-8">
                       <a.icon
                         aria-hidden
                         className="size-7 shrink-0 text-primary transition-[filter] duration-300 group-hover:[filter:drop-shadow(0_0_10px_currentColor)]"
