@@ -1,7 +1,7 @@
 # Dokumentations-Standard (Google-Grade)
 
 Ein normativer Standard für Repository-Dokumentation: messbar, profilabhängig und an den
-aktuellen Google-Dokumentationsmustern ausgerichtet. Dieser Standard ist der Maßstab, gegen den
+aktuellen Google-Dokumentationsmustern ausgerichtet. Dieser Standard ist der Massstab, gegen den
 das [`documentation-audit`](audit-prompts/documentation-audit-master-prompt.md) beliebige Repos
 prüft und konkrete Verbesserungs-Issues erzeugt.
 
@@ -39,7 +39,7 @@ Dieser Standard übernimmt **Googles Schreib- und Barrierefreiheits-Disziplin** 
 **Repo-Kopf**, den Googles eigene, minimalistische READMEs bewusst weglassen: Badges, ein
 Management-Summary und ein Architektur-Diagramm. Diese Mischung ist gewollt:
 
-- **Von Google:** Stimme, zweite Person, Präsens, Aktiv, satzweise Großschreibung der
+- **Von Google:** Stimme, zweite Person, Präsens, Aktiv, satzweise Grossschreibung der
   Überschriften, parallele Listen, Geltungsbereich + Zielgruppe zuerst nennen, strikte
   Barrierefreiheit. (Quelle: Google developer documentation style guide, tech-writing.)
 - **Von Best-in-Class-OSS:** Badge-Reihe (shields.io), Management-Summary/TL;DR, Mermaid-
@@ -95,7 +95,7 @@ Der Kopf entscheidet, ob ein Leser bleibt. Reihenfolge (verbindlich):
 5. **Inhaltsverzeichnis.** Ab ~100 Zeilen README. Beschreibende Linktexte, funktionierende Anker.
 
 > [!TIP]
-> Das C4-Modell hilft beim Schichten von Architektur: **Context** (System + Außenwelt) →
+> Das C4-Modell hilft beim Schichten von Architektur: **Context** (System + Aussenwelt) →
 > **Container** (Apps, DBs, APIs) → **Component** (Inneres eines Containers). Im Repo-Kopf gehört
 > in der Regel ein Context- oder schlankes Container-Diagramm.
 
@@ -195,7 +195,7 @@ tech-writing-Kursen. Sie gelten für jede Markdown-Datei im Repo.
 - **Code-Blöcke.** Sprache am Fence angeben; Einrückung 2 Leerzeichen; Zeilen ~80 Zeichen;
   ausgelassenen Code per sprachspezifischem Kommentar markieren, nicht per „…".
 - **Caption-first bei Abbildungen.** Erst die Bildunterschrift/Aussage, dann das Bild; Callouts
-  statt langer Fließtext-Erklärungen.
+  statt langer Fliesstext-Erklärungen.
 
 ---
 
@@ -204,7 +204,7 @@ tech-writing-Kursen. Sie gelten für jede Markdown-Datei im Repo.
 Barrierefreiheit ist nicht optional. Dokumentation muss mit Screenreader und Tastatur nutzbar sein.
 
 - **Alt-Text** für jedes informative Bild; leerer Alt-Text nur für rein dekorative Bilder.
-- **Keine Information ausschließlich über Bilder** vermitteln.
+- **Keine Information ausschliesslich über Bilder** vermitteln.
 - **Keine Richtungssprache.** „vorstehend/folgend/weiter oben im Text" statt „oben/unten/rechts" —
   Layout variiert je nach Gerät und Screenreader.
 - **Kontrast** mindestens 4.5:1 für Text.
@@ -266,7 +266,7 @@ ausgewiesen.
 - **P1 — Hoch:** kein Management-Summary, kein Architektur-Diagramm wo Profil es verlangt,
   undokumentiertes Kern-Feature, fehlende Pflicht-Health-Datei.
 - **P2 — Mittel:** Drift, schwache Navigation, inkonsistente Terminologie, dünne Referenz.
-- **P3 — Niedrig:** Stil, Tippfehler, Emoji-Politik-Verstöße ohne Informationsverlust.
+- **P3 — Niedrig:** Stil, Tippfehler, Emoji-Politik-Verstösse ohne Informationsverlust.
 
 Die Befunde werden nach dem [`ISSUE-OUTPUT-STANDARD.md`](ISSUE-OUTPUT-STANDARD.md) ausgegeben:
 zuerst ein Tracking-Issue (priorisierter Index + Management-Summary + Roadmap), dann pro Befund

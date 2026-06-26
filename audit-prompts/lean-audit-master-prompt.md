@@ -334,7 +334,7 @@ Two-part contract:
    finding: severity, dimension, removal **class**, evidence `file:line` + tool signal, the
    blind-spots-checked line, reachability/reversibility/blast-radius, impact, a concrete before/after
    fix **with a git-revert/reversibility note**, effort, and a re-audit criterion. Labels: `audit`,
-   `sev:p0…p3`, `domäne:<dimension>`, `aufwand:S|M|L`; back-link to the tracker.
+   `sev:p0…p3`, `dimension:<dimension>`, `effort:S|M|L`; back-link to the tracker.
 
 Create child issues first, collect their numbers, then create/update the tracking issue so its
 checklist links resolve. Detect existing audit issues by label and update rather than duplicate.

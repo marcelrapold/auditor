@@ -5,13 +5,14 @@ Dieser Standard ist **verbindlich** und wird von jeder Vorlage in `audit-prompts
 
 > [!NOTE]
 > **Management-Summary.** Nach der adversariellen Verifikation überführt jedes Audit seine
-> bestätigten Befunde in GitHub-Issues — **standardmäßig auf Deutsch**. Zuerst entsteht **ein
+> bestätigten Befunde in GitHub-Issues — **standardmässig auf Deutsch**. Zuerst entsteht **ein
 > Tracking-Issue** (der Index aller Sub-Aufgaben, nach Priorität sortiert, mit Management-Summary,
 > Scorecard und Roadmap), danach **pro Befund ein eigenes Issue**, jedes mit eigener
 > Management-Summary und konkreter Vorher/Nachher-Handlungsempfehlung. Das echte Anlegen erfolgt
 > **erst nach Vorschau und ausdrücklicher Freigabe**.
 
-Version 1.0.0 · Sprache der Issues: standardmäßig Deutsch (`OUTPUT_LANG` überschreibbar)
+Version 1.1.0 · Sprache der Issues: standardmässig Deutsch (`OUTPUT_LANG` überschreibbar)
+Neu in 1.1.0: de-CH-Orthografie (durchgehend ss) und der `dimension:`/`effort:`-Label-Kanon sind verbindlich.
 
 ---
 
@@ -20,6 +21,11 @@ Version 1.0.0 · Sprache der Issues: standardmäßig Deutsch (`OUTPUT_LANG` übe
 - **Auslöser:** läuft nach Phase 3 (Verifikation) und der Synthese. Nur **bestätigte** Befunde
   werden zu Issues; Hypothesen bleiben getrennt im Bericht.
 - **Sprache:** Deutsch als Standard. Pro Lauf via `OUTPUT_LANG` änderbar (z. B. für englische Repos).
+- **Locale & de-CH.** Die deutsche Issue-Ausgabe nutzt Schweizer Orthografie (durchgehend ss, kein
+  Eszett — Ausnahme nur unveränderliche Eigennamen, Code, Rechtstitel, wörtliche Zitate), deutsche
+  Anführungszeichen „…" (nie ein gerades ASCII-Schlusszeichen) und einheitliche Terminologie gemäss
+  Projekt-Glossar ([`TERMINOLOGY.md`](TERMINOLOGY.md)). Das gilt für **alle** Audits und ist pro Lauf
+  via `OUTPUT_LANG`/Locale überschreibbar.
 - **Vorschau zuerst.** Immer ein Trockenlauf (vollständiger Issue-Text als Markdown im Bericht).
   Echtes Anlegen nur bei **ausdrücklicher Freigabe** und vorhandenem Repo-Zugriff (`gh issue create`).
 - **Idempotenz.** Vor dem Anlegen bestehende Audit-Issues per Label-Suche (`audit`, `<audit-typ>`)
@@ -35,7 +41,7 @@ Ein einzelnes „Epic"/Index-Issue, das alle Sub-Aufgaben bündelt.
 - **Titel:** `[AUDIT] <Audit-Name> — Befund-Tracker & Roadmap`
 - **Labels:** `audit`, `tracking`, `<audit-typ>` (z. B. `security`, `performance`, `docs`)
 - **Body:**
-  1. **Management-Summary** (3–5 Sätze): Gesamturteil, Score/Note, größtes Risiko, realistisches
+  1. **Management-Summary** (3–5 Sätze): Gesamturteil, Score/Note, grösstes Risiko, realistisches
      Ziel nach Behebung. Für Leitung lesbar.
   2. **Scorecard** (Tabelle): Dimensionen × Note/Score × Befundzahl je Schweregrad.
   3. **Priorisierte Aufgabenliste** als Checkboxen, sortiert **P0 → P3**, innerhalb gleicher
@@ -58,7 +64,9 @@ Jeder bestätigte Befund wird ein eigenständiges, erstklassig dokumentiertes Is
 
 - **Titel:** `[<SEVERITY>][<Domäne/Dimension>] <prägnanter Befund>` — z. B.
   `[P0][AuthZ] IDOR an GET /api/orders/{id}`
-- **Labels:** `audit`, `sev:p0|p1|p2|p3`, `domäne:<x>`, `aufwand:S|M|L`
+- **Labels:** `audit`, `sev:p0|p1|p2|p3`, `dimension:<x>`, `effort:S|M|L`, optional `locale:de-CH`.
+  Die Lokalisierungs-Dimension heisst `dimension:localisation`; `locale:de-CH` markiert Schweizer
+  Orthografie (optional).
 - **Body (feste Reihenfolge):**
   1. **Management-Summary** (2–3 Sätze): was, Auswirkung, Empfehlung in einem Satz.
   2. **Schweregrad & Score:** P-Stufe + auditspezifischer Score (CVSS / ICE / Rubrik-Punkte).
@@ -96,7 +104,7 @@ Damit die Checklisten-Links im Tracker auflösen, in dieser Reihenfolge arbeiten
 ```markdown
 > [!NOTE]
 > **Management-Summary.** Das Security-Audit von `acme/shop` ergibt Note **Bronze (62/100)**.
-> Größtes Risiko: ein nicht authentifizierter Endpunkt, der Kundendaten preisgibt (P0).
+> Grösstes Risiko: ein nicht authentifizierter Endpunkt, der Kundendaten preisgibt (P0).
 > Nach Behebung der 2 P0- und 3 P1-Befunde ist Silver erreichbar.
 
 ## Scorecard
