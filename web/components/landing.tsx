@@ -95,15 +95,16 @@ function Hero({ lang }: { lang: Lang }) {
         )}
       />
 
-      {/* Legibility scrim over the full-bleed artwork: dark behind the left copy,
-          fading to transparent so the artwork stays vivid on the right. */}
+      {/* Soft legibility wash — light enough that the artwork still reads behind
+          the copy (text sits ON the artwork, not beside a dark panel). The text
+          itself carries a shadow for safety on the brighter areas. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-r from-background via-background/70 to-transparent lg:block"
+        className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-r from-background/75 via-background/25 to-transparent lg:block"
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-5 py-16 md:py-24 lg:py-0">
-        <div className="max-w-[560px] text-center lg:text-left">
+        <div className="max-w-[560px] text-center lg:text-left lg:[text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
           <Reveal immediate>
             <Badge className="mx-auto lg:mx-0">
               <span className="size-1.5 rounded-full bg-primary animate-badge-pulse" />
