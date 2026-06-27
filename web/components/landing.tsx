@@ -146,11 +146,14 @@ function Hero({ lang }: { lang: Lang }) {
           </Reveal>
         </div>
 
-        {/* Mobile / tablet: the artwork sits below the CTA, no parallax, softly vignetted. */}
-        <HeroArtworkStack
-          parallax={false}
-          className="mx-auto mt-12 aspect-[1672/941] w-full max-w-md [mask-image:radial-gradient(ellipse_88%_80%_at_center,black_58%,transparent_100%)] lg:hidden"
-        />
+        {/* Mobile / tablet: a full-bleed artwork band below the CTA — edge to edge
+            (not a boxed thumbnail), no parallax, fading into the page top and bottom. */}
+        <div className="-mx-5 mt-14 lg:hidden">
+          <HeroArtworkStack
+            parallax={false}
+            className="aspect-[16/10] w-full [mask-image:linear-gradient(to_bottom,transparent_0%,black_16%,black_88%,transparent_100%)]"
+          />
+        </div>
       </div>
     </section>
   );
