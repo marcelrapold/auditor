@@ -6,40 +6,52 @@ import { cn } from "@/lib/utils";
 
 /**
  * The Audit Orchestrator — a four-layer artwork stack with a subtle pointer
- * parallax. Each render shares the same geometry (1672×941), so the layers
- * line up; only the bright parts of the upper layers show (screen blend), which
- * composites the dark hardware + emerald signal paths over the base atmosphere.
+ * parallax. Each render shares the same geometry (1672×941), so the layers line
+ * up. The dark hardware (Core) carries the scene; the emerald Signal overlay
+ * supports it (screen blend, slightly held back so it doesn't flatten the metal
+ * into a glow); the structural Rig reads as faint physical infrastructure.
  *
  * Tune everything from one place: layer order (back→front), parallax depth in
- * px, blend mode, and opacity. Parallax is desktop-pointer only and disabled for
- * touch + prefers-reduced-motion.
+ * px, blend mode, and opacity. Parallax is desktop fine-pointer only, disabled
+ * for touch + prefers-reduced-motion, tracked within the hero section (not the
+ * window), and glides back to rest when the pointer leaves. The mask is supplied
+ * by the caller via `className` so desktop and mobile can fade differently.
  */
 type Layer = {
   src: string;
-  depth: number; // parallax travel in px at the screen edge
+  depth: number; // parallax travel in px at the edge of the tracked area
   blend: "normal" | "screen" | "lighten";
   opacity: number;
   priority?: boolean;
 };
 
 const LAYERS: Layer[] = [
-  { src: "/hero/base-atmosphere.webp", depth: 3, blend: "normal", opacity: 1, priority: true },
-  { src: "/hero/structural-rig.webp", depth: 8, blend: "screen", opacity: 0.55 },
-  { src: "/hero/orchestrator-core.webp", depth: 13, blend: "screen", opacity: 0.9 },
-  { src: "/hero/signal-overlay.webp", depth: 22, blend: "screen", opacity: 1 },
+  { src: "/hero/base-atmosphere.webp", depth: 2, blend: "normal", opacity: 1, priority: true },
+  { src: "/hero/structural-rig.webp", depth: 5, blend: "screen", opacity: 0.42 },
+  { src: "/hero/orchestrator-core.webp", depth: 9, blend: "screen", opacity: 1 },
+  { src: "/hero/signal-overlay.webp", depth: 13, blend: "screen", opacity: 0.85 },
 ];
 
 const LERP = 0.08; // smoothing toward the pointer target — lower = calmer
 
-export function HeroArtworkStack({ className }: { className?: string }) {
+export function HeroArtworkStack({
+  className,
+  parallax = true,
+}: {
+  className?: string;
+  parallax?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !parallax) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // Track the pointer within the hero section, not the whole window: the
+    // effect only reacts while the cursor is over the hero and rests otherwise.
+    const track: HTMLElement = el.closest("section") ?? el;
     const layers = Array.from(el.querySelectorAll<HTMLElement>("[data-depth]"));
     let tx = 0,
       ty = 0,
@@ -61,25 +73,34 @@ export function HeroArtworkStack({ className }: { className?: string }) {
         running = false;
       }
     };
-    const clamp = (n: number) => (n < -1 ? -1 : n > 1 ? 1 : n);
-    const onMove = (e: PointerEvent) => {
-      const r = el.getBoundingClientRect();
-      // clamp to [-1, 1] so the parallax travel never exceeds the 8% overscan
-      // when the pointer is far from the (off-center) artwork on wide screens
-      tx = clamp((e.clientX - (r.left + r.width / 2)) / (r.width / 2));
-      ty = clamp((e.clientY - (r.top + r.height / 2)) / (r.height / 2));
+    const start = () => {
       if (!running) {
         running = true;
         raf = requestAnimationFrame(tick);
       }
     };
+    const clamp = (n: number) => (n < -1 ? -1 : n > 1 ? 1 : n);
+    const onMove = (e: PointerEvent) => {
+      const r = track.getBoundingClientRect();
+      tx = clamp((e.clientX - (r.left + r.width / 2)) / (r.width / 2));
+      ty = clamp((e.clientY - (r.top + r.height / 2)) / (r.height / 2));
+      start();
+    };
+    // Glide back to rest on leave — no snap.
+    const onLeave = () => {
+      tx = 0;
+      ty = 0;
+      start();
+    };
 
-    window.addEventListener("pointermove", onMove, { passive: true });
+    track.addEventListener("pointermove", onMove, { passive: true });
+    track.addEventListener("pointerleave", onLeave, { passive: true });
     return () => {
-      window.removeEventListener("pointermove", onMove);
+      track.removeEventListener("pointermove", onMove);
+      track.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [parallax]);
 
   return (
     <div
@@ -88,7 +109,6 @@ export function HeroArtworkStack({ className }: { className?: string }) {
       className={cn(
         // `isolate` keeps the screen-blends compositing within the stack, not against the page
         "pointer-events-none relative isolate overflow-hidden",
-        "[mask-image:radial-gradient(ellipse_82%_78%_at_center,black_55%,transparent_100%)]",
         className,
       )}
     >
@@ -105,7 +125,7 @@ export function HeroArtworkStack({ className }: { className?: string }) {
             alt=""
             fill
             priority={l.priority}
-            sizes="(max-width: 1024px) 90vw, 45vw"
+            sizes="(max-width: 1024px) 92vw, 60vw"
             className="scale-[1.08] object-cover object-center"
           />
         </div>

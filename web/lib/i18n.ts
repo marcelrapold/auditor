@@ -43,16 +43,14 @@ export const ui = {
     themeLight: "Switch to light theme",
     themeDark: "Switch to dark theme",
     themeToggle: "Toggle color theme",
-    heroBadge: "audits · MIT",
-    heroTitle: "Turn any AI agent into a swarm of specialist auditors",
+    heroBadge: "The Audit Orchestrator",
+    heroTitle: "Turn any AI agent into a swarm that proves its findings.",
     heroSub:
-      "Copy one master prompt into your AI coding agent. It runs many specialists in parallel, makes independent skeptics refute every finding, and files only what survives — as priority-sorted GitHub issues.",
-    heroContrast:
-      'Not another "audit my code" prompt — these make your agent prove every finding before it files it.',
-    heroCtaCopy: "Copy the command",
+      "One master prompt activates {count} specialist audit lenses, makes independent skeptics challenge every serious claim, and returns only evidence-backed, priority-sorted GitHub issues.",
+    heroCtaCopy: "Copy the audit command",
     heroCtaProof: "See a real run",
     heroCtaHint: "Copies a template — swap in your repo URL before running.",
-    heroMeta: "evidence-bound · ≥2-of-3 adversarial verification · 30/60/90 roadmap",
+    heroMeta: "{count} lenses · ≥2-of-3 verified · priority-sorted output",
     agentEyebrow: "Run it",
     agentTitle: "Point your AI agent at auditor.rapold.io",
     agentLead:
@@ -192,16 +190,14 @@ export const ui = {
     themeLight: "Zu hellem Design wechseln",
     themeDark: "Zu dunklem Design wechseln",
     themeToggle: "Farbdesign umschalten",
-    heroBadge: "Audits · MIT",
-    heroTitle: "Mach aus jedem KI-Agenten einen Schwarm spezialisierter Auditoren",
+    heroBadge: "Audit-Orchestrator",
+    heroTitle: "Mach aus jedem KI-Agenten einen Schwarm, der seine Befunde belegt.",
     heroSub:
-      "Kopiere einen Master-Prompt in deinen KI-Coding-Agenten. Er setzt viele Spezialisten parallel ein, lässt jeden Befund von unabhängigen Skeptikern anfechten und reicht nur ein, was standhält — als nach Priorität sortierte GitHub-Issues.",
-    heroContrast:
-      "Kein weiterer „audit my code“-Prompt — diese zwingen deinen Agenten, jeden Befund zu belegen, bevor er ihn einreicht.",
-    heroCtaCopy: "Befehl kopieren",
+      "Ein Master-Prompt aktiviert {count} spezialisierte Prüfbereiche, lässt unabhängige Skeptiker jede ernsthafte Behauptung anfechten und liefert nur belegbasierte, nach Priorität sortierte GitHub-Issues.",
+    heroCtaCopy: "Audit-Befehl kopieren",
     heroCtaProof: "Echten Durchlauf ansehen",
     heroCtaHint: "Kopiert eine Vorlage — ersetze die Repo-URL, bevor du sie ausführst.",
-    heroMeta: "belegbasiert · ≥2-von-3 adversariell verifiziert · 30/60/90-Roadmap",
+    heroMeta: "{count} Prüfbereiche · ≥2-von-3 verifiziert · priorisierter Output",
     agentEyebrow: "Loslegen",
     agentTitle: "Nutze auditor.rapold.io mit deinem KI-Agenten",
     agentLead:
