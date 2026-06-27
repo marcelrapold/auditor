@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ArrowDown, ArrowRight, CircleDot, Search, ShieldCheck, Terminal } from "lucide-react";
 import { CommandBlock, CopyCommandButton } from "@/components/copy-command";
+import { HeroArtworkStack } from "@/components/hero-artwork";
 import { GitHubMark } from "@/components/icons";
 import { Reveal } from "@/components/reveal";
 import { SiteFooter, SiteHeader, homeNav } from "@/components/site-chrome";
@@ -80,57 +81,56 @@ function Hero({ lang }: { lang: Lang }) {
   return (
     <section id="top" className="relative overflow-hidden border-b border-border/60">
       <div className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 size-[min(40rem,90vw)] -translate-x-1/2"
-      >
-        <div className="size-full rounded-full bg-primary/10 blur-3xl animate-aurora-1" />
-      </div>
-      <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-12 text-center md:py-32">
-        <Reveal immediate>
-          <Badge className="mx-auto">
-            <span className="size-1.5 rounded-full bg-primary animate-badge-pulse" />
-            {AUDIT_COUNT} {tt.heroBadge} · {VERSION}
-          </Badge>
-        </Reveal>
-        <Reveal immediate>
-          <h1 className="mx-auto mt-6 max-w-4xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
-            {tt.heroTitle}
-          </h1>
-        </Reveal>
-        <Reveal immediate delay={0.1}>
-          <p className="mx-auto mt-6 max-w-prose text-pretty text-lg text-muted-foreground">
-            {tt.heroSub}
-          </p>
-        </Reveal>
-        <Reveal immediate delay={0.14}>
-          <p className="mx-auto mt-5 max-w-prose text-pretty text-base font-medium text-foreground/90">
-            {tt.heroContrast}
-          </p>
-        </Reveal>
-        <Reveal immediate delay={0.18}>
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 [&>*]:w-full sm:flex-row sm:[&>*]:w-auto">
-            <CopyCommandButton
-              command={AUDIT_COMMAND}
-              label={tt.heroCtaCopy}
-              copiedLabel={tt.agentCopied}
-              copiedAnnounce={tt.agentCopiedAnnounce}
-              failedAnnounce={tt.agentCopyFailed}
-            />
-            <a href="#proof" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
-              {tt.heroCtaProof}
-              <ArrowRight aria-hidden className="size-4" />
-            </a>
-          </div>
-        </Reveal>
-        <Reveal immediate delay={0.2}>
-          <p className="mt-3 text-xs text-muted-foreground">{tt.heroCtaHint}</p>
-        </Reveal>
-        <Reveal immediate delay={0.22}>
-          <p className="mt-8 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            {tt.heroMeta}
-          </p>
-        </Reveal>
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:py-28">
+        <div className="relative z-10 text-center lg:text-left">
+          <Reveal immediate>
+            <Badge className="mx-auto lg:mx-0">
+              <span className="size-1.5 rounded-full bg-primary animate-badge-pulse" />
+              {AUDIT_COUNT} {tt.heroBadge} · {VERSION}
+            </Badge>
+          </Reveal>
+          <Reveal immediate>
+            <h1 className="mx-auto mt-6 max-w-4xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl lg:mx-0">
+              {tt.heroTitle}
+            </h1>
+          </Reveal>
+          <Reveal immediate delay={0.1}>
+            <p className="mx-auto mt-6 max-w-prose text-pretty text-lg text-muted-foreground lg:mx-0">
+              {tt.heroSub}
+            </p>
+          </Reveal>
+          <Reveal immediate delay={0.14}>
+            <p className="mx-auto mt-5 max-w-prose text-pretty text-base font-medium text-foreground/90 lg:mx-0">
+              {tt.heroContrast}
+            </p>
+          </Reveal>
+          <Reveal immediate delay={0.18}>
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 [&>*]:w-full sm:flex-row sm:[&>*]:w-auto lg:justify-start">
+              <CopyCommandButton
+                command={AUDIT_COMMAND}
+                label={tt.heroCtaCopy}
+                copiedLabel={tt.agentCopied}
+                copiedAnnounce={tt.agentCopiedAnnounce}
+                failedAnnounce={tt.agentCopyFailed}
+              />
+              <a href="#proof" className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
+                {tt.heroCtaProof}
+                <ArrowRight aria-hidden className="size-4" />
+              </a>
+            </div>
+          </Reveal>
+          <Reveal immediate delay={0.2}>
+            <p className="mt-3 text-xs text-muted-foreground">{tt.heroCtaHint}</p>
+          </Reveal>
+          <Reveal immediate delay={0.22}>
+            <p className="mt-8 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              {tt.heroMeta}
+            </p>
+          </Reveal>
+        </div>
+        <div className="relative">
+          <HeroArtworkStack className="mx-auto aspect-square w-full max-w-xs sm:max-w-sm lg:max-w-none" />
+        </div>
       </div>
     </section>
   );
