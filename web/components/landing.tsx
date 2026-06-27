@@ -78,31 +78,28 @@ export function Landing({ lang }: { lang: Lang }) {
 function Hero({ lang }: { lang: Lang }) {
   const tt = t(lang);
   const count = String(AUDIT_COUNT);
-  // Desktop fade: left copy column fades away cleanly, the central-right hardware
-  // stays intact, and the output beam survives almost to the right edge.
-  const desktopMask =
-    "[mask-image:linear-gradient(90deg,transparent_0%,rgba(0,0,0,0.18)_20%,black_37%,black_92%,transparent_100%)]";
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden border-b border-border/60 lg:flex lg:min-h-[760px] lg:items-center"
+      className="relative isolate overflow-hidden border-b border-border/60 lg:flex lg:min-h-[88vh] lg:items-center"
     >
-      {/* faint grid backdrop */}
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
+      {/* faint grid backdrop (mostly covered by the full-bleed artwork on desktop) */}
+      <div className="pointer-events-none absolute inset-0 -z-30 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
 
-      {/* Desktop artwork — visually dominant, right-weighted, bleeding slightly past
-          the right edge; the Core lands around 74% of viewport width and mid-height. */}
+      {/* Desktop artwork — full-bleed across the whole hero; only the top and bottom
+          fade into the section so the bleed has no hard seams. */}
       <HeroArtworkStack
         className={cn(
-          "hidden lg:absolute lg:left-[42%] lg:right-[-6%] lg:top-1/2 lg:-z-10 lg:block lg:aspect-[1672/941] lg:-translate-y-1/2",
-          desktopMask,
+          "hidden lg:absolute lg:inset-0 lg:-z-20 lg:block",
+          "[mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]",
         )}
       />
 
-      {/* Legibility wash behind the left copy only — no visible panel. */}
+      {/* Legibility scrim over the full-bleed artwork: dark behind the left copy,
+          fading to transparent so the artwork stays vivid on the right. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-0 right-[48%] -z-10 hidden bg-gradient-to-r from-background via-background/85 to-transparent lg:block"
+        className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-r from-background via-background/70 to-transparent lg:block"
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-5 py-16 md:py-24 lg:py-0">

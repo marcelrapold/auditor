@@ -125,7 +125,7 @@ export function HeroArtworkStack({
             alt=""
             fill
             priority={l.priority}
-            sizes="(max-width: 1024px) 92vw, 60vw"
+            sizes="(max-width: 1024px) 92vw, 100vw"
             className="scale-[1.08] object-cover object-center"
           />
         </div>
