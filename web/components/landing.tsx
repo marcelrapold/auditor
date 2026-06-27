@@ -16,7 +16,6 @@ import {
   REPO,
   SAMPLE_FINDING,
   SCORECARD,
-  VERSION,
 } from "@/lib/content";
 import { glossify } from "@/lib/glossary";
 import { heroSrc } from "@/lib/heroes";
@@ -78,34 +77,57 @@ export function Landing({ lang }: { lang: Lang }) {
 
 function Hero({ lang }: { lang: Lang }) {
   const tt = t(lang);
+  const count = String(AUDIT_COUNT);
   return (
-    <section id="top" className="relative overflow-hidden border-b border-border/60">
-      <div className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:py-28">
-        <div className="relative z-10 text-center lg:text-left">
+    <section
+      id="top"
+      className="relative isolate overflow-hidden border-b border-border/60 lg:flex lg:min-h-[88vh] lg:items-center"
+    >
+      {/* faint grid backdrop (mostly covered by the full-bleed artwork on desktop) */}
+      <div className="pointer-events-none absolute inset-0 -z-30 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
+
+      {/* Desktop artwork — full-bleed across the whole hero; only the top and bottom
+          fade into the section so the bleed has no hard seams. */}
+      <HeroArtworkStack
+        className={cn(
+          "hidden lg:absolute lg:inset-0 lg:-z-20 lg:block",
+          "[mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]",
+        )}
+      />
+
+      {/* Soft legibility wash — light enough that the artwork still reads behind
+          the copy (text sits ON the artwork, not beside a dark panel). The text
+          itself carries a shadow for safety on the brighter areas. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-r from-background/75 via-background/25 to-transparent lg:block"
+      />
+
+      <div className="relative mx-auto w-full max-w-6xl px-5 py-16 md:py-24 lg:py-0">
+        <div className="max-w-[560px] text-center lg:text-left lg:[text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
           <Reveal immediate>
             <Badge className="mx-auto lg:mx-0">
               <span className="size-1.5 rounded-full bg-primary animate-badge-pulse" />
-              {AUDIT_COUNT} {tt.heroBadge} · {VERSION}
+              {tt.heroBadge}
             </Badge>
           </Reveal>
           <Reveal immediate>
-            <h1 className="mx-auto mt-6 max-w-4xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl lg:mx-0">
+            <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-[3.3rem] lg:leading-[1.05]">
               {tt.heroTitle}
             </h1>
           </Reveal>
           <Reveal immediate delay={0.1}>
             <p className="mx-auto mt-6 max-w-prose text-pretty text-lg text-muted-foreground lg:mx-0">
-              {tt.heroSub}
+              {tt.heroSub.replace("{count}", count)}
             </p>
           </Reveal>
           <Reveal immediate delay={0.14}>
-            <p className="mx-auto mt-5 max-w-prose text-pretty text-base font-medium text-foreground/90 lg:mx-0">
-              {tt.heroContrast}
+            <p className="mt-6 font-mono text-xs uppercase tracking-widest text-primary/90">
+              {tt.heroMeta.replace("{count}", count)}
             </p>
           </Reveal>
           <Reveal immediate delay={0.18}>
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 [&>*]:w-full sm:flex-row sm:[&>*]:w-auto lg:justify-start">
+            <div className="mt-9 flex flex-col items-center gap-3 [&>*]:w-full sm:flex-row sm:[&>*]:w-auto lg:items-start lg:justify-start">
               <CopyCommandButton
                 command={AUDIT_COMMAND}
                 label={tt.heroCtaCopy}
@@ -122,14 +144,15 @@ function Hero({ lang }: { lang: Lang }) {
           <Reveal immediate delay={0.2}>
             <p className="mt-3 text-xs text-muted-foreground">{tt.heroCtaHint}</p>
           </Reveal>
-          <Reveal immediate delay={0.22}>
-            <p className="mt-8 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-              {tt.heroMeta}
-            </p>
-          </Reveal>
         </div>
-        <div className="relative">
-          <HeroArtworkStack className="mx-auto aspect-square w-full max-w-xs sm:max-w-sm lg:max-w-none" />
+
+        {/* Mobile / tablet: a full-bleed artwork band below the CTA — edge to edge
+            (not a boxed thumbnail), no parallax, fading into the page top and bottom. */}
+        <div className="-mx-5 mt-14 lg:hidden">
+          <HeroArtworkStack
+            parallax={false}
+            className="aspect-[16/10] w-full [mask-image:linear-gradient(to_bottom,transparent_0%,black_16%,black_88%,transparent_100%)]"
+          />
         </div>
       </div>
     </section>
