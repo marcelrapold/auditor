@@ -61,10 +61,13 @@ export function HeroArtworkStack({ className }: { className?: string }) {
         running = false;
       }
     };
+    const clamp = (n: number) => (n < -1 ? -1 : n > 1 ? 1 : n);
     const onMove = (e: PointerEvent) => {
       const r = el.getBoundingClientRect();
-      tx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
-      ty = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      // clamp to [-1, 1] so the parallax travel never exceeds the 8% overscan
+      // when the pointer is far from the (off-center) artwork on wide screens
+      tx = clamp((e.clientX - (r.left + r.width / 2)) / (r.width / 2));
+      ty = clamp((e.clientY - (r.top + r.height / 2)) / (r.height / 2));
       if (!running) {
         running = true;
         raf = requestAnimationFrame(tick);
