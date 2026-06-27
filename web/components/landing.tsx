@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ArrowDown, ArrowRight, CircleDot, Search, ShieldCheck, Terminal } from "lucide-react";
 import { CommandBlock, CopyCommandButton } from "@/components/copy-command";
 import { HeroArtworkStack } from "@/components/hero-artwork";
+import { HeroParticles } from "@/components/hero-particles";
 import { GitHubMark } from "@/components/icons";
 import { Reveal } from "@/components/reveal";
 import { SiteFooter, SiteHeader, homeNav } from "@/components/site-chrome";
@@ -106,6 +107,10 @@ function Hero({ lang }: { lang: Lang }) {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-r from-background/75 via-background/25 to-transparent lg:block"
       />
+
+      {/* Emerald particle field — drifts and bleeds colour over the artwork,
+          above the washes but behind the copy. */}
+      <HeroParticles className="absolute inset-0 -z-10 h-full w-full" />
 
       <div className="relative mx-auto w-full max-w-6xl px-5 py-16 md:py-24 lg:py-0">
         <div className="max-w-[560px] text-center lg:text-left [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">

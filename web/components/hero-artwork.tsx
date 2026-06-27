@@ -28,7 +28,7 @@ type Layer = {
 const LAYERS: Layer[] = [
   { src: "/hero/base-atmosphere.webp", depth: 2, blend: "normal", opacity: 1, priority: true },
   { src: "/hero/structural-rig.webp", depth: 5, blend: "screen", opacity: 0.42 },
-  { src: "/hero/orchestrator-core.webp", depth: 9, blend: "screen", opacity: 1 },
+  { src: "/hero/orchestrator-core.webp", depth: 9, blend: "normal", opacity: 1 },
   { src: "/hero/signal-overlay.webp", depth: 13, blend: "screen", opacity: 0.85 },
 ];
 
