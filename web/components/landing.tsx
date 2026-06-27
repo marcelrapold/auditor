@@ -86,25 +86,29 @@ function Hero({ lang }: { lang: Lang }) {
       {/* faint grid backdrop (mostly covered by the full-bleed artwork on desktop) */}
       <div className="pointer-events-none absolute inset-0 -z-30 bg-grid [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
 
-      {/* Desktop artwork — full-bleed across the whole hero; only the top and bottom
-          fade into the section so the bleed has no hard seams. */}
+      {/* Full-bleed artwork behind the copy on every breakpoint; top and bottom
+          fade into the section so the bleed has no hard seams. Parallax
+          auto-disables on touch / coarse-pointer devices. */}
       <HeroArtworkStack
         className={cn(
-          "hidden lg:absolute lg:inset-0 lg:-z-20 lg:block",
-          "[mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]",
+          "absolute inset-0 -z-20",
+          "[mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)]",
         )}
       />
 
-      {/* Soft legibility wash — light enough that the artwork still reads behind
-          the copy (text sits ON the artwork, not beside a dark panel). The text
-          itself carries a shadow for safety on the brighter areas. */}
+      {/* Mobile: even veil so the centered copy reads cleanly over the artwork. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-background/60 lg:hidden"
+      />
+      {/* Desktop: directional wash — dark behind the left copy, clear on the right. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-r from-background/75 via-background/25 to-transparent lg:block"
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-5 py-16 md:py-24 lg:py-0">
-        <div className="max-w-[560px] text-center lg:text-left lg:[text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
+        <div className="max-w-[560px] text-center lg:text-left [text-shadow:0_1px_14px_rgba(0,0,0,0.6)]">
           <Reveal immediate>
             <Badge className="mx-auto lg:mx-0">
               <span className="size-1.5 rounded-full bg-primary animate-badge-pulse" />
@@ -146,14 +150,6 @@ function Hero({ lang }: { lang: Lang }) {
           </Reveal>
         </div>
 
-        {/* Mobile / tablet: a full-bleed artwork band below the CTA — edge to edge
-            (not a boxed thumbnail), no parallax, fading into the page top and bottom. */}
-        <div className="-mx-5 mt-14 lg:hidden">
-          <HeroArtworkStack
-            parallax={false}
-            className="aspect-[16/10] w-full [mask-image:linear-gradient(to_bottom,transparent_0%,black_16%,black_88%,transparent_100%)]"
-          />
-        </div>
       </div>
     </section>
   );

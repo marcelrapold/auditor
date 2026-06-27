@@ -107,8 +107,10 @@ export function HeroArtworkStack({
       ref={ref}
       aria-hidden
       className={cn(
-        // `isolate` keeps the screen-blends compositing within the stack, not against the page
-        "pointer-events-none relative isolate overflow-hidden",
+        // `isolate` keeps the screen-blends compositing within the stack, not against
+        // the page. The caller supplies positioning (e.g. `absolute inset-0`) — the
+        // stack must be a positioning context for the `fill` images.
+        "pointer-events-none isolate overflow-hidden",
         className,
       )}
     >
@@ -125,7 +127,7 @@ export function HeroArtworkStack({
             alt=""
             fill
             priority={l.priority}
-            sizes="(max-width: 1024px) 92vw, 100vw"
+            sizes="100vw"
             className="scale-[1.08] object-cover object-center"
           />
         </div>
