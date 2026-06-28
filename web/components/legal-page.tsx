@@ -47,6 +47,17 @@ export function LegalPage({
                         {p}
                       </p>
                     ))}
+                    {s.links?.map((l) => (
+                      <a
+                        key={l.href}
+                        href={l.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="w-fit rounded-md text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        {l.label}
+                      </a>
+                    ))}
                   </div>
                 </div>
               ))}

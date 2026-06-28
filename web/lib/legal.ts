@@ -5,16 +5,20 @@ import type { Lang } from "@/lib/i18n";
  * gehalten, damit `legal-page.tsx` sie generisch rendert. Deutsche Fassung in
  * Schweizer Orthografie (durchgehend ss).
  *
- * ⚠️ Platzhalter `[…]` vor Veröffentlichung mit echten Betreiberdaten füllen
- * (insb. Adresse). Diese Texte sind eine sorgfältige Vorlage, aber keine
+ * Kontakt erfolgt bewusst über E-Mail + LinkedIn statt einer privaten
+ * Postadresse. Diese Texte sind eine sorgfältige Vorlage, aber keine
  * Rechtsberatung.
  */
 export const LEGAL_OPERATOR = "Marcel Rapold";
 export const LEGAL_EMAIL = "marcel@marcelrapold.com";
-export const LEGAL_ADDRESS = "[Strasse Nr., PLZ Ort, Land — bitte ergänzen]";
+export const LEGAL_LINKEDIN = "https://www.linkedin.com/in/marcelrapold/";
 export const LEGAL_UPDATED = { en: "June 2026", de: "Juni 2026" } as const;
 
-export type LegalSection = { heading: string; body: string[] };
+export type LegalSection = {
+  heading: string;
+  body: string[];
+  links?: { label: string; href: string }[];
+};
 export type LegalDoc = { title: string; updatedLabel: string; intro: string; sections: LegalSection[] };
 
 function privacy(lang: Lang): LegalDoc {
@@ -27,11 +31,8 @@ function privacy(lang: Lang): LegalDoc {
       sections: [
         {
           heading: "Verantwortlicher",
-          body: [
-            `${LEGAL_OPERATOR}`,
-            `${LEGAL_ADDRESS}`,
-            `E-Mail: ${LEGAL_EMAIL}`,
-          ],
+          body: [`${LEGAL_OPERATOR}`, `E-Mail: ${LEGAL_EMAIL}`],
+          links: [{ label: "LinkedIn-Profil", href: LEGAL_LINKEDIN }],
         },
         {
           heading: "Hosting & Server-Protokolle",
@@ -82,7 +83,8 @@ function privacy(lang: Lang): LegalDoc {
     sections: [
       {
         heading: "Controller",
-        body: [`${LEGAL_OPERATOR}`, `${LEGAL_ADDRESS}`, `Email: ${LEGAL_EMAIL}`],
+        body: [`${LEGAL_OPERATOR}`, `Email: ${LEGAL_EMAIL}`],
+        links: [{ label: "LinkedIn profile", href: LEGAL_LINKEDIN }],
       },
       {
         heading: "Hosting & server logs",
@@ -135,7 +137,8 @@ function imprint(lang: Lang): LegalDoc {
       sections: [
         {
           heading: "Anbieter",
-          body: [`${LEGAL_OPERATOR}`, `${LEGAL_ADDRESS}`, `E-Mail: ${LEGAL_EMAIL}`],
+          body: [`${LEGAL_OPERATOR}`, `E-Mail: ${LEGAL_EMAIL}`],
+          links: [{ label: "LinkedIn-Profil", href: LEGAL_LINKEDIN }],
         },
         {
           heading: "Verantwortlich für den Inhalt",
@@ -163,7 +166,8 @@ function imprint(lang: Lang): LegalDoc {
     sections: [
       {
         heading: "Provider",
-        body: [`${LEGAL_OPERATOR}`, `${LEGAL_ADDRESS}`, `Email: ${LEGAL_EMAIL}`],
+        body: [`${LEGAL_OPERATOR}`, `Email: ${LEGAL_EMAIL}`],
+        links: [{ label: "LinkedIn profile", href: LEGAL_LINKEDIN }],
       },
       { heading: "Responsible for content", body: [`${LEGAL_OPERATOR}`] },
       {
