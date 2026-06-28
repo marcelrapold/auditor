@@ -107,6 +107,8 @@ export function SiteHeader({
 export function SiteFooter({ lang }: { lang: Lang }) {
   const tt = t(lang);
   const reports = lang === "de" ? "/de/reports" : "/reports";
+  const privacy = lang === "de" ? "/de/datenschutz" : "/privacy";
+  const imprint = lang === "de" ? "/de/impressum" : "/imprint";
   return (
     <footer className="border-t border-border/60 py-10">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 text-sm text-muted-foreground sm:flex-row">
@@ -117,6 +119,12 @@ export function SiteFooter({ lang }: { lang: Lang }) {
         <nav aria-label="Footer" className="flex items-center gap-6">
           <Link href={reports} className="rounded-md hover:text-foreground">
             {tt.footerReports}
+          </Link>
+          <Link href={privacy} className="rounded-md hover:text-foreground">
+            {tt.footerPrivacy}
+          </Link>
+          <Link href={imprint} className="rounded-md hover:text-foreground">
+            {tt.footerImprint}
           </Link>
           <a
             href={REPO}
