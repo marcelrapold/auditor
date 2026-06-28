@@ -177,6 +177,8 @@ export const ui = {
     footerGithub: "GitHub",
     footerStandard: "Standard",
     footerChangelog: "Changelog",
+    footerPrivacy: "Privacy",
+    footerImprint: "Imprint",
   },
   de: {
     nav: { use: "Einsetzen", audits: "Audits", how: "Ablauf", standards: "Standards", reports: "Berichte" },
@@ -324,6 +326,8 @@ export const ui = {
     footerGithub: "GitHub",
     footerStandard: "Standard",
     footerChangelog: "Changelog",
+    footerPrivacy: "Datenschutz",
+    footerImprint: "Impressum",
   },
 } as const;
 

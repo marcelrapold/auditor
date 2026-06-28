@@ -37,10 +37,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
   ]);
+  const legal = [
+    "/privacy",
+    "/de/datenschutz",
+    "/imprint",
+    "/de/impressum",
+  ].map((path) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: now,
+    changeFrequency: "yearly" as const,
+    priority: 0.3,
+  }));
   return [
     { url: SITE_URL, lastModified: now, changeFrequency: "monthly", priority: 1 },
     { url: `${SITE_URL}/de`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     ...reports,
     ...audits,
+    ...legal,
   ];
 }
