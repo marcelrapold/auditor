@@ -21,11 +21,11 @@
     "test": "node --test"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.29.0",
-    "zod": "3.25.76"
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.4.3"
   },
   "devDependencies": {
-    "@types/node": "22.10.5",
-    "typescript": "5.7.3"
+    "@types/node": "26.1.2",
+    "typescript": "7.0.2"
   }
 }
