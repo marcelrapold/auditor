@@ -11,6 +11,9 @@ updates:
       web-dependencies:
         patterns:
           - "*"
+        update-types:
+          - "patch"
+          - "minor"
   - package-ecosystem: npm
     directory: /mcp
     schedule:
@@ -22,6 +25,9 @@ updates:
       mcp-dependencies:
         patterns:
           - "*"
+        update-types:
+          - "patch"
+          - "minor"
   - package-ecosystem: github-actions
     directory: /
     schedule:
