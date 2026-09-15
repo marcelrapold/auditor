@@ -344,8 +344,13 @@ was actually inspected). C: Assumptions registry from Phase 0.
 
 ## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
 
-After Phase 3 verification, turn surviving findings into GitHub issues — **German by default**
-(`OUTPUT_LANG`); preview/dry-run first, created only on explicit authorization + repo access.
+After Phase 3 verification, turn surviving findings into tracker issues — in
+**`OUTPUT_LANG`** (English or German, chosen per run; ask if unset); preview/dry-run first, created
+only on explicit authorization + write access to the target (`ISSUE_TARGET`: GitHub, Jira, Linear
+or ServiceNow — mapping in [`REPORT-OUTPUT-STANDARD.md`](../REPORT-OUTPUT-STANDARD.md)). Also write
+`auditor-out/audit-run.json` (the confirmed findings in the schema below) and validate it with
+`node scripts/export-findings.mjs auditor-out/audit-run.json --validate`; the executive report,
+SARIF, OSCAL, CSV and evidence manifest derive from it.
 Two-part contract:
 
 1. **Tracking issue first** — `[AUDIT] Frontend — Befund-Tracker & Roadmap`. Body: a management

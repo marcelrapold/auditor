@@ -26,9 +26,9 @@ PROFILE:      <auto-detect (default) | library | application | service | cli | m
 DOC_TYPES:    <README | API ref | SDK | guides/tutorials | runbooks | internal eng docs>
 AUDIENCE:     <external devs | internal engineers | end users | mixed>
 DATA_ACCESS:  <can run the documented commands / call the API to verify? or read-only>
-OUTPUT_LANG:  <Deutsch (default) | English | ...>
+OUTPUT_LANG:  <English | Deutsch>  →  chosen per run; ask if unset, never assume
 STANDARD:     <DOCUMENTATION-STANDARD.md (default) | path to a custom standard>
-ISSUE_TARGET: <owner/repo for gh issue creation — preview-first, create only on approval>
+ISSUE_TARGET: <github:owner/repo | jira:KEY | linear:TEAM | servicenow:<url> — preview-first, create only on approval>
 ```
 
 If unknown, Phase 0 infers the profile, audience, and intent from the repo itself and states its
@@ -238,8 +238,13 @@ registry. D: list of commands/samples actually executed vs reasoned.
 
 ## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
 
-This audit's primary deliverable is GitHub issues — **German by default** (`OUTPUT_LANG`);
-preview/dry-run first, created only on explicit authorization + repo access. Two-part contract:
+This audit's primary deliverable is tracker issues — in **`OUTPUT_LANG`** (English or German,
+chosen per run; ask if unset); preview/dry-run first, created only on explicit authorization + write
+access to the target (`ISSUE_TARGET`: GitHub, Jira, Linear or ServiceNow — mapping in
+[`REPORT-OUTPUT-STANDARD.md`](../REPORT-OUTPUT-STANDARD.md)). Also write `auditor-out/audit-run.json`
+(the confirmed findings in the schema below) and validate it with
+`node scripts/export-findings.mjs auditor-out/audit-run.json --validate`; the executive report, SARIF,
+OSCAL, CSV and evidence manifest derive from it. Two-part contract:
 
 1. **Tracking issue first** — `[AUDIT] Docs — Befund-Tracker & Roadmap`. Body: a management
    summary (rubric score + grade band, biggest reader-blocker), the rubric scorecard, a

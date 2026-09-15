@@ -25,8 +25,8 @@ SCOPE:         <in-scope / out-of-scope>
 STACK:         <languages, frameworks, cloud — or let Phase 0 infer>
 AUTHORIZATION: <owner authorization on file? active testing allowed?>
 DATA_ACCESS:   <static/read-only | authorized active testing (DAST, probes)>
-OUTPUT_LANG:   <Deutsch (default) | English | ...>
-ISSUE_TARGET:  <owner/repo for issues — preview-first, on approval>
+OUTPUT_LANG:   <English | Deutsch>  →  chosen per run; ask if unset, never assume
+ISSUE_TARGET:  <github:owner/repo | jira:KEY | linear:TEAM | servicenow:<url> — preview-first, on approval>
 ```
 
 > [!WARNING]
@@ -177,8 +177,13 @@ C: assumptions registry.
 
 ## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
 
-After Phase 3 verification, turn confirmed findings into GitHub issues — **German by default**
-(`OUTPUT_LANG`); preview/dry-run first, created only on explicit authorization + repo access.
+After Phase 3 verification, turn confirmed findings into tracker issues — in
+**`OUTPUT_LANG`** (English or German, chosen per run; ask if unset); preview/dry-run first, created
+only on explicit authorization + write access to the target (`ISSUE_TARGET`: GitHub, Jira, Linear
+or ServiceNow — mapping in [`REPORT-OUTPUT-STANDARD.md`](../REPORT-OUTPUT-STANDARD.md)). Also write
+`auditor-out/audit-run.json` (the confirmed findings in the schema below) and validate it with
+`node scripts/export-findings.mjs auditor-out/audit-run.json --validate`; the executive report,
+SARIF, OSCAL, CSV and evidence manifest derive from it.
 Two-part contract:
 
 1. **Tracking issue first** — `[AUDIT] Security — Befund-Tracker & Roadmap`. Body: a management

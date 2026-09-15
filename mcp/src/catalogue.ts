@@ -130,9 +130,9 @@ export const AUDIT_KEYS = AUDITS.map((a) => a.key) as readonly string[];
 export const ORCHESTRATOR_FILE = "full-audit-master-prompt.md";
 
 /** The standards the `get_standard` tool can return. */
-export type StandardKey = "issue-output" | "documentation" | "control-crosswalk";
+export type StandardKey = "issue-output" | "documentation" | "control-crosswalk" | "report-output";
 
-export const STANDARD_KEYS = ["issue-output", "documentation", "control-crosswalk"] as const;
+export const STANDARD_KEYS = ["issue-output", "documentation", "control-crosswalk", "report-output"] as const;
 
 export const STANDARDS: Record<StandardKey, { file: string; description: string }> = {
   "issue-output": {
@@ -149,5 +149,10 @@ export const STANDARDS: Record<StandardKey, { file: string; description: string 
     file: "CONTROL-CROSSWALK.md",
     description:
       "The certification control crosswalk: maps every finding theme to the control IDs of SOC 2, ISO/IEC 27001:2022, ISO/IEC 42001:2023 + EU AI Act, NIS2, CRA and the Swiss revDSG (GDPR alongside), lists the organisational controls that are not assessable from code, and defines the readiness scoring the orchestrator's READINESS_TARGET mode uses.",
+  },
+  "report-output": {
+    file: "REPORT-OUTPUT-STANDARD.md",
+    description:
+      "The business-output contract: the canonical audit-run.json (schemas/audit-run.schema.json) every deliverable derives from, the executive report structure (Markdown → DOCX/PDF), SARIF / OSCAL / CSV exports and the evidence manifest produced by scripts/export-findings.mjs, the issue targets (GitHub, Jira, Linear, ServiceNow) with their field mapping, and the per-run output-language rule.",
   },
 };

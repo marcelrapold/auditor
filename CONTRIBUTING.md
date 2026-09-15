@@ -54,6 +54,10 @@ recommendation immediately actionable.
   `CHECKSUMS.txt` with `node scripts/checksums.mjs` (the file list is single-sourced there; a
   hand-run `sha256sum` without `-b` produces a different format). The `prompts` CI verifies it
   with `node scripts/checksums.mjs --check` and `sha256sum -c` and fails otherwise.
+- When changing the **shared finding schema**, change all three places together — the JSON block in
+  every `audit-prompts/*.md`, `SCHEMA_FIELDS` in `scripts/check-prompts.mjs`, and
+  `schemas/finding.schema.json` — and run `node --test "scripts/test/*.test.mjs"`; a test pins the
+  gate's field list to the schema's `required`.
 - When citing a standard or regulation, use the edition listed in
   [`FRAMEWORK-VERSIONS.md`](FRAMEWORK-VERSIONS.md); if you change an edition, update that file and
   every cite of the old identifier. Control IDs in findings come from

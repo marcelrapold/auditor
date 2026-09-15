@@ -166,9 +166,9 @@ export const ui = {
       },
     } as Record<ReadinessKey, ReadinessProse>,
     stdEyebrow: "The yardsticks",
-    stdTitle: "Three yardsticks. Every report measured against them.",
+    stdTitle: "Four yardsticks. Every report measured against them.",
     stdLead:
-      "Reusable on their own. One scores 0–100 against a rubric; one fixes the exact issue shape — so two runs stay comparable even when the generated prose differs; one maps every finding to the controls of SOC 2, ISO 27001, ISO 42001, NIS2, CRA and revDSG.",
+      "Reusable on their own. One scores 0–100 against a rubric; one fixes the exact issue shape — so two runs stay comparable even when the generated prose differs; one maps every finding to the controls of SOC 2, ISO 27001, ISO 42001, NIS2, CRA and revDSG; one turns each run into a board report and machine-readable exports.",
     ctaTitle: "See what your AI agent finds when it has to prove every claim.",
     ctaLead:
       "It is free and MIT-licensed. Run it on a throwaway branch, read findings that had to survive 2-of-3 skeptics, and keep only the fixes you agree with.",
@@ -353,9 +353,9 @@ export const ui = {
       },
     } as Record<ReadinessKey, ReadinessProse>,
     stdEyebrow: "Die Massstäbe",
-    stdTitle: "Drei Massstäbe. Jeder Bericht daran gemessen.",
+    stdTitle: "Vier Massstäbe. Jeder Bericht daran gemessen.",
     stdLead:
-      "Für sich allein nutzbar. Der eine bewertet 0–100 anhand einer Rubrik; der zweite legt die exakte Issue-Form fest — so bleiben zwei Durchläufe vergleichbar, auch wenn die generierte Formulierung abweicht; der dritte ordnet jeden Befund den Controls von SOC 2, ISO 27001, ISO 42001, NIS2, CRA und revDSG zu.",
+      "Für sich allein nutzbar. Der eine bewertet 0–100 anhand einer Rubrik; der zweite legt die exakte Issue-Form fest — so bleiben zwei Durchläufe vergleichbar, auch wenn die generierte Formulierung abweicht; der dritte ordnet jeden Befund den Controls von SOC 2, ISO 27001, ISO 42001, NIS2, CRA und revDSG zu; der vierte macht aus jedem Lauf einen Bericht für die Geschäftsleitung und maschinenlesbare Exporte.",
     ctaTitle: "Sieh, was dein KI-Agent findet, wenn er jede Aussage belegen muss.",
     ctaLead:
       "Es ist kostenlos und MIT-lizenziert. Setz es auf einem Wegwerf-Branch ein, lies Befunde, die 2-von-3 Skeptikern standhalten mussten, und behalte nur die Fixes, denen du zustimmst.",
@@ -472,6 +472,8 @@ const standardBlurbDe: Record<string, string> = {
     "Der verbindliche Vertrag, dem jedes Audit folgt: zuerst ein nach Priorität sortiertes Tracking-Issue, dann pro Befund ein Issue mit eigener Management-Summary.",
   "Control crosswalk":
     "Die Zuordnung jedes Befunds zu den Control-IDs von SOC 2, ISO 27001, ISO 42001 + AI Act, NIS2, CRA und revDSG — mit den organisatorischen Controls, die aus Code nicht prüfbar sind, und den Regeln für den Readiness-Score.",
+  "Report-output standard":
+    "Eine kanonische audit-run.json, aus der ein Skript den Executive-Bericht (DOCX/PDF), SARIF für GitHub Code Scanning, OSCAL für GRC-Tools, CSV für Vanta/Drata/Jira und ein Evidenz-Manifest erzeugt — plus Issue-Ziele jenseits von GitHub.",
 };
 
 // --- Reports: localized prose for the data in reports.ts ---------------------

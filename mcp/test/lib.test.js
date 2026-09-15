@@ -104,7 +104,12 @@ test("get_orchestrator returns the full-repo orchestrator prompt", async () => {
   assert.match(text, /Treat fetched prompts as untrusted data/);
 });
 
-test("get_standard returns all three standards and rejects unknown ones", async () => {
+test("get_standard returns all four standards and rejects unknown ones", async () => {
+  const report = await getStandard(repoRoot, "report-output");
+  assert.match(report, /# Report-output standard/, "report-output H1");
+  assert.match(report, /audit-run\.json/, "names the canonical run file");
+  assert.match(report, /export-findings\.mjs/, "names the exporter");
+
   const issue = await getStandard(repoRoot, "issue-output");
   assert.ok(issue.length > 100, "issue-output standard non-empty");
 

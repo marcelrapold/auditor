@@ -7,6 +7,30 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- **Business output.** [`REPORT-OUTPUT-STANDARD.md`](REPORT-OUTPUT-STANDARD.md) — the contract for
+  everything that leaves the audit besides issues: one canonical `auditor-out/audit-run.json`
+  ([`schemas/audit-run.schema.json`](schemas/audit-run.schema.json),
+  [`schemas/finding.schema.json`](schemas/finding.schema.json)) from which
+  `scripts/export-findings.mjs` derives, dependency-free and deterministically, the **executive
+  report** (Markdown → DOCX/PDF via pandoc), **SARIF 2.1.0** for GitHub Code Scanning, **OSCAL 1.1.2**
+  assessment results for GRC tools, **`gap-matrix.csv` / `findings.csv`** for Vanta, Drata,
+  Secureframe and Jira, and an **evidence manifest** with sha256 per cited artifact (hashes only, no
+  content). The script validates the run file (`--validate`), ships with `node:test` coverage, and
+  runs in the `prompts` CI workflow.
+- **Issue targets beyond GitHub.** `ISSUE_TARGET` accepts `github:owner/repo`, `jira:KEY`,
+  `linear:TEAM` and `servicenow:<url>`, with a field mapping (severity → priority, finding ID in the
+  title, `auditor` label, tracker as Epic / Project / Problem) in the report-output standard.
+- Orchestrator **Step 5b — Business exports** (write, validate, export, hand over `auditor-out/`);
+  MCP `get_standard("report-output")`; a fourth yardstick card on the landing page.
+
+### Changed
+- **Output language is chosen per run.** `OUTPUT_LANG` no longer defaults to German (or English —
+  the 13 prompts disagreed); every prompt now asks when unset and treats English and de-CH German as
+  equally first-class. `ISSUE-OUTPUT-STANDARD.md` 1.3.0 records the rule, the issue targets and the
+  canonical-source requirement.
+- `CONTROL-CROSSWALK.md` and `REPORT-OUTPUT-STANDARD.md` are part of the checksummed trust anchor.
+
 ## [0.10.0] - 2026-09-15
 
 ### Added

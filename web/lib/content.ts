@@ -5,6 +5,7 @@ import {
   ClipboardCheck,
   Cloud,
   Database,
+  FileOutput,
   FileSearch,
   GitBranch,
   Gauge,
@@ -310,6 +311,13 @@ export const STANDARDS: Standard[] = [
     blurb:
       "Maps every finding to the control IDs of SOC 2, ISO 27001, ISO 42001 + AI Act, NIS2, CRA and revDSG — with the organisational controls that are not assessable from code, and the readiness scoring rules.",
     icon: ClipboardCheck,
+  },
+  {
+    name: "Report-output standard",
+    file: "REPORT-OUTPUT-STANDARD.md",
+    blurb:
+      "One canonical audit-run.json, from which a script derives the executive report (DOCX/PDF), SARIF for GitHub Code Scanning, OSCAL for GRC tools, CSV for Vanta/Drata/Jira and an evidence manifest — plus issue targets beyond GitHub.",
+    icon: FileOutput,
   },
 ];
 

@@ -25,7 +25,7 @@ PLATFORM:      <web | iOS | Android | desktop | design-system>
 CONFORMANCE:   <target level: WCAG 2.2 AA (default) | AAA where feasible>
 LEGAL_CONTEXT: <EU/EAA | US/ADA-508 | global>
 DATA_ACCESS:   <can run AT / keyboard / automated scanners? or code-only?>
-OUTPUT_LANG:   <English (default) | Deutsch | ...>
+OUTPUT_LANG:   <English | Deutsch>  →  chosen per run; ask if unset, never assume
 ```
 
 If unknown, Phase 0 infers from the product and states assumptions. Prefer testing with real
@@ -191,7 +191,7 @@ In `OUTPUT_LANG`:
 8. **Accessibility Statement draft** (optional, EAA-relevant).
 9. **GitHub issues (mandatory):** per the *Issue output* section below and
    [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md) — tracking issue first, then one
-   issue per finding (German by default); preview-first, created only on explicit approval.
+   issue per finding (in `OUTPUT_LANG`); preview-first, created only on explicit approval.
 
 ### Appendices
 A: killed findings + refutations. B: coverage map (surface × AT × agent). C: assumptions & AT
@@ -201,8 +201,13 @@ matrix actually tested vs reasoned.
 
 ## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
 
-After Phase 3 verification, turn confirmed findings into GitHub issues — **German by default**
-(`OUTPUT_LANG`); preview/dry-run first, created only on explicit authorization + repo access.
+After Phase 3 verification, turn confirmed findings into tracker issues — in
+**`OUTPUT_LANG`** (English or German, chosen per run; ask if unset); preview/dry-run first, created
+only on explicit authorization + write access to the target (`ISSUE_TARGET`: GitHub, Jira, Linear
+or ServiceNow — mapping in [`REPORT-OUTPUT-STANDARD.md`](../REPORT-OUTPUT-STANDARD.md)). Also write
+`auditor-out/audit-run.json` (the confirmed findings in the schema below) and validate it with
+`node scripts/export-findings.mjs auditor-out/audit-run.json --validate`; the executive report,
+SARIF, OSCAL, CSV and evidence manifest derive from it.
 Two-part contract:
 
 1. **Tracking issue first** — `[AUDIT] Accessibility — Befund-Tracker & Roadmap`. Body: a

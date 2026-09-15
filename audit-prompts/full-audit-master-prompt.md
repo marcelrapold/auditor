@@ -16,16 +16,19 @@
 Ask these questions and wait for answers. Offer the options; accept free-form too.
 
 1. **Target.** What should I audit? (a local repo path, a GitHub URL, and/or a live URL)
-2. **Output language.** In which language should the report and the GitHub issues be written?
-   → **Deutsch** or **English** (default: ask; do not assume). This sets `OUTPUT_LANG` for every
-   audit you run.
+2. **Output language.** In which language should the report and the issues be written?
+   → **Deutsch** or **English** — both first-class; ask, never assume. This sets `OUTPUT_LANG`
+   (`de` | `en`) for every audit you run; German follows the de-CH rules of the issue standard.
 3. **Which audits?** **If the activation already named one specific audit** (e.g. "Run the
    content audit using auditor.rapold.io", typically pasted from an `auditor.rapold.io/audits/<key>`
    detail page), take that as the answer: run **that single audit only** and skip this question.
    Otherwise offer the menu below — the user may pick any subset, say **"full repo"** (you
    auto-detect which apply), or drill into **specific phases** of one audit.
-4. **Issue creation.** May I create GitHub issues in the target repo, or only preview them?
-   (Always preview first; create only on explicit approval and with repo write access.)
+4. **Issue creation and target.** May I create issues, or only preview them? And where —
+   `ISSUE_TARGET` is `github:owner/repo` (default when the target is a GitHub repo),
+   `jira:PROJECTKEY`, `linear:TEAMKEY`, or `servicenow:<instance URL>`; field mapping per
+   [`REPORT-OUTPUT-STANDARD.md`](../REPORT-OUTPUT-STANDARD.md). (Always preview first; create only
+   on explicit approval and with write access.)
 5. **Active testing.** Is dynamic/active testing authorized, or static/read-only only? (Default:
    read-only. Active tests require documented owner authorization.)
 6. **Readiness target (optional).** Is this run preparing for a certification or a regulatory
@@ -182,7 +185,36 @@ Fetch and follow
    the control IDs (`control:ISO27001-A.8.3`) and `deal-blocker` where set.
 
 Create child issues first, collect their numbers, then the trackers so the checklist links
-resolve. Detect existing audit issues by label and update rather than duplicate.
+resolve. Detect existing audit issues by label and update rather than duplicate. For Jira, Linear
+and ServiceNow targets apply the field mapping of `REPORT-OUTPUT-STANDARD.md` (severity → priority,
+finding ID in the title, `auditor` label, tracker as Epic / Project / Problem).
+
+---
+
+## Step 5b — Business exports (per `REPORT-OUTPUT-STANDARD.md`)
+
+Fetch and follow
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/REPORT-OUTPUT-STANDARD.md`. Before
+the issues are created, write the **canonical run file** and derive every business deliverable
+from it — never re-type a format from memory:
+
+1. Write `auditor-out/audit-run.json` per
+   `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/schemas/audit-run.schema.json`:
+   the merged, deduplicated, **confirmed** findings (each with `audit`, the eleven required fields,
+   explicit `locations[]` where code-anchored), `scorecard`, `not_applicable` with reasons,
+   `readiness` when `READINESS_TARGET` was set, `roadmap`, `coverage`, and `summary.<OUTPUT_LANG>`
+   (5–8 board-readable sentences).
+2. Validate it: `node scripts/export-findings.mjs auditor-out/audit-run.json --validate` (the script
+   ships in the repo at the pinned tag; fetch it from
+   `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/scripts/export-findings.mjs`
+   when the repo is not checked out). Fix the run file until it validates.
+3. Export: `node scripts/export-findings.mjs auditor-out/audit-run.json --out auditor-out --repo <checkout>`
+   → `EXECUTIVE-REPORT.md` (convert to DOCX/PDF with pandoc or the harness's document skill),
+   `findings.sarif`, `assessment-results.oscal.json`, `gap-matrix.csv`, `findings.csv`,
+   `evidence-manifest.json`.
+4. Hand over `auditor-out/` as one evidence pack and name, in the report, what each file is for
+   (SARIF → GitHub Code Scanning; OSCAL / CSV → the GRC tool; findings.csv → Jira import; manifest
+   → the external auditor).
 
 ---
 
@@ -221,5 +253,6 @@ Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/`
 - Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content,lean}-audit-master-prompt.md`
 - Standards: `ISSUE-OUTPUT-STANDARD.md`, `DOCUMENTATION-STANDARD.md` (+ `.en.md`)
 - Readiness: `CONTROL-CROSSWALK.md` (control mapping for SOC 2, ISO 27001, ISO 42001 + AI Act, NIS2, CRA, revDSG/GDPR), `FRAMEWORK-VERSIONS.md` (editions in use)
+- Business output: `REPORT-OUTPUT-STANDARD.md` (deliverables, issue targets, language), `schemas/audit-run.schema.json` + `schemas/finding.schema.json` (the canonical run file), `scripts/export-findings.mjs` (SARIF / OSCAL / CSV / executive report / evidence manifest)
 - This orchestrator: `audit-prompts/full-audit-master-prompt.md`
 - Human overview + language switcher: `https://auditor.rapold.io`

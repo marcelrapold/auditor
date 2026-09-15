@@ -54,6 +54,8 @@ date. Owner: repository maintainer. Last full review: 2026-09-15.
 | RFC 9110 / RFC 9457 | 2022 / 2023 | RFC 9457 obsoletes RFC 7807 | 2026-09-15 |
 | OpenAPI | 3.1 | | 2026-09-15 |
 | TDDDG (Germany) | Renamed from TTDSG on 14 May 2024 | Section 25 governs cookies and terminal-equipment access | 2026-09-15 |
+| SARIF | 2.1.0 (OASIS Standard, 2020; errata 01 2023) | `scripts/export-findings.mjs` emits it; GitHub Code Scanning ingests 2.1.0 | 2026-09-16 |
+| OSCAL | 1.1.2 (NIST, 2024) | assessment-results model, minimal profile emitted by the exporter | 2026-09-16 |
 | DORA (DevOps Research and Assessment) | 2024 State of DevOps report | Not the EU Digital Operational Resilience Act — the audits say "DORA metrics" to keep the two apart | 2026-09-15 |
 
 ## Review procedure
