@@ -35,6 +35,10 @@ specialist prompts from the public GitHub repo below.
    `ISSUE_TARGET` may be GitHub, Jira, Linear or ServiceNow. `SECTOR` (finance | health | swiss)
    adds overlay control IDs (PCI DSS, EU-DORA, FINMA, HIPAA, ISG, BWL, eCH-0059). See
    REPORT-OUTPUT-STANDARD.md and CONTROL-CROSSWALK.md.
+7. Make it continuous: give machine-verifiable findings a `check` (a shell command that passes
+   once fixed), and point the user at `scripts/verify-checks.mjs`, `scripts/diff-runs.mjs` and the
+   GitHub Action `marcelrapold/auditor/.github/actions/verify@<tag>` (validate, export, diff,
+   checks, SARIF upload on every PR).
    Output language (`OUTPUT_LANG`: English or German) is chosen per run — ask, never assume.
 
 ## Certification readiness (optional readiness target)

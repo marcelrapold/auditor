@@ -52,6 +52,7 @@ flowchart LR
 - [Run it from your AI agent](#run-it-from-your-ai-agent)
 - [Certification readiness](#certification-readiness)
 - [Outputs](#outputs)
+- [Continuous compliance](#continuous-compliance)
 - [Worked example: auditing this repo](#worked-example-auditing-this-repo)
 - [Quickstart](#quickstart)
 - [How it works](#how-it-works)
@@ -184,11 +185,39 @@ node scripts/export-findings.mjs auditor-out/audit-run.json --out auditor-out --
 | `evidence-manifest.json` | external auditor | sha256 + size per cited artifact, no content copied |
 | `caiq-answers.csv` | security questionnaires (CAIQ v4, SIG) | one pre-filled answer per CSA CCM domain; "Not assessed" where the run is silent |
 | `acr-wcag22.csv` | procurement, accessibility statements | Accessibility Conformance Report, one row per WCAG 2.2 A/AA criterion (VPAT 2.5 vocabulary) |
+| `trust-center.html` | prospects, security reviews | aggregate-only readiness page, no finding detail |
+| `checks.json`, `audit-diff.json` | CI | executable re-audit criteria and the run-to-run diff — see [Continuous compliance](#continuous-compliance) |
 | Tracker issues | engineering | GitHub, Jira, Linear or ServiceNow via `ISSUE_TARGET` |
 
 The contract is [`REPORT-OUTPUT-STANDARD.md`](REPORT-OUTPUT-STANDARD.md). Output language is chosen
 per run — English and German are equally first-class; German follows the de-CH rules of the issue
 standard.
+
+## Continuous compliance
+
+An audit that runs once decays. Three pieces keep it alive between audits:
+
+- **Executable re-audit checks.** A finding whose fix is machine-verifiable carries a `check`
+  (a shell command that passes once the finding is fixed). `node scripts/verify-checks.mjs
+  auditor-out/audit-run.json --repo .` runs them all and exits non-zero while a finding is open.
+- **Run-to-run diff.** `node scripts/diff-runs.mjs baseline.json current.json --fail-on
+  new-p0p1,regression` answers "better or worse since the last audit?" — added, fixed, worsened,
+  score and control deltas — and gates CI on it.
+- **GitHub Action.** `marcelrapold/auditor/.github/actions/verify@v1.0.0` validates the run,
+  exports everything, writes the executive report into the job summary, diffs against a
+  baseline, runs the checks and uploads SARIF to Code Scanning — no third-party action involved.
+
+```yaml
+- uses: marcelrapold/auditor/.github/actions/verify@v1.0.0
+  with:
+    run-file: auditor-out/audit-run.json
+    baseline: auditor-out/baseline/audit-run.json
+    fail-on: new-p0p1,regression
+```
+
+The MCP server exposes the same crosswalk to agents: `get_readiness_checklist(target)` returns
+every technically assessable control of a target with the audits to run, and
+`list_control_themes(audit?)` is the lookup for a finding's `controls` field.
 
 ## Worked example: auditing this repo
 
@@ -345,7 +374,8 @@ auditor/
 ├── FRAMEWORK-VERSIONS.md           dated register of every framework edition in use
 ├── REPORT-OUTPUT-STANDARD.md       business outputs: audit-run.json, executive report, SARIF/OSCAL/CSV, issue targets
 ├── schemas/                        JSON Schemas for the canonical run file and a finding
-├── scripts/                        CI gates, checksums, version pins, export-findings.mjs (+ tests)
+├── scripts/                        CI gates, checksums, version pins, export-findings / diff-runs / verify-checks (+ tests)
+├── .github/actions/verify/         the reusable GitHub Action (validate, export, diff, checks, SARIF upload)
 ├── CONTRIBUTING.md                 how to contribute templates and docs
 ├── CODE_OF_CONDUCT.md              Contributor Covenant
 ├── SECURITY.md                     how to report a vulnerability

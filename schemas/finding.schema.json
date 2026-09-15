@@ -74,7 +74,19 @@
     "anticipated_refutation": { "type": "string" },
     "cvss": { "type": "string" },
     "exploitability": { "type": "string" },
-    "issue_url": { "type": "string", "format": "uri", "description": "The tracker issue created for this finding, once it exists." }
+    "issue_url": { "type": "string", "format": "uri", "description": "The tracker issue created for this finding, once it exists." },
+    "check": {
+      "type": "object",
+      "description": "Optional executable re-audit criterion: a command that exits as expected once the finding is fixed. Run by scripts/verify-checks.mjs (and the auditor/verify GitHub Action) from the repository root. Only commands the operator has reviewed belong here — they execute with the caller's privileges.",
+      "required": ["run"],
+      "properties": {
+        "run": { "type": "string", "description": "Shell command executed from the repo root (POSIX sh on Linux/macOS, cmd on Windows).", "minLength": 1 },
+        "expect": { "type": "string", "enum": ["exit-zero", "exit-nonzero"], "default": "exit-zero", "description": "What a PASS (finding fixed) looks like." },
+        "description": { "type": "string", "description": "What the check proves, in one sentence." },
+        "timeout_seconds": { "type": "integer", "minimum": 1, "maximum": 600, "default": 60 }
+      },
+      "additionalProperties": false
+    }
   },
   "additionalProperties": true
 }

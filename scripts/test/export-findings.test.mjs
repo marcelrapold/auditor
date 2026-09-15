@@ -17,6 +17,7 @@ import {
   findingLocations,
   toAcrCsv,
   toQuestionnaireCsv,
+  toTrustCenterHtml,
   stableUuid,
   toEvidenceManifest,
   toExecutiveReport,
@@ -225,11 +226,27 @@ test("acr-wcag22.csv has every A/AA criterion with a VPAT status", () => {
   assert.ok(extra.at(-1).startsWith("1.4.6,,AAA / other,Does Not Support,X4-008,"));
 });
 
+test("trust-center.html is aggregate-only, escaped, and carries the readiness caveat", () => {
+  const run = clone();
+  run.target.name = "acme/<shop> & co";
+  const html = toTrustCenterHtml(run);
+  assert.ok(html.startsWith("<!doctype html>"));
+  assert.ok(html.includes("acme/&lt;shop&gt; &amp; co"), "target name is escaped");
+  assert.ok(html.includes("62.5 %"));
+  assert.ok(html.includes("not a certificate") || html.includes("Readiness, not certification"));
+  assert.ok(!html.includes("handlers/orders.ts"), "no evidence or finding detail leaks into the page");
+  assert.ok(!html.includes("IDOR"), "no finding titles");
+  assert.ok(html.includes("ISO27001 · PCI · SOC2") || html.includes("ISO27001"), "frameworks listed");
+  const de = toTrustCenterHtml({ ...clone(), output_lang: "de" });
+  assert.ok(de.includes('lang="de-CH"'));
+  assert.ok(de.includes("kein Zertifikat"));
+});
+
 test("CLI: validates, writes every export, and rejects an invalid run", () => {
   const out = mkdtempSync(join(tmpdir(), "auditor-out-"));
   const stdout = execFileSync(process.execPath, [join(ROOT, "scripts", "export-findings.mjs"), join(here, "fixtures", "audit-run.example.json"), "--out", out], { encoding: "utf8" });
   assert.match(stdout, /✓ audit-run.example.json valid — 5 finding\(s\)/);
-  for (const f of ["findings.sarif", "assessment-results.oscal.json", "gap-matrix.csv", "findings.csv", "EXECUTIVE-REPORT.md", "evidence-manifest.json", "caiq-answers.csv", "acr-wcag22.csv"]) {
+  for (const f of ["findings.sarif", "assessment-results.oscal.json", "gap-matrix.csv", "findings.csv", "EXECUTIVE-REPORT.md", "evidence-manifest.json", "caiq-answers.csv", "acr-wcag22.csv", "trust-center.html"]) {
     assert.ok(readFileSync(join(out, f), "utf8").length > 50, `${f} written`);
   }
   const badPath = join(out, "bad.json");

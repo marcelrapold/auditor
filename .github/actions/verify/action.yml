@@ -1,0 +1,133 @@
+name: auditor verify
+description: >-
+  Validate an auditor run (audit-run.json), export the business deliverables, diff against a
+  baseline run, run the executable re-audit checks, and upload SARIF to GitHub Code Scanning.
+  Fails the job when a --fail-on condition is hit or a check fails.
+author: marcelrapold
+
+inputs:
+  run-file:
+    description: Path to the canonical run file (schemas/audit-run.schema.json).
+    default: auditor-out/audit-run.json
+  baseline:
+    description: Path to a baseline run to diff against (empty = no diff).
+    default: ""
+  fail-on:
+    description: Comma-separated diff conditions that fail the job — new-p0p1, deal-blocker, regression, score-drop.
+    default: new-p0p1,regression
+  run-checks:
+    description: Run the executable re-audit checks (finding.check) against this checkout. Commands come from the run file — enable only for runs you produced or reviewed.
+    default: "false"
+  strict-checks:
+    description: With run-checks, treat findings without a check as failed.
+    default: "false"
+  upload-sarif:
+    description: Upload findings.sarif to Code Scanning (needs permissions security-events write).
+    default: "true"
+  out-dir:
+    description: Output directory for every export.
+    default: auditor-out
+  repo-path:
+    description: Path of the audited checkout (for evidence hashing and checks).
+    default: "."
+  token:
+    description: Token for the SARIF upload (defaults to the workflow's GITHUB_TOKEN).
+    default: ${{ github.token }}
+
+outputs:
+  readiness-score:
+    description: Technical control readiness in percent, or empty when the run has no readiness block.
+    value: ${{ steps.export.outputs.readiness }}
+  deal-blockers:
+    description: Number of deal-blocking findings.
+    value: ${{ steps.export.outputs.deal_blockers }}
+  diff-conditions:
+    description: Diff conditions that were hit (comma-separated), when a baseline was given.
+    value: ${{ steps.diff.outputs.hit }}
+
+runs:
+  using: composite
+  steps:
+    - name: Validate and export
+      id: export
+      shell: bash
+      env:
+        AUDITOR_ROOT: ${{ github.action_path }}/../../..
+        RUN_FILE: ${{ inputs.run-file }}
+        OUT_DIR: ${{ inputs.out-dir }}
+        REPO_PATH: ${{ inputs.repo-path }}
+      run: |
+        set -euo pipefail
+        node "$AUDITOR_ROOT/scripts/export-findings.mjs" "$RUN_FILE" --out "$OUT_DIR" --repo "$REPO_PATH"
+        node -e '
+          const run = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+          const out = [];
+          out.push("readiness=" + (run.readiness ? run.readiness.score_percent : ""));
+          out.push("deal_blockers=" + run.findings.filter((f) => f.deal_blocker).length);
+          require("fs").appendFileSync(process.env.GITHUB_OUTPUT, out.join("\n") + "\n");
+        ' "$RUN_FILE"
+        {
+          echo "## auditor — executive report"
+          cat "$OUT_DIR/EXECUTIVE-REPORT.md"
+        } >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Diff against baseline
+      id: diff
+      if: inputs.baseline != ''
+      shell: bash
+      env:
+        AUDITOR_ROOT: ${{ github.action_path }}/../../..
+        RUN_FILE: ${{ inputs.run-file }}
+        BASELINE: ${{ inputs.baseline }}
+        OUT_DIR: ${{ inputs.out-dir }}
+        FAIL_ON: ${{ inputs.fail-on }}
+      run: |
+        set -uo pipefail
+        node "$AUDITOR_ROOT/scripts/diff-runs.mjs" "$BASELINE" "$RUN_FILE" --out "$OUT_DIR" --fail-on "$FAIL_ON"
+        status=$?
+        {
+          echo "## auditor — diff against baseline"
+          cat "$OUT_DIR/AUDIT-DIFF.md"
+        } >> "$GITHUB_STEP_SUMMARY"
+        hit=$(node -e 'const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));console.log(Object.entries(d.conditions).filter(([,v])=>v).map(([k])=>k).join(","))' "$OUT_DIR/audit-diff.json")
+        echo "hit=$hit" >> "$GITHUB_OUTPUT"
+        exit $status
+
+    - name: Run re-audit checks
+      if: inputs.run-checks == 'true'
+      shell: bash
+      env:
+        AUDITOR_ROOT: ${{ github.action_path }}/../../..
+        RUN_FILE: ${{ inputs.run-file }}
+        OUT_DIR: ${{ inputs.out-dir }}
+        REPO_PATH: ${{ inputs.repo-path }}
+        STRICT: ${{ inputs.strict-checks }}
+      run: |
+        set -uo pipefail
+        args=()
+        [ "$STRICT" = "true" ] && args+=(--strict)
+        node "$AUDITOR_ROOT/scripts/verify-checks.mjs" "$RUN_FILE" --repo "$REPO_PATH" --out "$OUT_DIR" "${args[@]}"
+        status=$?
+        {
+          echo "## auditor — re-audit checks"
+          cat "$OUT_DIR/CHECKS-REPORT.md"
+        } >> "$GITHUB_STEP_SUMMARY"
+        exit $status
+
+    - name: Upload SARIF to Code Scanning
+      if: inputs.upload-sarif == 'true' && always()
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        OUT_DIR: ${{ inputs.out-dir }}
+        SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        REF: ${{ github.event.pull_request.head.ref && format('refs/pull/{0}/head', github.event.pull_request.number) || github.ref }}
+      run: |
+        set -euo pipefail
+        [ -f "$OUT_DIR/findings.sarif" ] || { echo "no findings.sarif — skipping upload"; exit 0; }
+        sarif=$(gzip -c "$OUT_DIR/findings.sarif" | base64 -w0)
+        gh api --method POST "/repos/${GITHUB_REPOSITORY}/code-scanning/sarifs" \
+          -f commit_sha="$SHA" -f ref="$REF" -f sarif="$sarif" -f tool_name=auditor \
+          -f checkout_uri="file://${GITHUB_WORKSPACE}" >/dev/null \
+          && echo "SARIF uploaded for $SHA ($REF)" \
+          || echo "::warning::SARIF upload failed — does the job have permissions: security-events: write, and is Code Scanning enabled?"

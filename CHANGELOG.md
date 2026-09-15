@@ -7,6 +7,32 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- **Continuous compliance (compliance-as-code).** Findings may carry an executable re-audit
+  criterion (`check`: a shell command that passes once the finding is fixed;
+  `schemas/finding.schema.json`); `scripts/verify-checks.mjs` runs them against a checkout and
+  writes `checks-report.json` / `CHECKS-REPORT.md` (exit 3 while a finding is open, `--strict`
+  counts checkless findings as open).
+- **Run-to-run diff.** `scripts/diff-runs.mjs baseline current` writes `audit-diff.json` /
+  `AUDIT-DIFF.md` — added, fixed, persisting with severity changes (renumbered ids matched by
+  audit + title), deal-blocker, readiness, scorecard and control deltas — and gates with
+  `--fail-on new-p0p1,deal-blocker,regression,score-drop` (exit 2).
+- **GitHub Action** `.github/actions/verify` (composite, no third-party actions): validates the
+  run, exports every deliverable, writes the executive report and the diff into the job summary,
+  runs the checks, uploads `findings.sarif` to Code Scanning via `gh api`; outputs
+  `readiness-score`, `deal-blockers`, `diff-conditions`.
+- **Trust center.** `--format trust-center` writes an aggregate-only `trust-center.html`
+  (readiness score, control status counts, frameworks mapped, deal-blocker count, the
+  readiness-not-certification sentence — no finding detail).
+- **MCP tools** `get_readiness_checklist(target)` and `list_control_themes(audit?)`, parsed live
+  from `CONTROL-CROSSWALK.md` (34 themes, prefixed control IDs, organisational controls, audits to
+  run).
+
+### Changed
+- Version 1.0.0: the prompt structure, the finding schema (eleven required fields), the canonical
+  run file, the crosswalk ID conventions and the exporter's file names are now a stable contract;
+  breaking changes to any of them bump the major version.
+
 ## [0.12.0] - 2026-09-16
 
 ### Added

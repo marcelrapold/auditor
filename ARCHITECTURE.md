@@ -23,7 +23,8 @@ auditor/
 ├── FRAMEWORK-VERSIONS.md      dated register of the framework editions the prompts cite
 ├── REPORT-OUTPUT-STANDARD.md  the business-output contract (audit-run.json → report, SARIF, OSCAL, CSV, evidence)
 ├── schemas/                   JSON Schemas: audit-run.schema.json, finding.schema.json
-└── scripts/                   dependency-free gates and tools, incl. export-findings.mjs with node:test tests
+├── scripts/                   dependency-free gates and tools: export-findings, diff-runs, verify-checks (node:test)
+└── .github/actions/verify/    the reusable GitHub Action (validate, export, diff, checks, SARIF upload)
 ```
 
 ## The shared audit method
@@ -57,6 +58,10 @@ Each prompt also shares a severity scale (P0–P3), a finding schema, and a mand
   `schemas/`); `scripts/export-findings.mjs` derives the executive report, SARIF, OSCAL, CSV and the
   evidence manifest deterministically. The agent never reproduces a file format from memory — the
   place where LLM output is least reliable is exactly where a script is cheap.
+- **Continuous, not one-off.** A finding may carry an executable `check`; `verify-checks.mjs`
+  runs them, `diff-runs.mjs` compares two runs and gates CI, and the composite GitHub Action wires
+  both into every PR without third-party actions. The MCP server serves the crosswalk parsed live
+  (`get_readiness_checklist`, `list_control_themes`), so agents and CI read the same file.
 - A **template** is an audit master prompt (`audit-prompts/*.md`) that an AI agent executes.
 - The `documentation` audit measures a repo against `DOCUMENTATION-STANDARD.md`; every audit emits
   issues per `ISSUE-OUTPUT-STANDARD.md` (a tracking issue first, then one German issue per finding).
