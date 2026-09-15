@@ -361,6 +361,9 @@ secrets — cite location and redact.
   "reversibility": "high (clean git revert, no external consumer)",
   "blast_radius": "low (dev-only install surface)",
   "standard": "SWE@Google Ch.21 — dependency footprint; OWASP Component Analysis",
+  "controls": ["ISO27001:A.8.19", "NIS2:Art.21(2)(d)", "CRA:AnnexI.II(1)"],
+  "deal_blocker": false,
+  "fine_exposure": "none",
   "fix": "concrete before/after — remove from package.json; staged step + revert note",
   "expected_impact": "smaller install + supply-chain surface; no behaviour change"
 }

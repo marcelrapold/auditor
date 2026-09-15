@@ -338,6 +338,9 @@ Never include real secrets — cite location and redact.
   "effort": "S",
   "evidence": "path/to/file.ext:line — quoted snippet",
   "standard": "the violated principle / declared standard",
+  "controls": ["ISO27001:A.8.29", "SOC2:CC8.1"],
+  "deal_blocker": false,
+  "fine_exposure": "none",
   "fix": "concrete before/after remediation",
   "expected_impact": "what the fix achieves"
 }

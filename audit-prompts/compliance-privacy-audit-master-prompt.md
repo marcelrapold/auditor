@@ -7,8 +7,12 @@
 > Every finding evidence-backed, mapped to a specific legal article/control, adversarially
 > verified, severity-scored, and turned into a prioritized remediation roadmap.
 >
-> **Universality:** Regime- and stack-agnostic. Primary lens is **GDPR/DSGVO**, extended to
-> ePrivacy, the **EU AI Act**, CCPA/CPRA, and sector rules (HIPAA, PCI-DSS) where applicable.
+> **Universality:** Regime- and stack-agnostic. Primary lens is **GDPR/DSGVO** and, for Swiss
+> targets, the **revDSG** (Federal Act on Data Protection, SR 235.1, with the VDSG ordinance) —
+> extended to ePrivacy / TDDDG, the **EU AI Act**, CCPA/CPRA, and sector rules (HIPAA, PCI DSS)
+> where applicable. Through [`CONTROL-CROSSWALK.md`](../CONTROL-CROSSWALK.md) every finding also
+> maps to the privacy controls of ISO/IEC 27001 (A.5.34), ISO/IEC 27701, and the SOC 2 Privacy
+> criteria (P1–P8), so the audit doubles as certification evidence.
 > Applies to web/mobile apps, APIs, data pipelines, and AI features. This is a
 > **privacy-engineering audit, not legal advice** — it surfaces risks and cites the relevant
 > articles so counsel can rule. Phase 0 decides which regimes apply; non-applicable mandates
@@ -20,7 +24,7 @@
 
 ```
 TARGET:        <repo path and/or running app + privacy policy URL>
-JURISDICTIONS: <EU/DE | UK | US-CA | global | ...>  →  which regimes apply
+JURISDICTIONS: <EU/DE | CH | UK | US-CA | global | ...>  →  which regimes apply (CH ⇒ revDSG + VDSG; EU ⇒ GDPR)
 DATA:          <what personal/sensitive data is processed? special categories? minors?>
 ROLE:          <controller | processor | both> + named sub-processors if known
 AI_IN_SCOPE:   <does it use automated decision-making / profiling / LLMs?>
@@ -38,8 +42,12 @@ real personal data into the report — cite location and redact.**
    data, the code `file:line` that collects/shares it, the policy clause, the cookie, the
    third-party request. No evidence → discarded.
 2. **Cite the article/control.** Every finding names what it violates: GDPR Art. 5/6/7/9/13/
-   15–22/25/28/30/32/33/35/44, ePrivacy/TTDSG cookie rules, EU AI Act risk tier, CCPA §, PCI/
-   HIPAA control. "Feels non-compliant" is rejected.
+   15–22/25/28/30/32/33/35/44, revDSG Art. 6/7/8/9/12/16–17/19–22/24/25/28/32 for Swiss targets,
+   ePrivacy / TDDDG § 25 (Germany; formerly TTDSG) cookie rules, EU AI Act risk tier, CCPA §, PCI/
+   HIPAA control. "Feels non-compliant" is rejected. Then fill `controls` from
+   `CONTROL-CROSSWALK.md` (the revDSG/GDPR article IDs plus ISO 27001 A.5.34 / SOC 2 P-series),
+   `deal_blocker`, and `fine_exposure` (GDPR Art. 83 tiers; revDSG Art. 60–63, which fine the
+   responsible **natural person** up to CHF 250 000).
 3. **Follow the data.** The spine of the audit is a verified **data-flow / RoPA map**: every
    category of personal data, its purpose, legal basis, recipients, location, and retention.
 4. **Severity is earned.** P0–P3; a P0 names a concrete legal/financial/individual harm
@@ -74,7 +82,9 @@ Each finding gets **effort (S/M/L/XL)** and **priority = impact × confidence ÷
   sub-processors — and whether a DPA + transfer mechanism exists.
 - **Surfaces:** privacy policy, cookie banner, consent records, account/settings, data-export
   and deletion flows, marketing/email consent.
-- **Applicable regimes:** confirm which of GDPR/ePrivacy/AI Act/CCPA/HIPAA/PCI apply.
+- **Applicable regimes:** confirm which of GDPR / revDSG (Swiss controller, Swiss data subjects,
+  or Swiss establishment) / ePrivacy-TDDDG / AI Act / CCPA / HIPAA / PCI apply. Swiss and EU law
+  usually apply **together** for a Swiss company serving EU users — audit both, cite both.
 
 Output: a structured brief distributed to all Phase 1 agents.
 
@@ -88,7 +98,7 @@ Art. 9 condition; purposes are specific and not exceeded (no silent repurposing)
 "legitimate interest" used where consent is legally required. Processing with no identifiable
 basis = P0.
 
-### C2 — Consent & cookies (Art. 7, ePrivacy/TTDSG)
+### C2 — Consent & cookies (Art. 7, ePrivacy / TDDDG § 25; CH: FMG Art. 45c)
 Consent is freely given, specific, informed, unambiguous, and as easy to withdraw as to give:
 no pre-ticked boxes, **reject-all equal in prominence to accept-all**, no bundling, granular
 purposes, and — critically — **no non-essential trackers/cookies fire before consent** (verify
@@ -103,7 +113,8 @@ code does Y) — every drift is a finding with both citations.
 ### C4 — Data-subject rights (Art. 15–22)
 Can a user actually exercise each right end-to-end: access/export (portability in a
 machine-readable format), rectification, **erasure** (does deletion propagate to all stores,
-backups, logs, third parties?), restriction, objection, and opt-out of automated decisions?
+backups, logs, third parties?), restriction, objection, and opt-out of automated decisions? (revDSG: access Art. 25, portability
+Art. 28, rectification/deletion Art. 32, automated decisions Art. 21.)
 A right promised in policy but not implementable in code = P1.
 
 ### C5 — Data minimization & retention (Art. 5(1)(c),(e), 25)
@@ -115,6 +126,8 @@ job that runs), not "kept forever by default". Privacy-by-default settings.
 Any personal data leaving the EEA (cloud regions, third-party processors, AI providers, CDNs)
 has a valid transfer mechanism (adequacy, SCCs, supplementary measures). Trace where data
 physically goes — provider default regions are a classic silent transfer. Unlawful transfer = P0.
+For Swiss controllers apply revDSG Art. 16–17 with the Federal Council's adequacy list (VDSG
+Annex 1) and the Swiss-US Data Privacy Framework where the recipient is certified.
 
 ### C7 — Processors, contracts & sub-processors (Art. 28)
 Every processor has a DPA with the required Art. 28 clauses; sub-processors are authorized and
@@ -124,13 +137,15 @@ is contractually and legally covered.
 ### C8 — Security of processing & breach readiness (Art. 32, 33, 34)
 Appropriate technical/organizational measures for the risk (encryption at rest/in transit,
 access control, pseudonymization), and a working **breach-notification capability** — can the
-org detect, assess, and notify within 72h? Cross-reference the security & infrastructure
-audits. Plaintext sensitive data or no breach process = P0/P1.
+org detect, assess, and notify within 72h (GDPR Art. 33) or "as soon as possible" (revDSG
+Art. 24, to the FDPIC)? Cross-reference the security & infrastructure audits. Plaintext
+sensitive data or no breach process = P0/P1.
 
 ### C9 — Accountability & governance (Art. 5(2), 30, 35, 37)
-RoPA (Art. 30 records) exists and matches reality, DPIAs for high-risk processing (Art. 35),
-DPO appointed where required, privacy-by-design evidence, and audit trails for consent and
-data access.
+RoPA (Art. 30 records; revDSG Art. 12) exists and matches reality, DPIAs for high-risk
+processing (Art. 35; revDSG Art. 22), DPO / data protection advisor appointed where required
+(Art. 37; revDSG Art. 10), privacy-by-design and by-default evidence (Art. 25; revDSG Art. 7),
+and audit trails for consent and data access.
 
 ### C10 — Automated decisions, profiling & EU AI Act
 Profiling/automated decision-making with legal/significant effect (Art. 22) has safeguards
@@ -164,9 +179,12 @@ request wasn't checked for consent/transfer?"
 
 ## Phase 4 — Benchmark
 
-Compare against current regulatory guidance (EDPB guidelines, DPA decisions, recognized
-privacy-pattern libraries) and well-run comparable products. Cite concrete obligations, not
-"be more compliant."
+Compare against current regulatory guidance (EDPB guidelines, DPA decisions, FDPIC / EDÖB
+guidance for Swiss targets, recognized privacy-pattern libraries) and well-run comparable
+products. Cite concrete obligations, not "be more compliant." Then add the **control view**:
+group the surviving findings by the ISO 27001 / SOC 2 Privacy control they cite (`missing` when a
+P0/P1 cites it, `partial` for P2/P3 only) — the input the orchestrator's readiness mode turns into
+a gap matrix.
 
 ---
 
@@ -175,7 +193,8 @@ privacy-pattern libraries) and well-run comparable products. Cite concrete oblig
 In `OUTPUT_LANG` (default to the data subjects' language for user-facing fixes):
 
 1. **Executive summary** (≤ 1 page): compliance verdict, the single biggest legal exposure,
-   estimated risk (incl. fine-tier context: up to €20M / 4% turnover), ceiling after remediation.
+   estimated risk (incl. fine-tier context: GDPR up to €20M / 4% turnover; revDSG up to
+   CHF 250 000 against the responsible natural person), ceiling after remediation.
 2. **Scorecard:** grade per dimension (C1–C11) + finding counts; overall weighted grade
    (Lawful basis, Consent, Transfers, Security count double).
 3. **Verified RoPA / data-flow map:** every personal-data category × purpose × basis ×
@@ -235,7 +254,10 @@ Never include real personal data — cite location and redact.
   "effort": "S",
   "data_categories": ["online identifiers", "behavioral data"],
   "evidence": "Network trace on first load (no interaction): GET to google-analytics.com/g/collect and facebook.com/tr fire from app/layout.tsx:18 before the CMP records consent.",
-  "article": "ePrivacy/TTDSG §25; GDPR Art. 6(1)(a) — consent required prior to non-essential tracking",
+  "article": "ePrivacy / TDDDG § 25; GDPR Art. 6(1)(a) — consent required prior to non-essential tracking; CH: FMG Art. 45c + revDSG Art. 19 information duty",
+  "controls": ["GDPR:Art.6(1)(a)", "revDSG:Art.19", "SOC2:P2.1", "ISO27001:A.5.34"],
+  "deal_blocker": true,
+  "fine_exposure": "GDPR Art. 83(5): up to EUR 20M / 4 % of global annual turnover",
   "harm_chain": "Unlawful tracking of every visitor → DPA complaint risk, fines, and invalidation of all collected analytics consent",
   "fix": "Gate all non-essential tags behind the CMP; load tracking only after opt-in (Consent Mode v2 / conditional script injection). Make reject-all a one-click equal to accept.",
   "expected_impact": "Stops pre-consent tracking on 100% of sessions; restores lawful basis",

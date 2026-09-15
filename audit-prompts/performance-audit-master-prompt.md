@@ -233,6 +233,9 @@ Never include real secrets or PII — cite location and redact.
   "paths": ["GET /api/orders"],
   "evidence": "services/orders.ts:54 loops orders and lazy-loads items per row. Repro: 50-order page = 51 queries (query log). p95 480 ms; DB CPU dominant.",
   "cost": "+~50 queries/request; p95 480 ms vs ~40 ms projected",
+  "controls": ["ISO27001:A.8.6", "SOC2:A1.1"],
+  "deal_blocker": false,
+  "fine_exposure": "none",
   "fix": "Eager-load items in one query (JOIN or IN(...)) or DataLoader batch. ~15 LOC.",
   "expected_impact": "51 queries → 2; est. p95 480 ms → ~40 ms; ~90% DB load cut on this path",
   "anticipated_refutation": "'Low traffic endpoint' — it's on the post-checkout path, called every order; query log shows it in the top 5 by volume."

@@ -8,9 +8,12 @@
 >
 > **Universality:** Provider- and framework-agnostic. Applies to chatbots, RAG systems,
 > agents/tool-callers, content generators, classifiers, copilots, and any feature wrapping
-> an LLM (any provider or self-hosted). Maps to the **OWASP Top 10 for LLM Applications** and
-> NIST AI RMF. Phase 0 decides scope; non-applicable mandates are logged "not applicable",
-> never skipped silently.
+> an LLM (any provider or self-hosted). Maps to the **OWASP Top 10 for LLM Applications (2025)**,
+> NIST AI RMF (+ the AI 600-1 generative-AI profile), and MITRE ATLAS — and, through
+> [`CONTROL-CROSSWALK.md`](../CONTROL-CROSSWALK.md), to **ISO/IEC 42001:2023 Annex A** and the
+> **EU AI Act** obligations by risk tier, which is what procurement now asks every AI vendor for.
+> Phase 0 decides scope; non-applicable mandates are logged "not applicable", never skipped
+> silently.
 
 ---
 
@@ -36,8 +39,11 @@ pricing, or API usage — never assert provider details from memory.
 1. **Evidence or it didn't happen.** Cite the concrete artifact: prompt template `file:line`,
    a tool definition, a retrieval/chunking config, a real (redacted) input→output pair, an
    eval result, or a token/cost figure. No evidence → discarded.
-2. **Cite the standard.** OWASP LLM Top 10 (LLM01 Prompt Injection … LLM10), NIST AI RMF,
-   provider safety/usage guidance, and eval best practice — name what's violated.
+2. **Cite the standard — and the control.** OWASP LLM Top 10 (LLM01 Prompt Injection … LLM10),
+   NIST AI RMF, MITRE ATLAS, provider safety/usage guidance, and eval best practice — name what's
+   violated. Then fill `controls` from `CONTROL-CROSSWALK.md` (ISO 42001 Annex A control, AI Act
+   article, plus ISO 27001 / SOC 2 where the finding is also a security one), `deal_blocker`, and
+   `fine_exposure` (AI Act Art. 99 tiers; GDPR where personal data is involved).
 3. **Reason about the adversary AND the honest user.** Two failure classes: malicious input
    (injection, jailbreak, exfiltration) and ordinary input that the system handles wrongly
    (hallucination, bad tool call, silent failure). Audit both.
@@ -177,7 +183,11 @@ eval? which output sink wasn't traced?"
 ## Phase 4 — Benchmark
 
 Compare prompts, guardrails, and eval rigor against current best practice for this AI shape
-and the provider's own guidance. Transferable patterns, not "prompt better."
+and the provider's own guidance. Transferable patterns, not "prompt better." Then add the
+**control view**: classify every AI system in scope by EU AI Act risk tier (prohibited / high /
+limited / minimal, with the article that puts it there) and group the surviving findings by the
+ISO 42001 Annex A control they cite (`missing` when a P0/P1 cites it, `partial` for P2/P3 only) —
+the input the orchestrator's `iso42001-ai-act` readiness target turns into a gap matrix.
 
 ---
 
@@ -243,7 +253,10 @@ Never include real secrets or PII — cite location and redact.
   "effort": "S",
   "ai_calls": ["chat.completion → ChatMessage render"],
   "evidence": "components/Message.tsx:33 dangerouslySetInnerHTML={{__html: marked(reply)}}; reply is model output that can include attacker-influenced content (via L1 indirect injection from a shared doc).",
-  "standard": "OWASP LLM02 Insecure Output Handling; treat model output as untrusted",
+  "standard": "OWASP LLM05:2025 Improper Output Handling; treat model output as untrusted",
+  "controls": ["ISO42001:A.6.2.6", "ISO27001:A.8.28", "SOC2:CC6.1", "AIAct:Art.15", "GDPR:Art.32"],
+  "deal_blocker": true,
+  "fine_exposure": "GDPR Art. 83(4): up to EUR 10M / 2 % of global annual turnover",
   "harm_chain": "Injected content in a shared document → model echoes <img onerror> → rendered raw → script runs in other users' sessions → session/data theft",
   "fix": "Sanitize rendered HTML (DOMPurify) or render markdown without raw HTML; never dangerouslySetInnerHTML on model output. ~10 LOC.",
   "expected_impact": "Closes the stored-XSS sink for all model-generated content",

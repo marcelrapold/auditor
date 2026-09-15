@@ -69,6 +69,11 @@ const ORDERED = [
 // contract that lets the orchestrator compose findings across audits. Audits
 // add their own keys (cvss, harm_chain, class, …) on top; only this intersection
 // is enforced so the gate stays strict without being flaky.
+//
+// The three business fields (`controls`, `deal_blocker`, `fine_exposure`) are
+// what the orchestrator's readiness mode aggregates into a certification gap
+// matrix — see CONTROL-CROSSWALK.md. Every audit must emit them, even when the
+// honest value is `[]` / `false` / `"none"`.
 const SCHEMA_FIELDS = [
   "id",
   "title",
@@ -78,6 +83,9 @@ const SCHEMA_FIELDS = [
   "evidence",
   "fix",
   "expected_impact",
+  "controls",
+  "deal_blocker",
+  "fine_exposure",
 ];
 
 // Uniform severity vocabulary (P0–P3) and no legacy German severities in headings/schema.
