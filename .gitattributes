@@ -1,0 +1,4 @@
+# Normalize line endings: the prompts are checksummed byte-for-byte (CHECKSUMS.txt),
+# so every text file must be LF in the working tree on every OS.
+* text=auto eol=lf
+*.webp binary

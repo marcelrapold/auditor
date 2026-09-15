@@ -35,7 +35,7 @@ export const AUDITS: readonly AuditEntry[] = [
     file: "security-audit-master-prompt.md",
     description:
       "14 domains: injection, authN/Z, secrets, supply chain, IaC, CI/CD, business logic, privacy, LLM.",
-    mapsTo: "OWASP · CWE · MITRE · CIS",
+    mapsTo: "OWASP · CWE · MITRE · CIS · ISO 27001 · SOC 2",
   },
   {
     key: "repo",
@@ -84,14 +84,14 @@ export const AUDITS: readonly AuditEntry[] = [
     file: "ai-llm-audit-master-prompt.md",
     description:
       "Prompt injection, jailbreaks, output handling, agent/tool safety, RAG, hallucination, evals.",
-    mapsTo: "OWASP LLM Top 10 · NIST AI RMF",
+    mapsTo: "OWASP LLM Top 10 · NIST AI RMF · ISO 42001 · EU AI Act",
   },
   {
     key: "compliance-privacy",
     file: "compliance-privacy-audit-master-prompt.md",
     description:
       "Lawful basis, consent/cookies, data-subject rights, retention, transfers, breach readiness.",
-    mapsTo: "GDPR · ePrivacy · EU AI Act",
+    mapsTo: "GDPR · revDSG · ePrivacy · EU AI Act",
   },
   {
     key: "accessibility",
@@ -130,7 +130,9 @@ export const AUDIT_KEYS = AUDITS.map((a) => a.key) as readonly string[];
 export const ORCHESTRATOR_FILE = "full-audit-master-prompt.md";
 
 /** The standards the `get_standard` tool can return. */
-export type StandardKey = "issue-output" | "documentation";
+export type StandardKey = "issue-output" | "documentation" | "control-crosswalk";
+
+export const STANDARD_KEYS = ["issue-output", "documentation", "control-crosswalk"] as const;
 
 export const STANDARDS: Record<StandardKey, { file: string; description: string }> = {
   "issue-output": {
@@ -142,5 +144,10 @@ export const STANDARDS: Record<StandardKey, { file: string; description: string 
     file: "DOCUMENTATION-STANDARD.en.md",
     description:
       "The Google-grade documentation standard with five repo profiles and a 0–100 scoring rubric — the same yardstick the documentation audit scores against. (English; the German source is DOCUMENTATION-STANDARD.md.)",
+  },
+  "control-crosswalk": {
+    file: "CONTROL-CROSSWALK.md",
+    description:
+      "The certification control crosswalk: maps every finding theme to the control IDs of SOC 2, ISO/IEC 27001:2022, ISO/IEC 42001:2023 + EU AI Act, NIS2, CRA and the Swiss revDSG (GDPR alongside), lists the organisational controls that are not assessable from code, and defines the readiness scoring the orchestrator's READINESS_TARGET mode uses.",
   },
 };

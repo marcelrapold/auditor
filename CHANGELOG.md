@@ -7,6 +7,47 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- **Certification readiness.** The orchestrator gains `READINESS_TARGET` with four targets —
+  `soc2`, `iso27001`, `iso42001-ai-act`, `nis2-cra` — and a Step 4b that inverts the findings into
+  a control-by-control gap matrix (status `implemented` / `partial` / `missing` / `not-assessable`
+  / `n/a`), classifies nonconformities as Major / Minor / OFI, computes a technical control
+  readiness score with a time-to-audit-ready estimate, and produces the target's deliverables
+  (Statement of Applicability draft, risk-register seed, AI-system inventory with risk tier,
+  reporting-capability check, evidence register).
+- **`CONTROL-CROSSWALK.md`** — one theme-based mapping (34 themes) from findings to the control
+  IDs of SOC 2 TSC, ISO/IEC 27001:2022 Annex A, ISO/IEC 42001:2023 Annex A + EU AI Act, NIS2
+  Art. 21/23, CRA Annex I / Art. 14, and the Swiss revDSG (GDPR alongside), with the organisational
+  controls listed as not assessable from code, a fine-exposure vocabulary, and the scoring rules.
+  It is part of the checksummed trust anchor and exposed by the MCP server as
+  `get_standard("control-crosswalk")`.
+- **`FRAMEWORK-VERSIONS.md`** — a dated register of every framework edition the prompts cite, with
+  a quarterly review procedure.
+- **Three business fields in every finding schema** — `controls`, `deal_blocker`, `fine_exposure` —
+  enforced across all 13 audits by the `prompts` CI gate; `ISSUE-OUTPUT-STANDARD.md` 1.2.0 adds
+  the matching `control:<Framework>-<ID>` and `deal-blocker` labels, the business view and the
+  readiness section of the tracking issue.
+- **Swiss revDSG** in the `compliance-privacy` audit (jurisdiction `CH`, Art. 6–9, 12, 16–17,
+  19–25, 28, 32, personal fines under Art. 60–63, FDPIC breach notification) alongside GDPR;
+  **ISO 42001 / EU AI Act** control view in the `ai-llm` audit; **ISO 27001 / SOC 2** control view
+  in the `security` and `infrastructure` audits.
+- **Landing page:** a "Certification readiness" section with the four targets and a third yardstick
+  card for the crosswalk; `llms.txt` documents the readiness protocol.
+- Legal pages (`/privacy`, `/imprint` and the German mirrors) and the analytics consent gate
+  (audit findings #168–#170); the "Audit Orchestrator" hero artwork with the emerald particle field.
+
+### Changed
+- Dependabot no longer groups major version bumps into the weekly groups.
+- `.gitattributes` normalises every text file to LF so the byte-for-byte checksums verify on
+  Windows checkouts too.
+
+### Fixed
+- Stale references: `TTDSG` → `TDDDG` (renamed May 2024), OWASP `A01:2021` → `A01:2025`, OWASP LLM
+  `LLM02` → `LLM05:2025`, and "DORA" disambiguated as DevOps Research and Assessment metrics, not
+  the EU Digital Operational Resilience Act.
+- `CONTRIBUTING.md` named a hand-run `sha256sum` command whose output format differs from what CI
+  verifies (#174); it now points at `node scripts/checksums.mjs`.
+
 ## [0.9.1] - 2026-06-26
 
 ### Changed

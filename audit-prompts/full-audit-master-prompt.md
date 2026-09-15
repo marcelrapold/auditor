@@ -28,6 +28,10 @@ Ask these questions and wait for answers. Offer the options; accept free-form to
    (Always preview first; create only on explicit approval and with repo write access.)
 5. **Active testing.** Is dynamic/active testing authorized, or static/read-only only? (Default:
    read-only. Active tests require documented owner authorization.)
+6. **Readiness target (optional).** Is this run preparing for a certification or a regulatory
+   deadline? Offer the four targets below; the answer sets `READINESS_TARGET` (`none` by default).
+   With a target set, the audits that target needs are selected automatically (the user may still
+   add others), and Step 4b produces a control-by-control gap matrix on top of the normal backlog.
 
 ### Audit menu
 
@@ -49,6 +53,26 @@ Ask these questions and wait for answers. Offer the options; accept free-form to
 
 `full repo` = run **Phase 0 reconnaissance** (below), then every audit whose "run it when"
 condition the target meets. Declare audits marked **not applicable** explicitly; never skip silently.
+
+### Readiness targets
+
+| `READINESS_TARGET` | Assesses against | Audits it runs |
+|---|---|---|
+| `soc2` | SOC 2 Trust Services Criteria (Security; plus Availability, Confidentiality, Processing Integrity, Privacy when in scope) | `security`, `infrastructure`, `repo`, `data`, `performance`, `lean`; `compliance-privacy` when Privacy is in scope |
+| `iso27001` | ISO/IEC 27001:2022 Annex A | `security`, `infrastructure`, `repo`, `data`, `lean`, `documentation`, `compliance-privacy` |
+| `iso42001-ai-act` | ISO/IEC 42001:2023 Annex A + EU AI Act obligations by risk tier | `ai-llm`, `compliance-privacy`, `security`, `data`, `documentation` |
+| `nis2-cra` | NIS2 Art. 21(2) + Art. 23; CRA Annex I Parts I–II + Art. 14 | `security`, `infrastructure`, `lean`, `repo`, `data` |
+
+The control mapping behind every target is
+[`CONTROL-CROSSWALK.md`](../CONTROL-CROSSWALK.md) (fetch it at
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.1/CONTROL-CROSSWALK.md`). Swiss
+revDSG and GDPR are not separate targets — the `compliance-privacy` audit always maps to them.
+
+> [!WARNING]
+> **Readiness is not certification.** Say so in the report and the tracking issue. The audits
+> assess the *technically assessable* controls and collect evidence; organisational controls
+> (policies, HR, physical security, management review) are reported as `not-assessable`, never as
+> missing. An ISO certificate comes from an accredited body, a SOC 2 report from a CPA firm.
 
 ---
 
@@ -77,11 +101,18 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.1/audit-prompts/<key
   adversarial verification → benchmark → synthesis). If your harness supports parallel
   sub-agents / Workflow mode, use it; otherwise run sequentially.
 - Keep each audit's findings in its shared finding schema so they compose across audits.
+- Make sure every confirmed finding carries the three business fields the schema requires:
+  `controls` (IDs from `CONTROL-CROSSWALK.md`, `[]` when no theme matches), `deal_blocker`
+  (would this fail a SOC 2 / ISO 27001 audit or block enterprise procurement?), and
+  `fine_exposure` (one value from the crosswalk's vocabulary, `"none"` when no fine attaches).
+  A specialist that omits them is re-asked before synthesis.
 
 > [!NOTE]
 > Each specialist prompt is self-contained and standards-mapped (OWASP, CWE, MITRE, WCAG, CIS,
-> DORA, RFCs, GDPR) and conforms to the shared canonical structure — enforced by the `prompts`
-> CI gate — so their findings compose across audits.
+> DORA metrics — DevOps Research and Assessment, not the EU Digital Operational Resilience Act —
+> RFCs, GDPR, and via the crosswalk ISO 27001, SOC 2, ISO 42001, NIS2, CRA, revDSG) and conforms
+> to the shared canonical structure — enforced by the `prompts` CI gate — so their findings compose
+> across audits.
 
 ---
 
@@ -91,6 +122,45 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.1/audit-prompts/<key
    + infrastructure + documentation → one finding, all lenses cited).
 2. **Re-rank** into one consolidated severity-sorted backlog (P0 → P3, then effort/ICE).
 3. **Scorecard:** one row per audit (grade/score) plus an overall repo-health verdict.
+4. **Business view:** list every `deal_blocker: true` finding first, and aggregate `fine_exposure`
+   by regime (highest tier that applies, with the finding IDs behind it).
+
+---
+
+## Step 4b — Readiness gap assessment (only when `READINESS_TARGET` is set)
+
+Invert the mapping: instead of "which controls does this finding break", answer "what is the
+status of every control the target framework has". Use `CONTROL-CROSSWALK.md` as the only source
+of control IDs and the status rules in its *Readiness scoring* section.
+
+1. **Enumerate the target's controls** from the crosswalk columns for the chosen framework(s) —
+   every ID that appears in any row, plus the *Requires organisational evidence* list.
+2. **Derive one status per control:** `implemented` (its theme was audited, no confirmed finding
+   cites it) · `partial` (only P2/P3 findings cite it) · `missing` (a P0/P1 cites it) ·
+   `not-assessable` (organisational) · `n/a` (Phase 0 declared the theme not applicable, with a
+   reason). Attach the finding IDs and the evidence artifacts behind every non-implemented status.
+3. **Classify nonconformities** in the auditor's vocabulary next to P0–P3: `missing` → Major NC,
+   `partial` → Minor NC, P3-only → OFI, `implemented` → Conform.
+4. **Compute the readiness score:** implemented ÷ (implemented + partial + missing), in percent,
+   labelled *technical control readiness*. Report `not-assessable` and `n/a` as counts, never in
+   the denominator.
+5. **Estimate time to audit-ready** from the effort of the findings behind `missing`/`partial`
+   controls (S 0.5 · M 2 · L 5 · XL 10 person-days, reported as a ×1–×2 range, labelled heuristic).
+6. **Produce the target's deliverables:**
+   - the **control gap matrix** (control · status · NC class · finding IDs · evidence · owner);
+   - the **Requires organisational evidence** list, with what an auditor will ask for per control;
+   - the **evidence register** (every artifact cited, with path/URL and a short description);
+   - for `iso27001`: a **Statement of Applicability draft** (control · applicable? · justification ·
+     implemented?) and a risk-register seed (one row per P0/P1: threat, likelihood, impact,
+     treatment, owning finding);
+   - for `iso42001-ai-act`: the **AI-system inventory** with EU AI Act risk tier per system and an
+     impact-assessment skeleton per high-risk or limited-risk system;
+   - for `nis2-cra`: the **reporting-capability check** (can the organisation meet the 24 h /
+     72 h / final-report windows of NIS2 Art. 23 and CRA Art. 14?) and the SBOM / disclosure
+     readiness (CRA Annex I Part II).
+7. **State the limits** in one paragraph the reader cannot miss: static vs active, sample sizes,
+   which controls were not assessable, and that this is a readiness assessment, not an audit
+   opinion or a certificate.
 
 ---
 
@@ -102,10 +172,14 @@ Fetch and follow
 
 1. **One master tracking issue** — `[AUDIT] Full repo — Master-Tracker & Roadmap`: management
    summary, the cross-audit scorecard, a priority-sorted checklist linking every sub-tracker,
-   and a 30/60/90 roadmap.
+   the deal-blocker list and fine-exposure summary, and a 30/60/90 roadmap. When
+   `READINESS_TARGET` is set, add a **Readiness** section: the score, the NC counts, the gap
+   matrix (or a link to it as an attached file when it exceeds ~40 rows), and the
+   "requires organisational evidence" list.
 2. **One sub-tracking issue per audit that ran** — each linking its per-finding issues.
 3. **One issue per confirmed finding** — each opening with its own management summary, then
-   evidence, severity, a concrete before/after fix, effort, and a re-audit criterion.
+   evidence, severity, a concrete before/after fix, effort, and a re-audit criterion. Labels carry
+   the control IDs (`control:ISO27001-A.8.3`) and `deal-blocker` where set.
 
 Create child issues first, collect their numbers, then the trackers so the checklist links
 resolve. Detect existing audit issues by label and update rather than duplicate.
@@ -146,5 +220,6 @@ Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.1/`
 
 - Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content,lean}-audit-master-prompt.md`
 - Standards: `ISSUE-OUTPUT-STANDARD.md`, `DOCUMENTATION-STANDARD.md` (+ `.en.md`)
+- Readiness: `CONTROL-CROSSWALK.md` (control mapping for SOC 2, ISO 27001, ISO 42001 + AI Act, NIS2, CRA, revDSG/GDPR), `FRAMEWORK-VERSIONS.md` (editions in use)
 - This orchestrator: `audit-prompts/full-audit-master-prompt.md`
 - Human overview + language switcher: `https://auditor.rapold.io`

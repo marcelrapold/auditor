@@ -8,9 +8,12 @@
 > exploitability-rated.
 >
 > **Universality:** Stack- and target-agnostic. Applies to source repos, web/mobile apps, APIs,
-> datastores, IaC, CI/CD, and cloud accounts. Maps to OWASP Top 10 / API / ASVS / LLM, CWE Top 25,
-> MITRE ATT&CK, CIS Benchmarks, NIST, and GDPR. Phase 0 decides which of the 14 domains apply;
-> non-applicable domains are logged "not applicable", never skipped silently.
+> datastores, IaC, CI/CD, and cloud accounts. Maps to OWASP Top 10 (2025) / API / ASVS / LLM, CWE
+> Top 25, MITRE ATT&CK, CIS Benchmarks, NIST, and GDPR — and, through
+> [`CONTROL-CROSSWALK.md`](../CONTROL-CROSSWALK.md), to the certification controls buyers and
+> auditors ask for: ISO/IEC 27001:2022 Annex A, SOC 2 Trust Services Criteria, NIS2 Art. 21, CRA
+> Annex I, and PCI DSS 4.0.1 where card data is in scope. Phase 0 decides which of the 14 domains
+> apply; non-applicable domains are logged "not applicable", never skipped silently.
 
 ---
 
@@ -38,8 +41,12 @@ ISSUE_TARGET:  <owner/repo for issues — preview-first, on approval>
 
 1. **Evidence or it didn't happen.** Every finding cites a concrete artifact: `file:line`, a
    request/response, a config value, a redacted secret location. No evidence → discarded.
-2. **Cite the standard.** Each finding names what it violates: OWASP (Top 10 / API / ASVS / LLM),
-   CWE, MITRE ATT&CK technique, CIS control, NIST, or a GDPR article.
+2. **Cite the standard — and the control.** Each finding names what it violates: OWASP (Top 10 /
+   API / ASVS / LLM), CWE, MITRE ATT&CK technique, CIS control, NIST, or a GDPR article. It also
+   fills `controls` with the certification control IDs from `CONTROL-CROSSWALK.md` (ISO 27001 /
+   SOC 2 / NIS2 / CRA), `deal_blocker` (would this fail a SOC 2 or ISO 27001 audit, or block
+   enterprise procurement?), and `fine_exposure` (the crosswalk's vocabulary) — so every finding
+   doubles as gap-assessment evidence for the reader's next certification.
 3. **Severity is earned.** Use the P0–P3 scale below plus a CVSS v3.1 estimate; a P0 names the
    concrete exploitation/data-loss/exposure path.
 4. **Adversarial humility.** Every P0/P1 is attacked by independent skeptics in Phase 3. Write
@@ -138,7 +145,10 @@ domain is under-covered?" — credible gaps go back through a quick round.
 
 Compare posture against the relevant standards (OWASP ASVS as a verification grid, CIS for infra)
 and re-confirm CVSS + exploitability per surviving finding. Output the migration/control reference
-for each, not just "be more secure".
+for each, not just "be more secure". Then add the **control view**: group the surviving findings by
+the ISO 27001 Annex A / SOC 2 control they cite, so the scorecard can state which controls are
+`missing` (a P0/P1 cites them) or `partial` (P2/P3 only) — the input the orchestrator's readiness
+mode turns into a gap matrix.
 
 ---
 
@@ -198,7 +208,10 @@ Never include real secrets or PII — cite location and redact.
   "confidence": 0.95,
   "effort": "M",
   "cvss": "8.1 (AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N)",
-  "standard": "OWASP A01:2021 / API1:2023 BOLA; CWE-639; MITRE T1190",
+  "standard": "OWASP A01:2025 Broken Access Control / API1:2023 BOLA; CWE-639; MITRE T1190",
+  "controls": ["ISO27001:A.8.3", "ISO27001:A.5.15", "SOC2:CC6.1", "NIS2:Art.21(2)(i)", "CRA:AnnexI.I(2)(d)", "GDPR:Art.32"],
+  "deal_blocker": true,
+  "fine_exposure": "GDPR Art. 83(5): up to EUR 20M / 4 % of global annual turnover",
   "evidence": "handlers/orders.ts:42 runs db.orders.find({ id: req.params.id }) with no owner check; repro: user A retrieves user B's order by id.",
   "impact": "Horizontal privilege escalation; full read of every customer's orders.",
   "exploitability": "confirmed",

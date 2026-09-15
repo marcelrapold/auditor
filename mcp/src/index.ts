@@ -19,7 +19,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-import { AUDIT_KEYS, STANDARDS } from "./catalogue.js";
+import { AUDIT_KEYS, STANDARD_KEYS, STANDARDS } from "./catalogue.js";
 import {
   AuditorError,
   findRepoRoot,
@@ -55,7 +55,10 @@ function createServer(repoRoot: string): McpServer {
         "repo — no network fetch required. Typical flow: call `get_orchestrator` " +
         "to scope a full-repo audit interactively, or `list_audits` then " +
         "`get_audit_prompt` to run a single specialist, and `get_standard` for " +
-        "the issue-output contract every audit must follow. " +
+        "the issue-output contract every audit must follow. For a certification " +
+        "readiness run (SOC 2, ISO 27001, ISO 42001 + EU AI Act, NIS2 + CRA), " +
+        "fetch `get_standard(\"control-crosswalk\")` and set READINESS_TARGET in " +
+        "the orchestrator — the result is a gap assessment, never a certificate. " +
         SAFETY_NOTE,
     },
   );
@@ -129,14 +132,16 @@ function createServer(repoRoot: string): McpServer {
         "Return one of the auditor standards every audit conforms to: " +
         "\"issue-output\" (" +
         STANDARDS["issue-output"].description +
-        ") or \"documentation\" (" +
+        "), \"documentation\" (" +
         STANDARDS.documentation.description +
+        ") or \"control-crosswalk\" (" +
+        STANDARDS["control-crosswalk"].description +
         ").",
       inputSchema: {
         standard: z
-          .enum(["issue-output", "documentation"])
+          .enum(STANDARD_KEYS)
           .describe(
-            "Which standard to return: \"issue-output\" or \"documentation\".",
+            "Which standard to return: \"issue-output\", \"documentation\" or \"control-crosswalk\".",
           ),
       },
     },

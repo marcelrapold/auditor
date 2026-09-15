@@ -271,6 +271,9 @@ resolve. Detect existing audit issues by label and update rather than duplicate.
   "docs": ["README.md:42"],
   "evidence": "README says `npm run setup`, but package.json:scripts (package.json:18) has no `setup` entry; the script was renamed to `bootstrap` in a refactor. The documented command errors out.",
   "reader_job": "First-run onboarding — the very first command a newcomer types fails",
+  "controls": ["ISO27001:A.5.37"],
+  "deal_blocker": false,
+  "fine_exposure": "none",
   "fix": "Update README to `npm run bootstrap` (or re-add a `setup` alias). Add a link-and-sample check to CI so this drift can't recur.",
   "expected_impact": "Unblocks step 1 of onboarding for every new developer; closes a recurring-drift class with the CI check",
   "anticipated_refutation": "'Experienced devs will figure it out' — the docs exist precisely for those who can't; a failing first command erodes trust in every later step."

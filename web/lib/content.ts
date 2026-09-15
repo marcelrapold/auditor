@@ -2,6 +2,7 @@ import {
   Accessibility,
   Bot,
   BookText,
+  ClipboardCheck,
   Cloud,
   Database,
   FileSearch,
@@ -81,7 +82,7 @@ export const AUDITS: Audit[] = [
     file: "security-audit-master-prompt.md",
     blurb:
       "14 domains: injection, authN/Z, secrets, supply chain, IaC, CI/CD, business logic, privacy, LLM.",
-    mapsTo: "OWASP · CWE · MITRE · CIS",
+    mapsTo: "OWASP · CWE · MITRE · CIS · ISO 27001 · SOC 2",
     icon: ShieldCheck,
   },
   {
@@ -144,7 +145,7 @@ export const AUDITS: Audit[] = [
     file: "ai-llm-audit-master-prompt.md",
     blurb:
       "Prompt injection, jailbreaks, output handling, agent/tool safety, RAG, hallucination, evals.",
-    mapsTo: "OWASP LLM Top 10 · NIST AI RMF",
+    mapsTo: "OWASP LLM Top 10 · NIST AI RMF · ISO 42001 · EU AI Act",
     icon: Bot,
   },
   {
@@ -153,7 +154,7 @@ export const AUDITS: Audit[] = [
     file: "compliance-privacy-audit-master-prompt.md",
     blurb:
       "Lawful basis, consent/cookies, data-subject rights, retention, transfers, breach readiness.",
-    mapsTo: "GDPR · ePrivacy · EU AI Act",
+    mapsTo: "GDPR · revDSG · ePrivacy · EU AI Act",
     icon: Scale,
   },
   {
@@ -302,5 +303,45 @@ export const STANDARDS: Standard[] = [
     blurb:
       "The mandatory contract every audit follows: a priority-sorted tracking issue first, then one issue per finding, each with its own management summary.",
     icon: GitBranch,
+  },
+  {
+    name: "Control crosswalk",
+    file: "CONTROL-CROSSWALK.md",
+    blurb:
+      "Maps every finding to the control IDs of SOC 2, ISO 27001, ISO 42001 + AI Act, NIS2, CRA and revDSG — with the organisational controls that are not assessable from code, and the readiness scoring rules.",
+    icon: ClipboardCheck,
+  },
+];
+
+/** The crosswalk file the readiness cards link to (repo-root relative). */
+export const CROSSWALK_FILE = "CONTROL-CROSSWALK.md";
+
+/** The four readiness targets the orchestrator offers (`READINESS_TARGET`). */
+export type ReadinessKey = "soc2" | "iso27001" | "iso42001-ai-act" | "nis2-cra";
+
+export type ReadinessTarget = {
+  key: ReadinessKey;
+  /** Audit names (from AUDITS) the target runs, in the crosswalk's order. */
+  audits: string[];
+};
+
+/** Mirrors the "Readiness targets" table in CONTROL-CROSSWALK.md — pinned by a test so the
+ *  landing page can never advertise a selection the orchestrator does not implement. */
+export const READINESS_TARGETS: ReadinessTarget[] = [
+  {
+    key: "soc2",
+    audits: ["security", "infrastructure", "repo", "data", "performance", "lean", "compliance-privacy"],
+  },
+  {
+    key: "iso27001",
+    audits: ["security", "infrastructure", "repo", "data", "lean", "documentation", "compliance-privacy"],
+  },
+  {
+    key: "iso42001-ai-act",
+    audits: ["ai-llm", "compliance-privacy", "security", "data", "documentation"],
+  },
+  {
+    key: "nis2-cra",
+    audits: ["security", "infrastructure", "lean", "repo", "data"],
   },
 ];

@@ -13,7 +13,9 @@ import {
   AUDIT_COMMAND,
   AUDIT_COUNT,
   BACKLOG_SAMPLE,
+  CROSSWALK_FILE,
   PROMPTS,
+  READINESS_TARGETS,
   REPO,
   SAMPLE_FINDING,
   SCORECARD,
@@ -63,6 +65,7 @@ export function Landing({ lang }: { lang: Lang }) {
         <Principles lang={lang} />
         <Proof lang={lang} />
         <Audits lang={lang} />
+        <Readiness lang={lang} />
         <HowItWorks lang={lang} />
         <Standards lang={lang} />
         <CallToAction lang={lang} />
@@ -471,6 +474,65 @@ function Audits({ lang }: { lang: Lang }) {
   );
 }
 
+function Readiness({ lang }: { lang: Lang }) {
+  const tt = t(lang);
+  const auditHref = (name: string) => `${lang === "de" ? "/de" : ""}/audits/${name}`;
+  return (
+    <Section id="readiness" eyebrow={tt.rdyEyebrow} title={tt.rdyTitle} lead={tt.rdyLead}>
+      <div className="grid gap-4 md:grid-cols-2">
+        {READINESS_TARGETS.map((target, i) => {
+          const prose = tt.rdyTargets[target.key];
+          return (
+            <Reveal key={target.key} delay={i * 0.05}>
+              <div className="flex h-full flex-col rounded-xl border border-border bg-card p-6">
+                <p className="font-mono text-xs text-primary">READINESS_TARGET: {target.key}</p>
+                <h3 className="mt-2 text-lg font-medium">{prose.name}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{glossify(prose.frameworks, lang)}</p>
+                <dl className="mt-5 flex flex-1 flex-col gap-4 text-sm">
+                  <div>
+                    <dt className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                      {tt.rdyRuns}
+                    </dt>
+                    <dd className="mt-2 flex flex-wrap gap-1.5">
+                      {target.audits.map((name) => (
+                        <a
+                          key={name}
+                          href={auditHref(name)}
+                          className="rounded-md border border-border px-2 py-0.5 font-mono text-xs text-foreground transition-colors hover:border-primary/50 hover:bg-accent/40"
+                        >
+                          {name}
+                        </a>
+                      ))}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                      {tt.rdyDeliverable}
+                    </dt>
+                    <dd className="mt-2 text-muted-foreground">{glossify(prose.deliverable, lang)}</dd>
+                  </div>
+                </dl>
+              </div>
+            </Reveal>
+          );
+        })}
+      </div>
+      <Reveal>
+        <p className="mt-10 max-w-prose text-pretty text-sm text-muted-foreground">{tt.rdyNote}</p>
+        <a
+          href={`${REPO}/blob/main/${CROSSWALK_FILE}`}
+          target="_blank"
+          rel="noreferrer"
+          className={cn(buttonVariants({ variant: "outline" }), "mt-5")}
+        >
+          {tt.rdyCta}
+          <ArrowRight aria-hidden className="size-4" />
+        </a>
+      </Reveal>
+    </Section>
+  );
+}
+
 function HowItWorks({ lang }: { lang: Lang }) {
   const tt = t(lang);
   const phases = phasesFor(lang);
@@ -552,7 +614,7 @@ function Standards({ lang }: { lang: Lang }) {
   const tt = t(lang);
   return (
     <Section id="standards" eyebrow={tt.stdEyebrow} title={tt.stdTitle} lead={tt.stdLead}>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         {standardsFor(lang).map((s, i) => (
           <Reveal key={s.name} delay={i * 0.05}>
             <a

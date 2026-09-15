@@ -2,7 +2,7 @@
 
 > **Mission:** Subject the target's infrastructure, delivery pipeline, and operational
 > posture to a rigorous audit at the standard of a top-tier SRE / platform team (Google SRE,
-> DORA, Well-Architected grade). Deploy a swarm of specialist agents to find where the
+> DORA metrics, Well-Architected grade). Deploy a swarm of specialist agents to find where the
 > system is fragile, insecure, unobservable, unrecoverable, or wasteful in how it is built,
 > shipped, and run. Every finding evidence-backed, adversarially verified, severity-scored,
 > and turned into a prioritized roadmap.
@@ -37,8 +37,12 @@ report — cite location and redact.**
 1. **Evidence or it didn't happen.** Cite the concrete artifact: IaC `file:line`, a
    manifest/Dockerfile/pipeline stanza, a (redacted) resource config, or a CIS/Well-
    Architected control id. No evidence → discarded.
-2. **Cite the standard.** CIS Benchmarks, cloud Well-Architected pillars, NIST, SLSA,
-   12-Factor, DORA metrics, Kubernetes hardening guides — name the control violated.
+2. **Cite the standard — and the control.** CIS Benchmarks, cloud Well-Architected pillars, NIST,
+   SLSA, 12-Factor, DORA metrics (DevOps Research and Assessment — not the EU Digital Operational
+   Resilience Act, which this audit does not assess), Kubernetes hardening guides — name the
+   control violated. Then fill `controls` from `CONTROL-CROSSWALK.md` (ISO 27001 Annex A / SOC 2
+   Availability and Common Criteria / NIS2 Art. 21 / CRA Annex I), `deal_blocker`, and
+   `fine_exposure`.
 3. **Reason about failure.** The central questions: *what happens when this fails, and can
    we recover?* Every single-point-of-failure and unrecoverable state is a finding.
 4. **Severity is earned.** P0–P3; a P0 names a concrete outage/breach/data-loss/lock-out path.
@@ -169,7 +173,10 @@ traced? was a restore actually verified?"
 ## Phase 4 — Benchmark
 
 Compare posture against CIS/Well-Architected for the platform and against DORA elite
-benchmarks. Output concrete controls and patterns, not "be more reliable."
+benchmarks (deploy frequency, lead time, change-fail rate, MTTR). Output concrete controls and
+patterns, not "be more reliable." Then add the **control view**: group the surviving findings by
+the ISO 27001 Annex A / SOC 2 control they cite (`missing` when a P0/P1 cites it, `partial` for
+P2/P3 only) — the input the orchestrator's readiness mode turns into a gap matrix.
 
 ---
 
@@ -232,6 +239,9 @@ Never include real secrets or PII — cite location and redact.
   "resources": ["aws_security_group.db", "aws_db_instance.primary"],
   "evidence": "infra/network.tf:61 ingress cidr_blocks = [\"0.0.0.0/0\"] port 5432; db instance publicly_accessible = true (infra/rds.tf:22).",
   "standard": "CIS AWS 5.x; Well-Architected Security pillar; least-exposure",
+  "controls": ["ISO27001:A.8.20", "ISO27001:A.8.22", "SOC2:CC6.6", "NIS2:Art.21(2)(a)", "CRA:AnnexI.I(2)(j)", "GDPR:Art.32"],
+  "deal_blocker": true,
+  "fine_exposure": "GDPR Art. 83(4): up to EUR 10M / 2 % of global annual turnover",
   "harm_chain": "Production database reachable from the internet → brute force / direct exfiltration of all customer data",
   "fix": "Set publicly_accessible=false; restrict ingress to the app subnet/SG only; access via bastion/SSM. ~6 LOC.",
   "expected_impact": "Removes internet exposure of the primary datastore",

@@ -50,9 +50,15 @@ recommendation immediately actionable.
 
 ## Release surface (prompts and checksums)
 
-- When editing an `audit-prompts/*.md` file or a standard, regenerate `CHECKSUMS.txt`
-  (`sha256sum audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md > CHECKSUMS.txt`).
-  The `prompts` CI verifies it with `sha256sum -c` and fails otherwise.
+- When editing an `audit-prompts/*.md` file, a standard, or `CONTROL-CROSSWALK.md`, regenerate
+  `CHECKSUMS.txt` with `node scripts/checksums.mjs` (the file list is single-sourced there; a
+  hand-run `sha256sum` without `-b` produces a different format). The `prompts` CI verifies it
+  with `node scripts/checksums.mjs --check` and `sha256sum -c` and fails otherwise.
+- When citing a standard or regulation, use the edition listed in
+  [`FRAMEWORK-VERSIONS.md`](FRAMEWORK-VERSIONS.md); if you change an edition, update that file and
+  every cite of the old identifier. Control IDs in findings come from
+  [`CONTROL-CROSSWALK.md`](CONTROL-CROSSWALK.md) — extend the crosswalk rather than inventing IDs
+  in a prompt.
 - The release version pinned in URLs is bumped **only at release time** — via
   `node scripts/bump-version.mjs vX.Y.Z`, never by hand. See [`RELEASING.md`](RELEASING.md).
 

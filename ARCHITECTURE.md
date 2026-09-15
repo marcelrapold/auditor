@@ -18,7 +18,9 @@ auditor/
 ├── mcp/             a stdio MCP server exposing the prompts as native agent tools
 ├── templates/       a canonical README skeleton implementing the doc standard
 ├── DOCUMENTATION-STANDARD.md (+ .en.md)   the doc-quality yardstick
-└── ISSUE-OUTPUT-STANDARD.md   the mandatory GitHub-issue output contract
+├── ISSUE-OUTPUT-STANDARD.md   the mandatory GitHub-issue output contract
+├── CONTROL-CROSSWALK.md       findings → certification control IDs (SOC 2, ISO 27001, ISO 42001, NIS2, CRA, revDSG)
+└── FRAMEWORK-VERSIONS.md      dated register of the framework editions the prompts cite
 ```
 
 ## The shared audit method
@@ -46,10 +48,15 @@ Each prompt also shares a severity scale (P0–P3), a finding schema, and a mand
 
 ## Standards vs templates
 
-- A **standard** is a yardstick (`DOCUMENTATION-STANDARD.md`, `ISSUE-OUTPUT-STANDARD.md`).
+- A **standard** is a yardstick (`DOCUMENTATION-STANDARD.md`, `ISSUE-OUTPUT-STANDARD.md`,
+  `CONTROL-CROSSWALK.md`).
 - A **template** is an audit master prompt (`audit-prompts/*.md`) that an AI agent executes.
 - The `documentation` audit measures a repo against `DOCUMENTATION-STANDARD.md`; every audit emits
   issues per `ISSUE-OUTPUT-STANDARD.md` (a tracking issue first, then one German issue per finding).
+- Every finding carries `controls`, `deal_blocker`, and `fine_exposure` (enforced by the `prompts`
+  gate). `CONTROL-CROSSWALK.md` is the only source of control IDs; the orchestrator's readiness
+  mode (`READINESS_TARGET`) inverts it into a per-control gap matrix. The mapping is by **theme**,
+  not by framework, so adding a framework is one new column, not thirteen prompt edits.
 
 ## Key trade-offs
 
@@ -61,6 +68,9 @@ Each prompt also shares a severity scale (P0–P3), a finding schema, and a mand
   is an explicit, potentially expensive choice left to the operator.
 - **The web app uses the ZVV-Atlas stack conventions with its own brand**, deliberately avoiding a
   private dependency so the public repo builds anywhere.
+- **Readiness, never certification.** The crosswalk maps only technically assessable controls and
+  lists the organisational rest as `not-assessable`; the prompts must say so in every report. That
+  honesty is the product's credibility with the certification bodies whose work it prepares.
 
 ## Web app
 
