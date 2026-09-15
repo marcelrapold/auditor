@@ -7,6 +7,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-09-16
+
 ### Added
 - **Business output.** [`REPORT-OUTPUT-STANDARD.md`](REPORT-OUTPUT-STANDARD.md) — the contract for
   everything that leaves the audit besides issues: one canonical `auditor-out/audit-run.json`

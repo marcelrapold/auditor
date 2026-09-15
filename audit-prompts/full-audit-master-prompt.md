@@ -68,7 +68,7 @@ condition the target meets. Declare audits marked **not applicable** explicitly;
 
 The control mapping behind every target is
 [`CONTROL-CROSSWALK.md`](../CONTROL-CROSSWALK.md) (fetch it at
-`https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/CONTROL-CROSSWALK.md`). Swiss
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.11.0/CONTROL-CROSSWALK.md`). Swiss
 revDSG and GDPR are not separate targets — the `compliance-privacy` audit always maps to them.
 
 > [!WARNING]
@@ -93,7 +93,7 @@ resulting audit selection for the user to confirm.
 For each chosen audit, **fetch its specialist prompt** and execute it:
 
 ```
-https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/audit-prompts/<key>-audit-master-prompt.md
+https://raw.githubusercontent.com/marcelrapold/auditor/v0.11.0/audit-prompts/<key>-audit-master-prompt.md
 ```
 
 (e.g. `…/security-audit-master-prompt.md`). Then:
@@ -170,7 +170,7 @@ of control IDs and the status rules in its *Readiness scoring* section.
 ## Step 5 — Issue output (per `ISSUE-OUTPUT-STANDARD.md`)
 
 Fetch and follow
-`https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/ISSUE-OUTPUT-STANDARD.md`. Produce, in
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.11.0/ISSUE-OUTPUT-STANDARD.md`. Produce, in
 **`OUTPUT_LANG`** (German or English as chosen), preview-first and created only on approval:
 
 1. **One master tracking issue** — `[AUDIT] Full repo — Master-Tracker & Roadmap`: management
@@ -194,19 +194,19 @@ finding ID in the title, `auditor` label, tracker as Epic / Project / Problem).
 ## Step 5b — Business exports (per `REPORT-OUTPUT-STANDARD.md`)
 
 Fetch and follow
-`https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/REPORT-OUTPUT-STANDARD.md`. Before
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.11.0/REPORT-OUTPUT-STANDARD.md`. Before
 the issues are created, write the **canonical run file** and derive every business deliverable
 from it — never re-type a format from memory:
 
 1. Write `auditor-out/audit-run.json` per
-   `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/schemas/audit-run.schema.json`:
+   `https://raw.githubusercontent.com/marcelrapold/auditor/v0.11.0/schemas/audit-run.schema.json`:
    the merged, deduplicated, **confirmed** findings (each with `audit`, the eleven required fields,
    explicit `locations[]` where code-anchored), `scorecard`, `not_applicable` with reasons,
    `readiness` when `READINESS_TARGET` was set, `roadmap`, `coverage`, and `summary.<OUTPUT_LANG>`
    (5–8 board-readable sentences).
 2. Validate it: `node scripts/export-findings.mjs auditor-out/audit-run.json --validate` (the script
    ships in the repo at the pinned tag; fetch it from
-   `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/scripts/export-findings.mjs`
+   `https://raw.githubusercontent.com/marcelrapold/auditor/v0.11.0/scripts/export-findings.mjs`
    when the repo is not checked out). Fix the run file until it validates.
 3. Export: `node scripts/export-findings.mjs auditor-out/audit-run.json --out auditor-out --repo <checkout>`
    → `EXECUTIVE-REPORT.md` (convert to DOCX/PDF with pandoc or the harness's document skill),
@@ -248,7 +248,7 @@ make this offer when the user already chose a subset or "full repo" from the men
 
 ## Index (machine-readable)
 
-Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/`
+Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.11.0/`
 
 - Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content,lean}-audit-master-prompt.md`
 - Standards: `ISSUE-OUTPUT-STANDARD.md`, `DOCUMENTATION-STANDARD.md` (+ `.en.md`)
