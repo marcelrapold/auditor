@@ -51,6 +51,7 @@ flowchart LR
 - [The audit library](#the-audit-library)
 - [Run it from your AI agent](#run-it-from-your-ai-agent)
 - [Certification readiness](#certification-readiness)
+- [Outputs](#outputs)
 - [Worked example: auditing this repo](#worked-example-auditing-this-repo)
 - [Quickstart](#quickstart)
 - [How it works](#how-it-works)
@@ -161,6 +162,30 @@ are always mapped by the `compliance-privacy` audit.
 Framework editions are tracked in [`FRAMEWORK-VERSIONS.md`](FRAMEWORK-VERSIONS.md) and reviewed
 quarterly.
 
+## Outputs
+
+Every run ends in **one canonical file**, `auditor-out/audit-run.json`
+([`schemas/audit-run.schema.json`](schemas/audit-run.schema.json)); everything a board, an auditor,
+a compliance tool or an engineering tracker needs is derived from it by a dependency-free script —
+never re-typed by the agent:
+
+```bash
+node scripts/export-findings.mjs auditor-out/audit-run.json --out auditor-out --repo . [--docx]
+```
+
+| File | For | Format |
+|---|---|---|
+| `EXECUTIVE-REPORT.md` → `.docx` / `.pdf` | management, board, external auditor | fixed board structure; pandoc or a document skill converts it |
+| `findings.sarif` | engineering, GitHub Code Scanning, IDEs | SARIF 2.1.0 (P0/P1 error, P2 warning, P3 note) |
+| `assessment-results.oscal.json` | GRC platforms | OSCAL 1.1.2 assessment results, one finding per finding × control |
+| `gap-matrix.csv`, `findings.csv` | Vanta / Drata / Secureframe, Jira import, spreadsheets | CSV |
+| `evidence-manifest.json` | external auditor | sha256 + size per cited artifact, no content copied |
+| Tracker issues | engineering | GitHub, Jira, Linear or ServiceNow via `ISSUE_TARGET` |
+
+The contract is [`REPORT-OUTPUT-STANDARD.md`](REPORT-OUTPUT-STANDARD.md). Output language is chosen
+per run — English and German are equally first-class; German follows the de-CH rules of the issue
+standard.
+
 ## Worked example: auditing this repo
 
 The library is dogfooded on itself. Running the orchestrator end-to-end against `auditor` produced
@@ -200,8 +225,8 @@ access to the target repository for the issue phase.
    STACK:        <languages, frameworks, cloud — or let Phase 0 infer>
    AUDIENCE:     <who the target serves, if known>
    DATA_ACCESS:  <can run / active-test? or read-only>
-   OUTPUT_LANG:  <Deutsch (default) | English | ...>
-   ISSUE_TARGET: <owner/repo for issues — preview-first, on approval>
+   OUTPUT_LANG:  <English | Deutsch>  →  chosen per run; ask if unset, never assume
+   ISSUE_TARGET: <github:owner/repo | jira:KEY | linear:TEAM | servicenow:<url> — preview-first, on approval>
    ```
 3. **Let it run.** It builds a fact sheet, fans out specialist agents, cross-pollinates and
    dedupes, adversarially verifies every serious finding, benchmarks against best-in-class, then
@@ -267,12 +292,12 @@ After verification, every audit produces GitHub issues per
    management summary, then severity, evidence, a concrete before/after fix, effort, and a
    re-audit criterion.
 
-Issues are German by default (configurable per run), preview-first, and created only on explicit
-authorization.
+Issues are written in the language chosen per run (English or German), can target GitHub, Jira,
+Linear or ServiceNow, are preview-first, and are created only on explicit authorization.
 
 ## Standards
 
-Three normative standards govern the audits and are reusable on their own:
+Four normative standards govern the audits and are reusable on their own:
 
 - [`DOCUMENTATION-STANDARD.md`](DOCUMENTATION-STANDARD.md) (German) and
   [`DOCUMENTATION-STANDARD.en.md`](DOCUMENTATION-STANDARD.en.md) (English) — a Google-grade
@@ -283,6 +308,9 @@ Three normative standards govern the audits and are reusable on their own:
 - [`CONTROL-CROSSWALK.md`](CONTROL-CROSSWALK.md) — the control mapping (SOC 2, ISO 27001,
   ISO 42001 + AI Act, NIS2, CRA, revDSG/GDPR) behind the `controls` field of every finding and
   the orchestrator's readiness mode; editions in [`FRAMEWORK-VERSIONS.md`](FRAMEWORK-VERSIONS.md).
+- [`REPORT-OUTPUT-STANDARD.md`](REPORT-OUTPUT-STANDARD.md) — the business-output contract: the
+  canonical `audit-run.json`, the executive report, SARIF / OSCAL / CSV exports, the evidence
+  manifest, issue targets (GitHub, Jira, Linear, ServiceNow) and the per-run language rule.
 
 A ready-to-use README skeleton lives at [`templates/README.template.md`](templates/README.template.md).
 
@@ -311,6 +339,9 @@ auditor/
 ├── ISSUE-OUTPUT-STANDARD.md        mandatory issue output for all audits
 ├── CONTROL-CROSSWALK.md            findings → SOC 2 / ISO 27001 / ISO 42001 / NIS2 / CRA / revDSG controls
 ├── FRAMEWORK-VERSIONS.md           dated register of every framework edition in use
+├── REPORT-OUTPUT-STANDARD.md       business outputs: audit-run.json, executive report, SARIF/OSCAL/CSV, issue targets
+├── schemas/                        JSON Schemas for the canonical run file and a finding
+├── scripts/                        CI gates, checksums, version pins, export-findings.mjs (+ tests)
 ├── CONTRIBUTING.md                 how to contribute templates and docs
 ├── CODE_OF_CONDUCT.md              Contributor Covenant
 ├── SECURITY.md                     how to report a vulnerability

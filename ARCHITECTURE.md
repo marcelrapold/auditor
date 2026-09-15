@@ -20,7 +20,10 @@ auditor/
 ├── DOCUMENTATION-STANDARD.md (+ .en.md)   the doc-quality yardstick
 ├── ISSUE-OUTPUT-STANDARD.md   the mandatory GitHub-issue output contract
 ├── CONTROL-CROSSWALK.md       findings → certification control IDs (SOC 2, ISO 27001, ISO 42001, NIS2, CRA, revDSG)
-└── FRAMEWORK-VERSIONS.md      dated register of the framework editions the prompts cite
+├── FRAMEWORK-VERSIONS.md      dated register of the framework editions the prompts cite
+├── REPORT-OUTPUT-STANDARD.md  the business-output contract (audit-run.json → report, SARIF, OSCAL, CSV, evidence)
+├── schemas/                   JSON Schemas: audit-run.schema.json, finding.schema.json
+└── scripts/                   dependency-free gates and tools, incl. export-findings.mjs with node:test tests
 ```
 
 ## The shared audit method
@@ -49,7 +52,11 @@ Each prompt also shares a severity scale (P0–P3), a finding schema, and a mand
 ## Standards vs templates
 
 - A **standard** is a yardstick (`DOCUMENTATION-STANDARD.md`, `ISSUE-OUTPUT-STANDARD.md`,
-  `CONTROL-CROSSWALK.md`).
+  `CONTROL-CROSSWALK.md`, `REPORT-OUTPUT-STANDARD.md`).
+- **One canonical output, derived formats.** An agent writes `audit-run.json` (validated against
+  `schemas/`); `scripts/export-findings.mjs` derives the executive report, SARIF, OSCAL, CSV and the
+  evidence manifest deterministically. The agent never reproduces a file format from memory — the
+  place where LLM output is least reliable is exactly where a script is cheap.
 - A **template** is an audit master prompt (`audit-prompts/*.md`) that an AI agent executes.
 - The `documentation` audit measures a repo against `DOCUMENTATION-STANDARD.md`; every audit emits
   issues per `ISSUE-OUTPUT-STANDARD.md` (a tracking issue first, then one German issue per finding).

@@ -29,6 +29,8 @@ jobs:
           node-version-file: web/.nvmrc
       - name: Canonical prompt structure (interoperability)
         run: node scripts/check-prompts.mjs
+      - name: Business-export tooling (schemas + scripts/export-findings.mjs)
+        run: node --test "scripts/test/*.test.mjs"
       - name: Verify CHECKSUMS.txt is in sync (single-source regen)
         run: node scripts/checksums.mjs --check
       - name: Verify prompt checksums (untrusted-fetch trust anchor)

@@ -89,8 +89,8 @@ confidence** = `reachability_confidence × reversibility ÷ blast_radius`; only 
 TARGET:       <local repo path or GitHub URL>
 SCOPE:        <whole repo | specific packages/paths>
 DATA_ACCESS:  <read-only static analysis (default) | tools available>
-OUTPUT_LANG:  <Deutsch (default) | English | ...>
-ISSUE_TARGET: <owner/repo for issues — preview-first, on approval>
+OUTPUT_LANG:  <English | Deutsch>  →  chosen per run; ask if unset, never assume
+ISSUE_TARGET: <github:owner/repo | jira:KEY | linear:TEAM | servicenow:<url> — preview-first, on approval>
 ```
 
 No arguments are strictly required — Phase 0 infers the stack. The audit is **read-only**: tools run
@@ -320,8 +320,13 @@ chat, write a file only if asked). Structure — exactly these sections:
 
 ## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
 
-Beyond the report, turn verified findings into GitHub issues — **German by default** (configurable
-via `OUTPUT_LANG`); preview/dry-run first, created only on explicit authorization + repo access.
+Beyond the report, turn verified findings into tracker issues — in **`OUTPUT_LANG`** (English or
+German, chosen per run; ask if unset); preview/dry-run first, created only on explicit authorization
++ write access to the target (`ISSUE_TARGET`: GitHub, Jira, Linear or ServiceNow — mapping in
+[`REPORT-OUTPUT-STANDARD.md`](../REPORT-OUTPUT-STANDARD.md)). Also write `auditor-out/audit-run.json`
+(the confirmed findings in the schema below) and validate it with
+`node scripts/export-findings.mjs auditor-out/audit-run.json --validate`; the executive report, SARIF,
+OSCAL, CSV and evidence manifest derive from it.
 Two-part contract:
 
 1. **Tracking issue first** — `[AUDIT] Lean — Befund-Tracker & Roadmap`. Body: a management summary

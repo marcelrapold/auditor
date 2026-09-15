@@ -33,7 +33,7 @@ GOAL:         <the one belief-change or action it must produce — read-through,
 VOICE:        <brand voice / style-guide reference, or infer from the existing corpus>
 COMPARISON:   <named best-in-class references or competitors to benchmark against — or Phase 0 picks>
 DATA_ACCESS:  <may fetch live URLs / competitor pages to compare? or work from provided text only>
-OUTPUT_LANG:  <Deutsch (default) | English | ...>
+OUTPUT_LANG:  <English | Deutsch>  →  chosen per run; ask if unset, never assume
 SOURCE_LANGUAGE:    <auto-detect (default) | English | Deutsch | ... — language of the source draft,
                      used to detect interference>
 LOCALISATION_MODE:  <audit-only (default) | native-rewrite | translate-and-rewrite — how far the
@@ -41,7 +41,7 @@ LOCALISATION_MODE:  <audit-only (default) | native-rewrite | translate-and-rewri
                      modes & terminology policy" below>
 TERMINOLOGY_POLICY: <infer from corpus (default) | provided glossary | strict glossary — defined
                      under "Localisation modes & terminology policy" below>
-ISSUE_TARGET: <owner/repo for gh issue creation — preview-first, create only on approval>
+ISSUE_TARGET: <github:owner/repo | jira:KEY | linear:TEAM | servicenow:<url> — preview-first, create only on approval>
 ```
 
 If unknown, Phase 0 infers the content type, thesis, audience, awareness stage, and goal from the
@@ -402,8 +402,13 @@ assumptions registry. D: claims checked vs unverifiable (handed back to the auth
 
 ## Issue output — mandatory (see [`ISSUE-OUTPUT-STANDARD.md`](../ISSUE-OUTPUT-STANDARD.md))
 
-This audit's primary deliverable is GitHub issues — **German by default** (`OUTPUT_LANG`);
-preview/dry-run first, created only on explicit authorization + repo access. Two-part contract:
+This audit's primary deliverable is tracker issues — in **`OUTPUT_LANG`** (English or German,
+chosen per run; ask if unset); preview/dry-run first, created only on explicit authorization + write
+access to the target (`ISSUE_TARGET`: GitHub, Jira, Linear or ServiceNow — mapping in
+[`REPORT-OUTPUT-STANDARD.md`](../REPORT-OUTPUT-STANDARD.md)). Also write `auditor-out/audit-run.json`
+(the confirmed findings in the schema below) and validate it with
+`node scripts/export-findings.mjs auditor-out/audit-run.json --validate`; the executive report, SARIF,
+OSCAL, CSV and evidence manifest derive from it. Two-part contract:
 
 1. **Tracking issue first** — `[AUDIT] Content — Befund-Tracker & Roadmap`. Body: a management
    summary (scorecard total + grade band, thesis verdict, the biggest disengagement driver), the

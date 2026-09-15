@@ -5,13 +5,18 @@ Dieser Standard ist **verbindlich** und wird von jeder Vorlage in `audit-prompts
 
 > [!NOTE]
 > **Management-Summary.** Nach der adversariellen Verifikation überführt jedes Audit seine
-> bestätigten Befunde in GitHub-Issues — **standardmässig auf Deutsch**. Zuerst entsteht **ein
+> bestätigten Befunde in Tracker-Issues (GitHub, Jira, Linear oder ServiceNow) — **in der pro Lauf
+> gewählten Sprache**, Deutsch oder English. Zuerst entsteht **ein
 > Tracking-Issue** (der Index aller Sub-Aufgaben, nach Priorität sortiert, mit Management-Summary,
 > Scorecard und Roadmap), danach **pro Befund ein eigenes Issue**, jedes mit eigener
 > Management-Summary und konkreter Vorher/Nachher-Handlungsempfehlung. Das echte Anlegen erfolgt
 > **erst nach Vorschau und ausdrücklicher Freigabe**.
 
-Version 1.2.0 · Sprache der Issues: standardmässig Deutsch (`OUTPUT_LANG` überschreibbar)
+Version 1.3.0 · Sprache der Issues: pro Lauf gewählt (`OUTPUT_LANG` = Deutsch oder English; wird
+gefragt, nie angenommen)
+Neu in 1.3.0: Sprache pro Lauf statt Deutsch-Default; Issue-Ziele GitHub, Jira, Linear und ServiceNow
+mit Feldzuordnung in [`REPORT-OUTPUT-STANDARD.md`](REPORT-OUTPUT-STANDARD.md); `audit-run.json` als
+kanonische Quelle, aus der Executive-Bericht, SARIF, OSCAL, CSV und Evidenz-Manifest erzeugt werden.
 Neu in 1.2.0: Control-Labels (`control:<Framework>-<ID>`) und die Kennzeichnung `deal-blocker` aus dem
 [`CONTROL-CROSSWALK.md`](CONTROL-CROSSWALK.md); bei gesetztem `READINESS_TARGET` enthält das
 Tracking-Issue die Gap-Matrix und den Readiness-Score.
@@ -23,7 +28,14 @@ Neu in 1.1.0: de-CH-Orthografie (durchgehend ss) und der `dimension:`/`effort:`-
 
 - **Auslöser:** läuft nach Phase 3 (Verifikation) und der Synthese. Nur **bestätigte** Befunde
   werden zu Issues; Hypothesen bleiben getrennt im Bericht.
-- **Sprache:** Deutsch als Standard. Pro Lauf via `OUTPUT_LANG` änderbar (z. B. für englische Repos).
+- **Sprache:** pro Lauf gewählt (`OUTPUT_LANG`: Deutsch oder English). Wird nie angenommen, sondern
+  gefragt; Deutsch folgt den de-CH-Regeln unten.
+- **Ziel-Tracker:** `ISSUE_TARGET` ist `github:owner/repo` (Standard bei GitHub-Repos), `jira:KEY`,
+  `linear:TEAM` oder `servicenow:<URL>`; Feldzuordnung (Schweregrad → Priorität, Labels, Tracker als
+  Epic/Projekt/Problem) in [`REPORT-OUTPUT-STANDARD.md`](REPORT-OUTPUT-STANDARD.md).
+- **Kanonische Quelle:** vor dem Anlegen `auditor-out/audit-run.json` schreiben und mit
+  `node scripts/export-findings.mjs … --validate` prüfen; Issues und alle Business-Exporte stammen aus
+  derselben Datei.
 - **Locale & de-CH.** Die deutsche Issue-Ausgabe nutzt Schweizer Orthografie (durchgehend ss, kein
   Eszett — Ausnahme nur unveränderliche Eigennamen, Code, Rechtstitel, wörtliche Zitate), deutsche
   Anführungszeichen „…" (nie ein gerades ASCII-Schlusszeichen) und einheitliche Terminologie gemäss
@@ -178,7 +190,10 @@ by severity+score, standard mapping plus the certification control IDs from `CON
 location, evidence, impact, a concrete before/after fix,
 effort, and a re-audit criterion. When a readiness target was set, the tracking issue also carries
 the control gap matrix and the readiness score, always labelled as a readiness assessment, not a
-certificate. Issues are German by default (`OUTPUT_LANG`), preview-first, and
+certificate. Issues are written in the language chosen per run (`OUTPUT_LANG`, English or German —
+asked, never assumed), target GitHub, Jira, Linear or ServiceNow (`ISSUE_TARGET`, mapping in
+`REPORT-OUTPUT-STANDARD.md`), are derived from the same `audit-run.json` as the business exports,
+preview-first, and
 created only on explicit authorization. Create child issues first, collect their numbers, then
 create the tracking issue so its checklist links resolve. Detect existing audit issues by label
 and update rather than duplicate. Never include real secrets or PII.

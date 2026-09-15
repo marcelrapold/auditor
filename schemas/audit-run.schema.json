@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://auditor.rapold.io/schemas/audit-run.schema.json",
+  "title": "auditor run",
+  "description": "The canonical machine-readable output of one audit run (one specialist or the orchestrator's merged sweep). Every business export — SARIF, OSCAL, CSV, executive report, evidence manifest — is derived from this file by scripts/export-findings.mjs, so the formats are deterministic instead of generated prose.",
+  "type": "object",
+  "required": ["schema_version", "tool", "target", "output_lang", "audits", "findings"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0" },
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "const": "auditor" },
+        "version": { "type": "string", "pattern": "^v\\d+\\.\\d+\\.\\d+$", "description": "The release tag whose prompts produced the run." }
+      },
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "required": ["name", "audited_at"],
+      "properties": {
+        "name": { "type": "string", "description": "Human name, e.g. owner/repo." },
+        "url": { "type": "string", "format": "uri" },
+        "commit": { "type": "string", "description": "The commit SHA that was audited, when the target is a repository." },
+        "audited_at": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": true
+    },
+    "output_lang": { "type": "string", "enum": ["en", "de"], "description": "Language of the prose fields (summary, roadmap notes). Chosen per run; never assumed." },
+    "readiness_target": { "type": "string", "enum": ["none", "soc2", "iso27001", "iso42001-ai-act", "nis2-cra"], "default": "none" },
+    "audits": {
+      "type": "array",
+      "description": "Audit keys that ran.",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "not_applicable": {
+      "type": "array",
+      "description": "Audits Phase 0 declared not applicable, each with a reason — never skipped silently.",
+      "items": {
+        "type": "object",
+        "required": ["audit", "reason"],
+        "properties": { "audit": { "type": "string" }, "reason": { "type": "string" } },
+        "additionalProperties": false
+      }
+    },
+    "scorecard": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["audit", "score"],
+        "properties": {
+          "audit": { "type": "string" },
+          "grade": { "type": "string" },
+          "score": { "type": "number", "minimum": 0, "maximum": 100 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "finding.schema.json" }
+    },
+    "readiness": {
+      "type": "object",
+      "description": "Present when readiness_target is not \"none\". Derived per CONTROL-CROSSWALK.md § Readiness scoring.",
+      "required": ["score_percent", "controls"],
+      "properties": {
+        "score_percent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "status"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[A-Za-z0-9]+:[^\\s]+$" },
+              "status": { "type": "string", "enum": ["implemented", "partial", "missing", "not-assessable", "n/a"] },
+              "nc_class": { "type": "string", "enum": ["major", "minor", "ofi", "conform"] },
+              "finding_ids": { "type": "array", "items": { "type": "string" } },
+              "evidence": { "type": "string" },
+              "owner": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "not_assessable": { "type": "array", "items": { "type": "string" } },
+        "time_to_ready_days": {
+          "type": "object",
+          "required": ["min", "max"],
+          "properties": { "min": { "type": "number", "minimum": 0 }, "max": { "type": "number", "minimum": 0 } },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": true
+    },
+    "roadmap": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["horizon", "finding_ids"],
+        "properties": {
+          "horizon": { "type": "string", "enum": ["immediate", "30", "60", "90"] },
+          "finding_ids": { "type": "array", "items": { "type": "string" } },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "description": "Honest limits: static vs active, sampling, what was not examined.",
+      "properties": {
+        "static_only": { "type": "boolean" },
+        "sampled": { "type": "string" },
+        "limits": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "summary": {
+      "type": "object",
+      "description": "Executive-summary prose written by the agent, keyed by language.",
+      "properties": { "en": { "type": "string" }, "de": { "type": "string" } },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

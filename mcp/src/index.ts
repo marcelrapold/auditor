@@ -134,14 +134,16 @@ function createServer(repoRoot: string): McpServer {
         STANDARDS["issue-output"].description +
         "), \"documentation\" (" +
         STANDARDS.documentation.description +
-        ") or \"control-crosswalk\" (" +
+        "), \"control-crosswalk\" (" +
         STANDARDS["control-crosswalk"].description +
+        ") or \"report-output\" (" +
+        STANDARDS["report-output"].description +
         ").",
       inputSchema: {
         standard: z
           .enum(STANDARD_KEYS)
           .describe(
-            "Which standard to return: \"issue-output\", \"documentation\" or \"control-crosswalk\".",
+            "Which standard to return: \"issue-output\", \"documentation\", \"control-crosswalk\" or \"report-output\".",
           ),
       },
     },

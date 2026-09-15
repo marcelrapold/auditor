@@ -614,7 +614,7 @@ function Standards({ lang }: { lang: Lang }) {
   const tt = t(lang);
   return (
     <Section id="standards" eyebrow={tt.stdEyebrow} title={tt.stdTitle} lead={tt.stdLead}>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {standardsFor(lang).map((s, i) => (
           <Reveal key={s.name} delay={i * 0.05}>
             <a

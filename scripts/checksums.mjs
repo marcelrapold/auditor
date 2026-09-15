@@ -5,7 +5,7 @@
 // CHECKSUMS.txt is produced in GNU coreutils BINARY format, byte-for-byte
 // identical to:
 //
-//   sha256sum -b audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md CONTROL-CROSSWALK.md
+//   sha256sum -b audit-prompts/*.md ISSUE-OUTPUT-STANDARD.md DOCUMENTATION-STANDARD*.md CONTROL-CROSSWALK.md REPORT-OUTPUT-STANDARD.md
 //
 // i.e. each line is `<64-hex>␠*<repo-relative-path>\n`. This script is the
 // single source of the checksummed file list so the manifest can't silently
@@ -26,8 +26,9 @@ const MANIFEST = "CHECKSUMS.txt";
 // expanded in shell-glob order: each glob is sorted, the groups concatenated.
 // `audit-prompts/*.md` (sorted) · `ISSUE-OUTPUT-STANDARD.md` ·
 // `DOCUMENTATION-STANDARD*.md` (sorted: .en.md before .md) ·
-// `CONTROL-CROSSWALK.md` (agents fetch it for the readiness mapping, so it is
-// part of the trust anchor).
+// `CONTROL-CROSSWALK.md` and `REPORT-OUTPUT-STANDARD.md` (agents fetch them for
+// the readiness mapping and the business-output contract, so they are part of
+// the trust anchor).
 function sortedMatches(dir, predicate) {
   return readdirSync(join(ROOT, dir))
     .filter(predicate)
@@ -41,6 +42,7 @@ function checksummedFiles() {
     "ISSUE-OUTPUT-STANDARD.md",
     ...sortedMatches(".", (f) => /^DOCUMENTATION-STANDARD.*\.md$/.test(f)),
     "CONTROL-CROSSWALK.md",
+    "REPORT-OUTPUT-STANDARD.md",
   ];
 }
 

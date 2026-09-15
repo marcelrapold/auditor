@@ -26,6 +26,13 @@ specialist prompts from the public GitHub repo below.
    audit, then one issue per confirmed finding — preview-first, created only on approval.
 5. If a single **pre-selected** audit ran, after delivering its backlog offer once: "Want me to
    run the remaining audits (full-repo sweep) as well?" — and only continue on an explicit yes.
+6. Before creating issues, write `auditor-out/audit-run.json` (schemas/audit-run.schema.json: the
+   confirmed findings with their eleven required fields, scorecard, roadmap, coverage, summary),
+   validate it with `node scripts/export-findings.mjs auditor-out/audit-run.json --validate`, and
+   export the business deliverables with the same script (executive report → DOCX/PDF, SARIF for
+   GitHub Code Scanning, OSCAL for GRC tools, CSV for Vanta/Drata/Secureframe and Jira, evidence
+   manifest). `ISSUE_TARGET` may be GitHub, Jira, Linear or ServiceNow. See REPORT-OUTPUT-STANDARD.md.
+   Output language (`OUTPUT_LANG`: English or German) is chosen per run — ask, never assume.
 
 ## Certification readiness (optional readiness target)
 
@@ -63,6 +70,7 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/audit-prompts/ful
 - [ISSUE-OUTPUT-STANDARD](https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/ISSUE-OUTPUT-STANDARD.md): the mandatory GitHub-issue output contract (tracking issue + per-finding issues)
 - [DOCUMENTATION-STANDARD](https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/DOCUMENTATION-STANDARD.md): the documentation standard (five repo profiles + a 0–100 rubric) the `documentation` audit measures against
 - [CONTROL-CROSSWALK](https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/CONTROL-CROSSWALK.md): findings → control IDs of SOC 2, ISO 27001, ISO 42001 + AI Act, NIS2, CRA, revDSG/GDPR; the readiness scoring rules; the organisational controls that are not assessable from code
+- [REPORT-OUTPUT-STANDARD](https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/REPORT-OUTPUT-STANDARD.md): the business-output contract — `audit-run.json` (schema at `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/schemas/audit-run.schema.json`), executive report, SARIF, OSCAL, CSV, evidence manifest, issue targets; exporter at `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/scripts/export-findings.mjs`
 
 ## Notes
 

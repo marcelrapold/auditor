@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "tool": { "name": "auditor", "version": "v0.11.0" },
+  "target": {
+    "name": "acme/shop",
+    "url": "https://github.com/acme/shop",
+    "commit": "0123456789abcdef0123456789abcdef01234567",
+    "audited_at": "2026-09-16T08:00:00Z"
+  },
+  "output_lang": "en",
+  "readiness_target": "iso27001",
+  "audits": ["security", "infrastructure"],
+  "not_applicable": [{ "audit": "data", "reason": "no database in scope" }],
+  "scorecard": [
+    { "audit": "security", "grade": "B", "score": 78 },
+    { "audit": "infrastructure", "grade": "A-", "score": 90 }
+  ],
+  "findings": [
+    {
+      "id": "SEC-001",
+      "audit": "security",
+      "agent": "authorization",
+      "title": "IDOR on GET /api/orders/{id} — any user reads any order",
+      "severity": "P0",
+      "confidence": 0.95,
+      "effort": "M",
+      "cvss": "8.1 (AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N)",
+      "standard": "OWASP A01:2025 Broken Access Control; CWE-639",
+      "controls": ["ISO27001:A.8.3", "ISO27001:A.5.15", "SOC2:CC6.1", "GDPR:Art.32"],
+      "deal_blocker": true,
+      "fine_exposure": "GDPR Art. 83(5): up to EUR 20M / 4 % of global annual turnover",
+      "evidence": "handlers/orders.ts:42 runs db.orders.find({ id: req.params.id }) with no owner check; repro: user A retrieves user B's order by id.",
+      "impact": "Horizontal privilege escalation; full read of every customer's orders.",
+      "fix": "Scope the query to the caller: find({ id, ownerId: req.user.id }); return 404 on miss.",
+      "expected_impact": "Closes cross-tenant order access on this endpoint.",
+      "anticipated_refutation": "'Requires auth' — an authenticated user is exactly the attacker here."
+    },
+    {
+      "id": "I2-004",
+      "audit": "infrastructure",
+      "agent": "cloud-security-network",
+      "title": "Postgres security group open to 0.0.0.0/0 on 5432",
+      "severity": "P1",
+      "confidence": 0.97,
+      "effort": "S",
+      "locations": [
+        { "path": "infra/network.tf", "line": 61 },
+        { "path": "infra/rds.tf", "line": 22 }
+      ],
+      "standard": "CIS AWS 5.x; Well-Architected Security pillar",
+      "controls": ["ISO27001:A.8.20", "ISO27001:A.8.22", "SOC2:CC6.6", "NIS2:Art.21(2)(a)"],
+      "deal_blocker": true,
+      "fine_exposure": "GDPR Art. 83(4): up to EUR 10M / 2 % of global annual turnover",
+      "evidence": "infra/network.tf:61 ingress cidr_blocks = [\"0.0.0.0/0\"] port 5432; db instance publicly_accessible = true (infra/rds.tf:22).",
+      "fix": "Set publicly_accessible=false; restrict ingress to the app subnet only.",
+      "expected_impact": "Removes internet exposure of the primary datastore."
+    },
+    {
+      "id": "SEC-014",
+      "audit": "security",
+      "agent": "headers",
+      "title": "Missing Content-Security-Policy on all HTML responses",
+      "severity": "P2",
+      "confidence": 0.9,
+      "effort": "S",
+      "controls": ["ISO27001:A.8.9", "SOC2:CC6.1"],
+      "deal_blocker": false,
+      "fine_exposure": "none",
+      "evidence": "Response headers for GET / (curl -I, 2026-09-16): no Content-Security-Policy; next.config.ts:12 sets only X-Frame-Options.",
+      "fix": "Add a CSP with default-src 'self' and a nonce for inline scripts in next.config.ts headers().",
+      "expected_impact": "Blocks the most common XSS exploitation paths at the browser."
+    },
+    {
+      "id": "SEC-020",
+      "audit": "security",
+      "agent": "docs",
+      "title": "SECURITY.md names no response time for reports",
+      "severity": "P3",
+      "confidence": 0.85,
+      "effort": "S",
+      "controls": [],
+      "deal_blocker": false,
+      "fine_exposure": "none",
+      "evidence": "SECURITY.md has a contact address but no acknowledgement window or disclosure timeline; see section 'Reporting' (lines 1-20 of the file).",
+      "fix": "State an acknowledgement SLA (e.g. 3 business days) and a coordinated-disclosure window (90 days).",
+      "expected_impact": "Reporters know what to expect; CRA Annex I Part II(5) readiness."
+    }
+  ],
+  "readiness": {
+    "score_percent": 62.5,
+    "controls": [
+      { "id": "ISO27001:A.8.3", "status": "missing", "nc_class": "major", "finding_ids": ["SEC-001"], "evidence": "handlers/orders.ts:42" },
+      { "id": "ISO27001:A.5.15", "status": "missing", "nc_class": "major", "finding_ids": ["SEC-001"] },
+      { "id": "ISO27001:A.8.20", "status": "missing", "nc_class": "major", "finding_ids": ["I2-004"] },
+      { "id": "ISO27001:A.8.22", "status": "missing", "nc_class": "major", "finding_ids": ["I2-004"] },
+      { "id": "ISO27001:A.8.9", "status": "partial", "nc_class": "minor", "finding_ids": ["SEC-014"] },
+      { "id": "ISO27001:A.8.24", "status": "implemented", "nc_class": "conform", "finding_ids": [], "evidence": "TLS 1.3 only, HSTS preload; secrets in AWS Secrets Manager" },
+      { "id": "ISO27001:A.8.13", "status": "implemented", "nc_class": "conform", "finding_ids": [], "evidence": "nightly RDS snapshots, restore tested 2026-09-01" },
+      { "id": "ISO27001:A.8.15", "status": "implemented", "nc_class": "conform", "finding_ids": [] },
+      { "id": "ISO27001:A.8.8", "status": "n/a", "finding_ids": [] }
+    ],
+    "not_assessable": ["ISO27001:A.5.1", "ISO27001:A.6.1", "ISO27001:A.7.1"],
+    "time_to_ready_days": { "min": 3, "max": 6 }
+  },
+  "roadmap": [
+    { "horizon": "immediate", "finding_ids": ["SEC-001", "I2-004"], "note": "both are deal-blockers" },
+    { "horizon": "30", "finding_ids": ["SEC-014"] },
+    { "horizon": "60", "finding_ids": ["SEC-020"] }
+  ],
+  "coverage": {
+    "static_only": true,
+    "sampled": "12 of 87 endpoints reviewed for authorization; all IaC files reviewed",
+    "limits": "no DAST, no cloud-account access; CI logs not inspected"
+  },
+  "summary": {
+    "en": "Two deal-blocking exposures (cross-tenant order access, internet-reachable database) put the ISO 27001 readiness at 62.5 %; both are small fixes. After remediation the technical controls in scope are at 87 %, with three organisational controls still needing policy evidence.",
+    "de": "Zwei Deal-Blocker (mandantenübergreifender Bestellzugriff, aus dem Internet erreichbare Datenbank) drücken die ISO-27001-Readiness auf 62.5 %; beide sind kleine Fixes. Nach der Behebung liegen die technischen Controls im Scope bei 87 %, drei organisatorische Controls brauchen noch Richtlinien-Nachweise."
+  }
+}
