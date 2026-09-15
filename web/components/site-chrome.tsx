@@ -16,6 +16,7 @@ export function homeNav(lang: Lang): NavItem[] {
   return [
     { href: "#use", label: tt.nav.use },
     { href: "#audits", label: tt.nav.audits },
+    { href: "#readiness", label: tt.nav.readiness },
     { href: "#how", label: tt.nav.how },
     { href: "#standards", label: tt.nav.standards },
   ];

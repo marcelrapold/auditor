@@ -1,6 +1,17 @@
-import { AUDITS, BACKLOG_SAMPLE, PHASES, PRINCIPLES, STANDARDS, type Audit } from "./content";
+import {
+  AUDITS,
+  BACKLOG_SAMPLE,
+  PHASES,
+  PRINCIPLES,
+  STANDARDS,
+  type Audit,
+  type ReadinessKey,
+} from "./content";
 
 export type Lang = "en" | "de";
+
+/** Prose for one readiness target card; the target keys and audit lists live in content.ts. */
+export type ReadinessProse = { name: string; frameworks: string; deliverable: string };
 
 // Proof-table finding titles, keyed by the BACKLOG_SAMPLE issue number `n` (stable),
 // not by array position — reordering content.ts can no longer mistranslate a row.
@@ -32,7 +43,14 @@ const proofRowsFor = (lang: Lang): string[] =>
 // UI chrome strings.
 export const ui = {
   en: {
-    nav: { use: "Use it", audits: "Audits", how: "How it works", standards: "Standards", reports: "Reports" },
+    nav: {
+      use: "Use it",
+      audits: "Audits",
+      readiness: "Readiness",
+      how: "How it works",
+      standards: "Standards",
+      reports: "Reports",
+    },
     skip: "Skip to content",
     langToggle: "Switch to German",
     newTab: "(opens in a new tab)",
@@ -116,10 +134,41 @@ export const ui = {
     howOutput: "You get — priority-sorted GitHub issues.",
     howParallel: "in parallel",
     howGate: "survives ≥2 of 3",
+    rdyEyebrow: "Certification readiness",
+    rdyTitle: "Audit-ready for SOC 2, ISO 27001, ISO 42001 and NIS2/CRA — straight from the repo.",
+    rdyLead:
+      "Pick a target and the orchestrator runs exactly the audits that framework needs. Every finding carries the control IDs an auditor asks for and rolls up into a control-by-control gap matrix with a readiness score. Not a certificate — the fastest honest route to one.",
+    rdyRuns: "Runs",
+    rdyDeliverable: "Delivers",
+    rdyNote:
+      "Readiness, not certification: the audits assess the technically assessable controls and collect the evidence. Organisational controls — policies, HR, physical security — are reported as “not assessable”, never as missing. Swiss revDSG and GDPR are always mapped by the compliance audit.",
+    rdyCta: "Read the control crosswalk",
+    rdyTargets: {
+      soc2: {
+        name: "SOC 2",
+        frameworks: "Trust Services Criteria — Security, plus Availability, Confidentiality, Processing Integrity and Privacy when in scope.",
+        deliverable: "Control gap matrix (CC1–CC9 and the in-scope categories), evidence register, readiness score.",
+      },
+      iso27001: {
+        name: "ISO/IEC 27001:2022",
+        frameworks: "Annex A — the 93 controls across organisational, people, physical and technological themes.",
+        deliverable: "Gap matrix, Statement of Applicability draft, risk-register seed, readiness score.",
+      },
+      "iso42001-ai-act": {
+        name: "ISO/IEC 42001 + EU AI Act",
+        frameworks: "AI management system Annex A plus the AI Act obligations for each risk tier.",
+        deliverable: "AI-system inventory with risk tier, gap matrix, impact-assessment skeleton, readiness score.",
+      },
+      "nis2-cra": {
+        name: "NIS2 + CRA",
+        frameworks: "The ten NIS2 Art. 21 measures and the CRA Annex I product and vulnerability-handling requirements.",
+        deliverable: "Gap matrix, SBOM and disclosure readiness, reporting-capability check (24 h / 72 h windows).",
+      },
+    } as Record<ReadinessKey, ReadinessProse>,
     stdEyebrow: "The yardsticks",
-    stdTitle: "Two yardsticks. Every report measured against them.",
+    stdTitle: "Three yardsticks. Every report measured against them.",
     stdLead:
-      "Reusable on their own. One scores 0–100 against a rubric; the other fixes the exact issue shape — so two runs stay comparable even when the generated prose differs.",
+      "Reusable on their own. One scores 0–100 against a rubric; one fixes the exact issue shape — so two runs stay comparable even when the generated prose differs; one maps every finding to the controls of SOC 2, ISO 27001, ISO 42001, NIS2, CRA and revDSG.",
     ctaTitle: "See what your AI agent finds when it has to prove every claim.",
     ctaLead:
       "It is free and MIT-licensed. Run it on a throwaway branch, read findings that had to survive 2-of-3 skeptics, and keep only the fixes you agree with.",
@@ -181,7 +230,14 @@ export const ui = {
     footerImprint: "Imprint",
   },
   de: {
-    nav: { use: "Einsetzen", audits: "Audits", how: "Ablauf", standards: "Standards", reports: "Berichte" },
+    nav: {
+      use: "Einsetzen",
+      audits: "Audits",
+      readiness: "Readiness",
+      how: "Ablauf",
+      standards: "Standards",
+      reports: "Berichte",
+    },
     skip: "Zum Inhalt springen",
     langToggle: "Auf Englisch wechseln",
     newTab: "(öffnet in neuem Tab)",
@@ -265,10 +321,41 @@ export const ui = {
     howOutput: "Du bekommst — nach Priorität sortierte GitHub-Issues.",
     howParallel: "parallel",
     howGate: "übersteht ≥2 von 3",
+    rdyEyebrow: "Zertifizierungs-Readiness",
+    rdyTitle: "Audit-ready für SOC 2, ISO 27001, ISO 42001 und NIS2/CRA — direkt aus dem Repo.",
+    rdyLead:
+      "Wähle ein Ziel, und der Orchestrator führt genau die Audits aus, die dieses Framework braucht. Jeder Befund trägt die Control-IDs, nach denen ein Auditor fragt, und fliesst in eine Gap-Matrix pro Control mit Readiness-Score. Kein Zertifikat — aber der schnellste ehrliche Weg dorthin.",
+    rdyRuns: "Führt aus",
+    rdyDeliverable: "Liefert",
+    rdyNote:
+      "Readiness, nicht Zertifizierung: Die Audits bewerten die technisch prüfbaren Controls und sammeln die Belege. Organisatorische Controls — Richtlinien, HR, physische Sicherheit — werden als „nicht prüfbar“ ausgewiesen, nie als fehlend. Schweizer revDSG und DSGVO ordnet das Compliance-Audit immer zu.",
+    rdyCta: "Zum Control-Crosswalk",
+    rdyTargets: {
+      soc2: {
+        name: "SOC 2",
+        frameworks: "Trust Services Criteria — Security, dazu Availability, Confidentiality, Processing Integrity und Privacy, wenn im Scope.",
+        deliverable: "Control-Gap-Matrix (CC1–CC9 und die Kategorien im Scope), Evidenz-Register, Readiness-Score.",
+      },
+      iso27001: {
+        name: "ISO/IEC 27001:2022",
+        frameworks: "Annex A — die 93 Controls über die Themen Organisation, Personal, Physik und Technik.",
+        deliverable: "Gap-Matrix, Entwurf der Statement of Applicability, Risikoregister-Grundstock, Readiness-Score.",
+      },
+      "iso42001-ai-act": {
+        name: "ISO/IEC 42001 + EU AI Act",
+        frameworks: "Annex A des KI-Managementsystems plus die Pflichten des AI Act je Risikostufe.",
+        deliverable: "KI-System-Inventar mit Risikostufe, Gap-Matrix, Gerüst für das Impact Assessment, Readiness-Score.",
+      },
+      "nis2-cra": {
+        name: "NIS2 + CRA",
+        frameworks: "Die zehn Massnahmen aus NIS2 Art. 21 und die Produkt- und Schwachstellen-Anforderungen aus CRA Annex I.",
+        deliverable: "Gap-Matrix, SBOM- und Disclosure-Readiness, Prüfung der Meldefähigkeit (24-h- und 72-h-Fenster).",
+      },
+    } as Record<ReadinessKey, ReadinessProse>,
     stdEyebrow: "Die Massstäbe",
-    stdTitle: "Zwei Massstäbe. Jeder Bericht daran gemessen.",
+    stdTitle: "Drei Massstäbe. Jeder Bericht daran gemessen.",
     stdLead:
-      "Für sich allein nutzbar. Der eine bewertet 0–100 anhand einer Rubrik; der andere legt die exakte Issue-Form fest — so bleiben zwei Durchläufe vergleichbar, auch wenn die generierte Formulierung abweicht.",
+      "Für sich allein nutzbar. Der eine bewertet 0–100 anhand einer Rubrik; der zweite legt die exakte Issue-Form fest — so bleiben zwei Durchläufe vergleichbar, auch wenn die generierte Formulierung abweicht; der dritte ordnet jeden Befund den Controls von SOC 2, ISO 27001, ISO 42001, NIS2, CRA und revDSG zu.",
     ctaTitle: "Sieh, was dein KI-Agent findet, wenn er jede Aussage belegen muss.",
     ctaLead:
       "Es ist kostenlos und MIT-lizenziert. Setz es auf einem Wegwerf-Branch ein, lies Befunde, die 2-von-3 Skeptikern standhalten mussten, und behalte nur die Fixes, denen du zustimmst.",
@@ -383,6 +470,8 @@ const standardBlurbDe: Record<string, string> = {
     "Ein Dokumentationsstandard mit fünf Repo-Profilen und einer 0–100-Rubrik — derselbe Massstab, an dem das Documentation-Audit misst.",
   "Issue-output standard":
     "Der verbindliche Vertrag, dem jedes Audit folgt: zuerst ein nach Priorität sortiertes Tracking-Issue, dann pro Befund ein Issue mit eigener Management-Summary.",
+  "Control crosswalk":
+    "Die Zuordnung jedes Befunds zu den Control-IDs von SOC 2, ISO 27001, ISO 42001 + AI Act, NIS2, CRA und revDSG — mit den organisatorischen Controls, die aus Code nicht prüfbar sind, und den Regeln für den Readiness-Score.",
 };
 
 // --- Reports: localized prose for the data in reports.ts ---------------------

@@ -11,7 +11,10 @@ Dieser Standard ist **verbindlich** und wird von jeder Vorlage in `audit-prompts
 > Management-Summary und konkreter Vorher/Nachher-Handlungsempfehlung. Das echte Anlegen erfolgt
 > **erst nach Vorschau und ausdrücklicher Freigabe**.
 
-Version 1.1.0 · Sprache der Issues: standardmässig Deutsch (`OUTPUT_LANG` überschreibbar)
+Version 1.2.0 · Sprache der Issues: standardmässig Deutsch (`OUTPUT_LANG` überschreibbar)
+Neu in 1.2.0: Control-Labels (`control:<Framework>-<ID>`) und die Kennzeichnung `deal-blocker` aus dem
+[`CONTROL-CROSSWALK.md`](CONTROL-CROSSWALK.md); bei gesetztem `READINESS_TARGET` enthält das
+Tracking-Issue die Gap-Matrix und den Readiness-Score.
 Neu in 1.1.0: de-CH-Orthografie (durchgehend ss) und der `dimension:`/`effort:`-Label-Kanon sind verbindlich.
 
 ---
@@ -53,8 +56,16 @@ Ein einzelnes „Epic"/Index-Issue, das alle Sub-Aufgaben bündelt.
      - [ ] #126 — P1 — Fehlende Rate-Limits an /login (Aufwand: M)
      - [ ] #127 — P2 — Inkonsistente Fehlerantworten (Aufwand: L)
      ```
-  4. **Roadmap:** Sofort (≤ 7 Tage) → 30 → 60 → 90 Tage, abhängigkeitsbewusst, mit Issue-Verweisen.
-  5. **Abdeckung & Grenzen:** kurzer Hinweis, was geprüft/ausgelassen wurde.
+  4. **Business-Sicht:** zuerst alle Befunde mit `deal_blocker: true` (würden ein SOC-2- oder
+     ISO-27001-Audit scheitern lassen oder ein Enterprise-Procurement blockieren), dann die
+     Bussgeld-Exposition je Regime (höchste zutreffende Stufe, mit den Befund-IDs dahinter).
+  5. **Readiness (nur bei gesetztem `READINESS_TARGET`):** Readiness-Score in Prozent, Anzahl
+     Major/Minor-Nichtkonformitäten und OFI, die Control-Gap-Matrix (Control × Status × Befund-IDs
+     × Nachweis) und die Liste der organisatorisch nachzuweisenden Controls — gemäss
+     [`CONTROL-CROSSWALK.md`](CONTROL-CROSSWALK.md). Immer mit dem Satz: Readiness-Assessment,
+     kein Zertifikat.
+  6. **Roadmap:** Sofort (≤ 7 Tage) → 30 → 60 → 90 Tage, abhängigkeitsbewusst, mit Issue-Verweisen.
+  7. **Abdeckung & Grenzen:** kurzer Hinweis, was geprüft/ausgelassen wurde.
 
 ---
 
@@ -66,11 +77,15 @@ Jeder bestätigte Befund wird ein eigenständiges, erstklassig dokumentiertes Is
   `[P0][AuthZ] IDOR an GET /api/orders/{id}`
 - **Labels:** `audit`, `sev:p0|p1|p2|p3`, `dimension:<x>`, `effort:S|M|L`, optional `locale:de-CH`.
   Die Lokalisierungs-Dimension heisst `dimension:localisation`; `locale:de-CH` markiert Schweizer
-  Orthografie (optional).
+  Orthografie (optional). Dazu pro Control-ID aus dem Befund ein `control:<Framework>-<ID>`-Label
+  (z. B. `control:ISO27001-A.8.3`, `control:SOC2-CC6.1`; Doppelpunkte im ID-Teil werden zu
+  Bindestrichen) und `deal-blocker`, wenn `deal_blocker: true`.
 - **Body (feste Reihenfolge):**
   1. **Management-Summary** (2–3 Sätze): was, Auswirkung, Empfehlung in einem Satz.
   2. **Schweregrad & Score:** P-Stufe + auditspezifischer Score (CVSS / ICE / Rubrik-Punkte).
-  3. **Standard-Bezug:** OWASP / CWE / MITRE / WCAG / RFC / CIS — je nach Audit.
+  3. **Standard-Bezug:** OWASP / CWE / MITRE / WCAG / RFC / CIS — je nach Audit — **plus** die
+     Control-IDs aus `CONTROL-CROSSWALK.md` (ISO 27001 / SOC 2 / ISO 42001 / NIS2 / CRA / revDSG)
+     und die Bussgeld-Exposition (`fine_exposure`, oder „keine“).
   4. **Fundort:** `pfad/datei.ext:Zeile`, Endpunkt, Ressource oder Artefakt.
   5. **Nachweis:** Code-/Request-/Konfig-Ausschnitt (redigiert).
   6. **Auswirkung:** konkret — was kann ein Angreifer/Nutzer erreichen?
@@ -131,7 +146,9 @@ Damit die Checklisten-Links im Tracker auflösen, in dieser Reihenfolge arbeiten
 > manipulierte ID abrufen. Auswirkung: Offenlegung aller Kundendaten. Empfehlung:
 > Objekt-Eigentümerschaft serverseitig prüfen.
 
-**Schweregrad:** P0 · **CVSS:** 8.1 · **Standard:** OWASP A01 / CWE-639
+**Schweregrad:** P0 · **CVSS:** 8.1 · **Standard:** OWASP A01:2025 / CWE-639
+**Controls:** ISO27001:A.8.3 · SOC2:CC6.1 · NIS2:Art.21(2)(i) · **Deal-Blocker:** ja ·
+**Bussgeld-Exposition:** GDPR Art. 83(5), bis EUR 20 Mio. / 4 % des Umsatzes
 **Fundort:** `handlers/orders.ts:42`
 **Nachweis:** `db.orders.find({ id: req.params.id })` — kein Abgleich mit `req.user.id`.
 **Auswirkung:** horizontale Rechteumgehung; vollständiger Zugriff auf fremde Bestellungen.
@@ -156,8 +173,12 @@ Teil von #123
 Every audit ends with the same issue output: **first a tracking issue** (the index of all
 sub-tasks, priority-sorted P0→P3, with a management summary, scorecard, and 30/60/90 roadmap),
 **then one issue per confirmed finding** — each opening with its own management summary, followed
-by severity+score, standard mapping, location, evidence, impact, a concrete before/after fix,
-effort, and a re-audit criterion. Issues are German by default (`OUTPUT_LANG`), preview-first, and
+by severity+score, standard mapping plus the certification control IDs from `CONTROL-CROSSWALK.md`
+(as `control:<Framework>-<ID>` labels, with `deal-blocker` where set) and the fine exposure,
+location, evidence, impact, a concrete before/after fix,
+effort, and a re-audit criterion. When a readiness target was set, the tracking issue also carries
+the control gap matrix and the readiness score, always labelled as a readiness assessment, not a
+certificate. Issues are German by default (`OUTPUT_LANG`), preview-first, and
 created only on explicit authorization. Create child issues first, collect their numbers, then
 create the tracking issue so its checklist links resolve. Detect existing audit issues by label
 and update rather than duplicate. Never include real secrets or PII.

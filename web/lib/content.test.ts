@@ -1,8 +1,8 @@
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, it, expect } from "vitest";
-import { AUDITS, AUDIT_COUNT } from "./content";
+import { AUDITS, AUDIT_COUNT, CROSSWALK_FILE, READINESS_TARGETS } from "./content";
 import { SITE_URL, TITLE, DESCRIPTION } from "./site";
 
 // This file lives at web/lib/content.test.ts, so the repo root (which ships
@@ -47,6 +47,38 @@ describe("content", () => {
     const auditKeys = [...new Set(AUDITS.map((a) => a.name))].sort();
     const fileKeys = [...promptFileKeys()].sort();
     expect(auditKeys).toEqual(fileKeys);
+  });
+});
+
+describe("readiness targets", () => {
+  const auditNames = new Set(AUDITS.map((a) => a.name));
+  const crosswalk = readFileSync(resolve(here, "..", "..", CROSSWALK_FILE), "utf8");
+
+  it("has four unique targets", () => {
+    const keys = READINESS_TARGETS.map((r) => r.key);
+    expect(keys).toHaveLength(4);
+    expect(new Set(keys).size).toBe(4);
+  });
+
+  it("every target runs only audits that exist in the catalogue", () => {
+    for (const target of READINESS_TARGETS) {
+      expect(target.audits.length).toBeGreaterThan(0);
+      for (const name of target.audits) {
+        expect(auditNames.has(name), `${target.key} runs unknown audit "${name}"`).toBe(true);
+      }
+    }
+  });
+
+  it("every target key and its audit list match CONTROL-CROSSWALK.md (single source of truth)", () => {
+    // The crosswalk's "Readiness targets" table is what the orchestrator reads; the landing page
+    // must not advertise a target or an audit selection the prompts don't implement.
+    for (const target of READINESS_TARGETS) {
+      const row = crosswalk.split("\n").find((line) => line.startsWith(`| \`${target.key}\` |`));
+      expect(row, `crosswalk documents target ${target.key}`).toBeDefined();
+      for (const name of target.audits) {
+        expect(row, `${target.key} row lists \`${name}\``).toContain(`\`${name}\``);
+      }
+    }
   });
 });
 
