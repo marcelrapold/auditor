@@ -22,7 +22,7 @@ export const REPO = "https://github.com/marcelrapold/auditor";
 export const PROMPTS = `${REPO}/blob/main/audit-prompts`;
 
 /** Latest release tag — single-sourced via scripts/bump-version.mjs. */
-export const VERSION = "v0.12.0";
+export const VERSION = "v1.0.0";
 
 /** The generic activation, copied verbatim (the leading "$" is visual only). It names
  *  no audit, so the orchestrator runs its "which audit(s)?" menu. Lives on the home page. */

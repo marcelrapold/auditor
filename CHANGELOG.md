@@ -7,6 +7,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-16
+
 ### Added
 - **Continuous compliance (compliance-as-code).** Findings may carry an executable re-audit
   criterion (`check`: a shell command that passes once the finding is fixed;
