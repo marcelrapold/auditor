@@ -7,6 +7,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-09-15
+
 ### Added
 - **Certification readiness.** The orchestrator gains `READINESS_TARGET` with four targets —
   `soc2`, `iso27001`, `iso42001-ai-act`, `nis2-cra` — and a Step 4b that inverts the findings into

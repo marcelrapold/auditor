@@ -65,7 +65,7 @@ condition the target meets. Declare audits marked **not applicable** explicitly;
 
 The control mapping behind every target is
 [`CONTROL-CROSSWALK.md`](../CONTROL-CROSSWALK.md) (fetch it at
-`https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.1/CONTROL-CROSSWALK.md`). Swiss
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/CONTROL-CROSSWALK.md`). Swiss
 revDSG and GDPR are not separate targets — the `compliance-privacy` audit always maps to them.
 
 > [!WARNING]
@@ -90,7 +90,7 @@ resulting audit selection for the user to confirm.
 For each chosen audit, **fetch its specialist prompt** and execute it:
 
 ```
-https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.1/audit-prompts/<key>-audit-master-prompt.md
+https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/audit-prompts/<key>-audit-master-prompt.md
 ```
 
 (e.g. `…/security-audit-master-prompt.md`). Then:
@@ -167,7 +167,7 @@ of control IDs and the status rules in its *Readiness scoring* section.
 ## Step 5 — Issue output (per `ISSUE-OUTPUT-STANDARD.md`)
 
 Fetch and follow
-`https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.1/ISSUE-OUTPUT-STANDARD.md`. Produce, in
+`https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/ISSUE-OUTPUT-STANDARD.md`. Produce, in
 **`OUTPUT_LANG`** (German or English as chosen), preview-first and created only on approval:
 
 1. **One master tracking issue** — `[AUDIT] Full repo — Master-Tracker & Roadmap`: management
@@ -216,7 +216,7 @@ make this offer when the user already chose a subset or "full repo" from the men
 
 ## Index (machine-readable)
 
-Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.9.1/`
+Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.10.0/`
 
 - Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content,lean}-audit-master-prompt.md`
 - Standards: `ISSUE-OUTPUT-STANDARD.md`, `DOCUMENTATION-STANDARD.md` (+ `.en.md`)
