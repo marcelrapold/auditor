@@ -7,6 +7,21 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+### Added
+- **Vendor questionnaire pre-fill.** `scripts/export-findings.mjs --format questionnaire` writes
+  `caiq-answers.csv`: one pre-filled answer per CSA CCM v4 domain (the grouping CAIQ v4 and SIG
+  use), derived from the run's control statuses, with "Not assessed by this run" where the audits
+  were silent — never a `Yes` the run cannot back.
+- **Accessibility Conformance Report.** `--format acr` writes `acr-wcag22.csv`: every WCAG 2.2
+  Level A/AA criterion with a VPAT 2.5 conformance level, read from `WCAG:<SC>` controls and the
+  `wcag` field; "Supports" only when the accessibility audit ran. Covers eCH-0059 v3 too.
+- **Sector overlays.** `SECTOR: finance | health | swiss` in the orchestrator adds overlay control
+  IDs from a new crosswalk table — PCI DSS 4.0.1 requirements, EU-DORA articles, FINMA-RS 2023/1
+  chapters, HIPAA Security Rule sections, the Swiss ISG reporting duty, the BWL ICT minimum
+  standard and eCH-0059 — mapped to all 34 themes; fine-exposure vocabulary extended accordingly.
+  The `security`, `infrastructure`, `compliance-privacy`, `accessibility` and `frontend` prompts
+  name the overlays in their principles or schema examples.
+
 ## [0.11.0] - 2026-09-16
 
 ### Added

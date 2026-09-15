@@ -381,7 +381,7 @@ checklist links resolve. Detect existing audit issues by label and update rather
   "surfaces": ["/checkout", "/settings"],
   "evidence": "Dialog at components/Modal.tsx:41 renders without focus trap; Tab reaches background content; Esc not handled.",
   "principle": "WCAG 2.2 SC 2.1.2 No Keyboard Trap (inverse), 2.4.3 Focus Order; ARIA APG dialog pattern",
-  "controls": [],
+  "controls": ["WCAG:2.1.2", "WCAG:2.4.3"],
   "deal_blocker": true,
   "fine_exposure": "EAA / ADA: national penalties and litigation risk (varies by member state; US private lawsuits)",
   "harm_chain": "Keyboard/SR users cannot complete checkout → direct revenue loss + legal exposure",

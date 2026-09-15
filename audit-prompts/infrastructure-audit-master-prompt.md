@@ -42,7 +42,10 @@ report — cite location and redact.**
    Resilience Act, which this audit does not assess), Kubernetes hardening guides — name the
    control violated. Then fill `controls` from `CONTROL-CROSSWALK.md` (ISO 27001 Annex A / SOC 2
    Availability and Common Criteria / NIS2 Art. 21 / CRA Annex I), `deal_blocker`, and
-   `fine_exposure`.
+   `fine_exposure`. With `SECTOR: finance` add the EU-DORA articles (Art. 9–12 protection,
+   detection, response, backup; Art. 17/19 incidents; Art. 28/30 third parties) and the FINMA-RS
+   2023/1 ICT / Cyber / BCM chapters; with `swiss` the BWL ICT-minimum-standard categories and the
+   ISG 24 h reporting duty; always the `CCM:` domain for questionnaire pre-fill.
 3. **Reason about failure.** The central questions: *what happens when this fails, and can
    we recover?* Every single-point-of-failure and unrecoverable state is a finding.
 4. **Severity is earned.** P0–P3; a P0 names a concrete outage/breach/data-loss/lock-out path.
