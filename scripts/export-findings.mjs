@@ -9,6 +9,8 @@
 //   findings.csv               one row per finding (Jira / spreadsheet import)
 //   EXECUTIVE-REPORT.md        board-ready report skeleton (→ DOCX/PDF via pandoc)
 //   evidence-manifest.json     sha256 + timestamp per cited artifact
+//   caiq-answers.csv           vendor questionnaire pre-fill (CSA CCM v4 domains)
+//   acr-wcag22.csv             Accessibility Conformance Report (VPAT 2.5 vocabulary)
 //
 // Dependency-free on purpose (node:fs, node:crypto only), like every script in
 // this repo. Validation is a strict required-field / enum check of the schema's
@@ -16,7 +18,8 @@
 // (ajv-cli, check-jsonschema) when you need the complete check.
 //
 // Usage:
-//   node scripts/export-findings.mjs <audit-run.json> [--out <dir>] [--format all|sarif|oscal|csv|report|evidence]
+//   node scripts/export-findings.mjs <audit-run.json> [--out <dir>]
+//                                    [--format all|sarif|oscal|csv|report|evidence|questionnaire|acr]
 //                                    [--repo <path>] [--docx] [--validate]
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -582,6 +585,181 @@ export function toEvidenceManifest(run, repoRoot) {
   };
 }
 
+// --- Overlays: vendor questionnaire (CSA CCM / CAIQ) and accessibility ACR ------
+
+/** CSA CCM v4 control domains — the grouping every CAIQ v4 question set uses. */
+export const CCM_DOMAINS = [
+  ["A&A", "Audit & Assurance"],
+  ["AIS", "Application & Interface Security"],
+  ["BCR", "Business Continuity Management & Operational Resilience"],
+  ["CCC", "Change Control & Configuration Management"],
+  ["CEK", "Cryptography, Encryption & Key Management"],
+  ["DCS", "Datacenter Security"],
+  ["DSP", "Data Security & Privacy Lifecycle Management"],
+  ["GRC", "Governance, Risk & Compliance"],
+  ["HRS", "Human Resources"],
+  ["IAM", "Identity & Access Management"],
+  ["IPY", "Interoperability & Portability"],
+  ["IVS", "Infrastructure & Virtualization Security"],
+  ["LOG", "Logging & Monitoring"],
+  ["SEF", "Security Incident Management, E-Discovery & Cloud Forensics"],
+  ["STA", "Supply Chain Management, Transparency & Accountability"],
+  ["TVM", "Threat & Vulnerability Management"],
+  ["UEM", "Universal Endpoint Management"],
+];
+
+const QUESTIONNAIRE_ANSWER = {
+  implemented: "Yes",
+  partial: "Partial",
+  missing: "No",
+  "not-assessable": "Requires organisational evidence",
+  "n/a": "N/A",
+};
+
+/** Control statuses keyed by ID: the explicit readiness block wins, derived findings fill the rest. */
+function controlStatuses(run) {
+  const out = new Map();
+  for (const c of deriveControls(run)) out.set(c.id, { id: c.id, status: c.status, finding_ids: c.finding_ids, evidence: c.evidence.join(" | ") });
+  for (const c of run.readiness?.controls ?? []) {
+    out.set(c.id, { id: c.id, status: c.status, finding_ids: c.finding_ids ?? out.get(c.id)?.finding_ids ?? [], evidence: c.evidence ?? out.get(c.id)?.evidence ?? "" });
+  }
+  for (const id of run.readiness?.not_assessable ?? []) out.set(id, { id, status: "not-assessable", finding_ids: [], evidence: "" });
+  return out;
+}
+
+/**
+ * caiq-answers.csv — one row per CSA CCM domain (plus any refined `CCM:XXX-nn`
+ * control), pre-answered from the run so a vendor questionnaire starts filled in,
+ * not blank. Domains the run says nothing about are listed as "Not assessed".
+ */
+export function toQuestionnaireCsv(run) {
+  const statuses = [...controlStatuses(run).values()].filter((c) => c.id.startsWith("CCM:"));
+  const byDomain = new Map(CCM_DOMAINS.map(([d]) => [d, []]));
+  for (const c of statuses) {
+    const domain = c.id.slice(4).split("-")[0];
+    if (!byDomain.has(domain)) byDomain.set(domain, []);
+    byDomain.get(domain).push(c);
+  }
+  const rows = [];
+  for (const [domain, name] of CCM_DOMAINS) {
+    const list = byDomain.get(domain) ?? [];
+    if (!list.length) {
+      rows.push([domain, name, `CCM:${domain}`, "Not assessed by this run", [], "", "no finding or readiness control cited this domain"]);
+      continue;
+    }
+    // Worst status wins at domain level: No > Partial > organisational > Yes.
+    const order = ["missing", "partial", "not-assessable", "implemented", "n/a"];
+    const worst = list.reduce((a, b) => (order.indexOf(b.status) < order.indexOf(a.status) ? b : a));
+    rows.push([domain, name, `CCM:${domain}`, QUESTIONNAIRE_ANSWER[worst.status], list.flatMap((c) => c.finding_ids), list.map((c) => c.evidence).filter(Boolean).join(" | "), list.length > 1 ? `${list.length} controls cited; worst status shown` : ""]);
+    for (const c of list.filter((x) => x.id !== `CCM:${domain}`)) {
+      rows.push([domain, name, c.id, QUESTIONNAIRE_ANSWER[c.status], c.finding_ids, c.evidence, ""]);
+    }
+  }
+  return csv(rows, ["domain", "domain_name", "control_id", "answer", "finding_ids", "evidence", "notes"]);
+}
+
+/** WCAG 2.2 Level A and AA success criteria — the rows of an Accessibility Conformance Report. */
+export const WCAG22_A_AA = [
+  ["1.1.1", "Non-text Content", "A"],
+  ["1.2.1", "Audio-only and Video-only (Prerecorded)", "A"],
+  ["1.2.2", "Captions (Prerecorded)", "A"],
+  ["1.2.3", "Audio Description or Media Alternative (Prerecorded)", "A"],
+  ["1.2.4", "Captions (Live)", "AA"],
+  ["1.2.5", "Audio Description (Prerecorded)", "AA"],
+  ["1.3.1", "Info and Relationships", "A"],
+  ["1.3.2", "Meaningful Sequence", "A"],
+  ["1.3.3", "Sensory Characteristics", "A"],
+  ["1.3.4", "Orientation", "AA"],
+  ["1.3.5", "Identify Input Purpose", "AA"],
+  ["1.4.1", "Use of Color", "A"],
+  ["1.4.2", "Audio Control", "A"],
+  ["1.4.3", "Contrast (Minimum)", "AA"],
+  ["1.4.4", "Resize Text", "AA"],
+  ["1.4.5", "Images of Text", "AA"],
+  ["1.4.10", "Reflow", "AA"],
+  ["1.4.11", "Non-text Contrast", "AA"],
+  ["1.4.12", "Text Spacing", "AA"],
+  ["1.4.13", "Content on Hover or Focus", "AA"],
+  ["2.1.1", "Keyboard", "A"],
+  ["2.1.2", "No Keyboard Trap", "A"],
+  ["2.1.4", "Character Key Shortcuts", "A"],
+  ["2.2.1", "Timing Adjustable", "A"],
+  ["2.2.2", "Pause, Stop, Hide", "A"],
+  ["2.3.1", "Three Flashes or Below Threshold", "A"],
+  ["2.4.1", "Bypass Blocks", "A"],
+  ["2.4.2", "Page Titled", "A"],
+  ["2.4.3", "Focus Order", "A"],
+  ["2.4.4", "Link Purpose (In Context)", "A"],
+  ["2.4.5", "Multiple Ways", "AA"],
+  ["2.4.6", "Headings and Labels", "AA"],
+  ["2.4.7", "Focus Visible", "AA"],
+  ["2.4.11", "Focus Not Obscured (Minimum)", "AA"],
+  ["2.5.1", "Pointer Gestures", "A"],
+  ["2.5.2", "Pointer Cancellation", "A"],
+  ["2.5.3", "Label in Name", "A"],
+  ["2.5.4", "Motion Actuation", "A"],
+  ["2.5.7", "Dragging Movements", "AA"],
+  ["2.5.8", "Target Size (Minimum)", "AA"],
+  ["3.1.1", "Language of Page", "A"],
+  ["3.1.2", "Language of Parts", "AA"],
+  ["3.2.1", "On Focus", "A"],
+  ["3.2.2", "On Input", "A"],
+  ["3.2.3", "Consistent Navigation", "AA"],
+  ["3.2.4", "Consistent Identification", "AA"],
+  ["3.2.6", "Consistent Help", "A"],
+  ["3.3.1", "Error Identification", "A"],
+  ["3.3.2", "Labels or Instructions", "A"],
+  ["3.3.3", "Error Suggestion", "AA"],
+  ["3.3.4", "Error Prevention (Legal, Financial, Data)", "AA"],
+  ["3.3.7", "Redundant Entry", "A"],
+  ["3.3.8", "Accessible Authentication (Minimum)", "AA"],
+  ["4.1.2", "Name, Role, Value", "A"],
+  ["4.1.3", "Status Messages", "AA"],
+];
+
+/** Success criteria a finding cites: `WCAG:<sc>` controls plus any `x.y.z` token in its `wcag` field. */
+export function findingCriteria(finding) {
+  const scs = new Set();
+  for (const c of finding.controls ?? []) {
+    const m = /^WCAG:(\d\.\d+\.\d+)$/.exec(String(c));
+    if (m) scs.add(m[1]);
+  }
+  if (typeof finding.wcag === "string") {
+    for (const m of finding.wcag.matchAll(/\b(\d\.\d{1,2}\.\d{1,2})\b/g)) scs.add(m[1]);
+  }
+  return [...scs];
+}
+
+/**
+ * acr-wcag22.csv — an Accessibility Conformance Report in the VPAT 2.5 vocabulary
+ * (Supports / Partially Supports / Does Not Support / Not Evaluated), one row per
+ * WCAG 2.2 A/AA criterion. "Supports" is only claimed when an accessibility audit
+ * ran; otherwise uncited criteria are "Not Evaluated".
+ */
+export function toAcrCsv(run) {
+  const cited = new Map();
+  for (const f of run.findings) {
+    for (const sc of findingCriteria(f)) {
+      const e = cited.get(sc) ?? { worst: 3, ids: [] };
+      e.worst = Math.min(e.worst, severityRank(f.severity));
+      e.ids.push(f.id);
+      cited.set(sc, e);
+    }
+  }
+  const evaluated = run.audits.includes("accessibility");
+  const known = new Set(WCAG22_A_AA.map(([sc]) => sc));
+  const rows = WCAG22_A_AA.map(([sc, name, level]) => {
+    const e = cited.get(sc);
+    const status = e ? (e.worst <= 1 ? "Does Not Support" : "Partially Supports") : evaluated ? "Supports" : "Not Evaluated";
+    const remarks = e ? `see ${e.ids.join(", ")}` : evaluated ? "no confirmed finding in the audited scope" : "accessibility audit did not run";
+    return [sc, name, level, status, e ? e.ids : [], remarks];
+  });
+  for (const [sc, e] of [...cited.entries()].sort()) {
+    if (!known.has(sc)) rows.push([sc, "", "AAA / other", e.worst <= 1 ? "Does Not Support" : "Partially Supports", e.ids, `cited outside the A/AA set; see ${e.ids.join(", ")}`]);
+  }
+  return csv(rows, ["criteria", "name", "level", "conformance_level", "finding_ids", "remarks"]);
+}
+
 // --- CLI ----------------------------------------------------------------------
 
 function parseArgs(argv) {
@@ -608,7 +786,7 @@ function main() {
     process.exit(2);
   }
   if (!opts.input) {
-    console.error("Usage: node scripts/export-findings.mjs <audit-run.json> [--out <dir>] [--format all|sarif|oscal|csv|report|evidence] [--repo <path>] [--docx] [--validate]");
+    console.error("Usage: node scripts/export-findings.mjs <audit-run.json> [--out <dir>] [--format all|sarif|oscal|csv|report|evidence|questionnaire|acr] [--repo <path>] [--docx] [--validate]");
     process.exit(2);
   }
   const run = JSON.parse(readFileSync(resolve(opts.input), "utf8"));
@@ -644,6 +822,8 @@ function main() {
     }
   }
   if (want("evidence")) write("evidence-manifest.json", toEvidenceManifest(run, opts.repo ? resolve(opts.repo) : null));
+  if (want("questionnaire")) write("caiq-answers.csv", toQuestionnaireCsv(run));
+  if (want("acr")) write("acr-wcag22.csv", toAcrCsv(run));
   for (const w of written) console.log(`  wrote ${join(opts.out, w)}`);
 }
 

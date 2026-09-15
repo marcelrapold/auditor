@@ -35,6 +35,14 @@ Ask these questions and wait for answers. Offer the options; accept free-form to
    deadline? Offer the four targets below; the answer sets `READINESS_TARGET` (`none` by default).
    With a target set, the audits that target needs are selected automatically (the user may still
    add others), and Step 4b produces a control-by-control gap matrix on top of the normal backlog.
+7. **Sector (optional).** Does the target sit in a regulated sector? `SECTOR` is `none` (default),
+   `finance` (PCI DSS 4.0.1 when card data is in scope, EU-DORA, FINMA-RS 2023/1), `health` (HIPAA
+   Security Rule when PHI is in scope) or `swiss` (ISG reporting duty, BWL ICT minimum standard,
+   eCH-0059). A sector adds the overlay control IDs of `CONTROL-CROSSWALK.md` § *Sector and
+   questionnaire overlays* to every finding's `controls`; it never replaces the core frameworks.
+   Any run may additionally pre-fill a **vendor security questionnaire** (CSA CAIQ v4 shape) and,
+   when the accessibility audit ran, an **Accessibility Conformance Report** (VPAT 2.5 shape) —
+   both come out of the exporter in Step 5b.
 
 ### Audit menu
 
@@ -108,7 +116,10 @@ https://raw.githubusercontent.com/marcelrapold/auditor/v0.11.0/audit-prompts/<ke
   `controls` (IDs from `CONTROL-CROSSWALK.md`, `[]` when no theme matches), `deal_blocker`
   (would this fail a SOC 2 / ISO 27001 audit or block enterprise procurement?), and
   `fine_exposure` (one value from the crosswalk's vocabulary, `"none"` when no fine attaches).
-  A specialist that omits them is re-asked before synthesis.
+  A specialist that omits them is re-asked before synthesis. With `SECTOR` set, `controls` also
+  carries the overlay IDs (`PCI:`, `EUDORA:`, `FINMA:`, `HIPAA:`, `ISG:`, `BWL:`, `ECH0059:`) and,
+  for questionnaire pre-fill, the `CCM:` domain of the finding's theme; accessibility findings
+  carry `WCAG:<SC>`.
 
 > [!NOTE]
 > Each specialist prompt is self-contained and standards-mapped (OWASP, CWE, MITRE, WCAG, CIS,
@@ -211,7 +222,9 @@ from it — never re-type a format from memory:
 3. Export: `node scripts/export-findings.mjs auditor-out/audit-run.json --out auditor-out --repo <checkout>`
    → `EXECUTIVE-REPORT.md` (convert to DOCX/PDF with pandoc or the harness's document skill),
    `findings.sarif`, `assessment-results.oscal.json`, `gap-matrix.csv`, `findings.csv`,
-   `evidence-manifest.json`.
+   `evidence-manifest.json`, `caiq-answers.csv` (vendor questionnaire pre-fill by CSA CCM domain;
+   "Not assessed by this run" where the run is silent) and `acr-wcag22.csv` (Accessibility
+   Conformance Report; "Supports" is claimed only when the accessibility audit ran).
 4. Hand over `auditor-out/` as one evidence pack and name, in the report, what each file is for
    (SARIF → GitHub Code Scanning; OSCAL / CSV → the GRC tool; findings.csv → Jira import; manifest
    → the external auditor).

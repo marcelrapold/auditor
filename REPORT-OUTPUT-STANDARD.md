@@ -50,6 +50,8 @@ Version 1.0.0
 | `auditor-out/gap-matrix.csv` | compliance tools (custom-control import), readiness reviews | CSV, one row per control | `scripts/export-findings.mjs` |
 | `auditor-out/findings.csv` | Jira / spreadsheet import, vendor questionnaires | CSV, one row per finding | `scripts/export-findings.mjs` |
 | `auditor-out/evidence-manifest.json` | external auditor | JSON, sha256 per cited artifact | `scripts/export-findings.mjs --repo <checkout>` |
+| `auditor-out/caiq-answers.csv` | sales engineering, security questionnaires (CAIQ v4, and SIG by domain) | CSV, one row per CSA CCM v4 domain (+ refined controls) | `scripts/export-findings.mjs --format questionnaire` |
+| `auditor-out/acr-wcag22.csv` | procurement (public sector, enterprise), accessibility statements | CSV, one row per WCAG 2.2 A/AA criterion in VPAT 2.5 vocabulary | `scripts/export-findings.mjs --format acr` |
 | Tracker issues | engineering, project management | per [`ISSUE-OUTPUT-STANDARD.md`](ISSUE-OUTPUT-STANDARD.md), target per [Issue targets](#issue-targets) | the agent, preview-first, on approval |
 
 The agent writes the run file and the prose it contains. The script does the rest:
@@ -154,6 +156,29 @@ Markdown, not from memory.
 - `findings.csv`: `id, audit, severity, title, effort, confidence, deal_blocker, fine_exposure,
   controls, standard, locations, evidence, fix, expected_impact, issue_url`. For Jira's CSV importer
   map `title → Summary`, `severity → Priority` (see below), `controls → Labels`, `fix → Description`.
+
+### Vendor questionnaire pre-fill (CAIQ v4, SIG)
+
+- `caiq-answers.csv` answers per **CSA CCM v4 domain**: `Yes` (implemented), `Partial`, `No`
+  (a P0/P1 cites it), `Requires organisational evidence`, `N/A`, or `Not assessed by this run` —
+  the honest default for every domain the run is silent about. Refined `CCM:XXX-nn` controls get
+  their own rows.
+- The answers come from the `CCM:` IDs the crosswalk's overlay table attaches to each finding
+  theme. Paste the domain answer into every CAIQ question of that domain, then refine per question
+  with your licensed CAIQ copy; SIG questionnaires map to the same domains.
+- Never answer `Yes` for a domain the audits did not examine — the file does not, and neither
+  should the person completing the questionnaire.
+
+### Accessibility Conformance Report (VPAT 2.5 shape)
+
+- `acr-wcag22.csv` lists every WCAG 2.2 Level A and AA success criterion with a VPAT
+  conformance level: `Does Not Support` (a P0/P1 cites it), `Partially Supports` (P2/P3),
+  `Supports` (the accessibility audit ran and no confirmed finding cites it), `Not Evaluated`
+  (the accessibility audit did not run). AAA criteria a finding cites are appended.
+- Criteria are read from `controls` (`WCAG:4.1.2`) and the finding's `wcag` field.
+- Paste the rows into the WCAG 2.x table of the VPAT 2.5 template (the ITI template's
+  "Conformance Level" and "Remarks and Explanations" columns); the `remarks` column carries the
+  finding IDs. eCH-0059 v3 (Switzerland, WCAG 2.1 AA) is covered by the same table.
 
 ---
 

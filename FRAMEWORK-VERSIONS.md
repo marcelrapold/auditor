@@ -55,6 +55,15 @@ date. Owner: repository maintainer. Last full review: 2026-09-15.
 | OpenAPI | 3.1 | | 2026-09-15 |
 | TDDDG (Germany) | Renamed from TTDSG on 14 May 2024 | Section 25 governs cookies and terminal-equipment access | 2026-09-15 |
 | SARIF | 2.1.0 (OASIS Standard, 2020; errata 01 2023) | `scripts/export-findings.mjs` emits it; GitHub Code Scanning ingests 2.1.0 | 2026-09-16 |
+| CSA CCM / CAIQ | v4 (CCM v4.0.x, CAIQ v4) | 17 control domains; the questionnaire pre-fill answers per domain | 2026-09-16 |
+| VPAT / ACR | VPAT 2.5 (ITI, 2023) | `acr-wcag22.csv` uses its conformance-level vocabulary | 2026-09-16 |
+| PCI DSS | 4.0.1 (June 2024) | Future-dated requirements mandatory since 31 Mar 2025 — `finance` overlay | 2026-09-16 |
+| EU-DORA | Regulation (EU) 2022/2554 | Applies since 17 Jan 2025 — `finance` overlay | 2026-09-16 |
+| FINMA-RS 2023/1 | Operational risks and resilience — banks, in force 1 Jan 2024 | Cited by chapter (ICT, Cyber, CritData, BCM) — `finance` overlay | 2026-09-16 |
+| HIPAA Security Rule | 45 CFR Part 164 Subpart C (a 2025 NPRM proposes tightening) | `health` overlay | 2026-09-16 |
+| ISG (Switzerland) | SR 128, in force 1 Jan 2024; cyber-attack reporting duty Art. 74a–74h since 1 Apr 2025 | `swiss` overlay | 2026-09-16 |
+| BWL ICT minimum standard | 2023 edition (NIST-CSF-shaped) | `swiss` overlay | 2026-09-16 |
+| eCH-0059 | v3.0 (references WCAG 2.1 AA) | `swiss` overlay; satisfied by a WCAG 2.2 A/AA ACR | 2026-09-16 |
 | OSCAL | 1.1.2 (NIST, 2024) | assessment-results model, minimal profile emitted by the exporter | 2026-09-16 |
 | DORA (DevOps Research and Assessment) | 2024 State of DevOps report | Not the EU Digital Operational Resilience Act — the audits say "DORA metrics" to keep the two apart | 2026-09-15 |
 

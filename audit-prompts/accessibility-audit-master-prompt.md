@@ -179,7 +179,11 @@ In `OUTPUT_LANG`:
 
 1. **Executive summary** (≤ 1 page): conformance verdict (AA: pass/partial/fail), the single
    biggest barrier, legal exposure (EAA/ADA), realistic path to conformance.
-2. **WCAG 2.2 conformance table:** every applicable SC × status × evidence — VPAT-ready.
+2. **WCAG 2.2 conformance table:** every applicable SC × status × evidence — VPAT-ready. The
+   machine-readable form is `acr-wcag22.csv` from `scripts/export-findings.mjs --format acr`
+   (VPAT 2.5 vocabulary: Supports / Partially Supports / Does Not Support), built from each
+   finding's `controls` (`WCAG:<SC>`, e.g. `WCAG:4.1.2`) and `wcag` field — so cite the SC number
+   in both. In Switzerland eCH-0059 v3 (WCAG 2.1 AA) is satisfied by the same report.
 3. **Scorecard:** grade per dimension (X1–X12) + finding counts; overall weighted grade
    (Keyboard, Screen reader, Forms, Contrast count double).
 4. **Verified findings register:** standard schema, each mapped to its SC; sorted by priority;
@@ -239,7 +243,7 @@ checklist links resolve. Detect existing audit issues by label and update rather
   "surfaces": ["/ (header)", "all pages"],
   "evidence": "components/Header.tsx:54 <button><svg/></button> — computed accessible name is empty; screen reader announces 'button' with no label. Reused on every page.",
   "wcag": "SC 4.1.2 Name, Role, Value (Level A); SC 1.1.1",
-  "controls": [],
+  "controls": ["WCAG:4.1.2", "WCAG:1.1.1"],
   "deal_blocker": true,
   "fine_exposure": "EAA / ADA: national penalties and litigation risk (varies by member state; US private lawsuits)",
   "who_is_blocked": "Blind/low-vision screen-reader users cannot find or trust the cart control → cannot check out",

@@ -34,6 +34,7 @@ Version 1.0.0 · Framework editions and review cadence: [`FRAMEWORK-VERSIONS.md`
 - [Readiness targets](#readiness-targets)
 - [The crosswalk](#the-crosswalk)
 - [Requires organisational evidence](#requires-organisational-evidence)
+- [Sector and questionnaire overlays](#sector-and-questionnaire-overlays)
 - [Fine-exposure vocabulary](#fine-exposure-vocabulary)
 - [Readiness scoring](#readiness-scoring)
 - [Copyright note](#copyright-note)
@@ -56,6 +57,15 @@ numbering. Cite IDs and titles only; never reproduce the framework's control tex
 | `revDSG:` | Swiss Federal Act on Data Protection (SR 235.1, in force 1 Sept 2023) | `revDSG:Art.8` | Article |
 | `VDSG:` | Swiss Data Protection Ordinance (SR 235.11) | `VDSG:Art.3` | Article |
 | `GDPR:` | Regulation (EU) 2016/679 | `GDPR:Art.32(1)(a)` | Article, paragraph, point |
+| `CCM:` | CSA Cloud Controls Matrix v4 (the CAIQ v4 question set follows it) | `CCM:IAM`, `CCM:CEK` | Control domain (refine to `CCM:IAM-04`-style control IDs with your CAIQ copy) — overlay |
+| `PCI:` | PCI DSS 4.0.1 | `PCI:Req.7` | Requirement 1–12 — `finance` overlay |
+| `EUDORA:` | EU Digital Operational Resilience Act, Regulation (EU) 2022/2554 | `EUDORA:Art.9` | Article — `finance` overlay (distinct from "DORA metrics") |
+| `FINMA:` | FINMA Circular 2023/1 "Operational risks and resilience — banks" | `FINMA:RS23/1-ICT` | Chapter: `ICT`, `Cyber`, `CritData`, `BCM` — `finance` overlay |
+| `HIPAA:` | HIPAA Security Rule, 45 CFR Part 164 | `HIPAA:164.312(a)(1)` | Section and paragraph — `health` overlay |
+| `ISG:` | Swiss Information Security Act (SR 128) | `ISG:Art.74a` | Article — `swiss` overlay |
+| `BWL:` | Swiss ICT minimum standard (BWL / NCSC, NIST-CSF-shaped) | `BWL:PR.AC` | Function.Category — `swiss` overlay |
+| `ECH0059:` | eCH-0059 accessibility standard v3 | `ECH0059:WCAG-AA` | Conformance level — `swiss` overlay |
+| `WCAG:` | WCAG 2.2 success criterion (accessibility findings) | `WCAG:2.4.7` | SC number — feeds the ACR export |
 
 A finding's `controls` array lists every applicable ID across frameworks, most specific first:
 
@@ -186,6 +196,63 @@ denominator**. Reporting them as "missing" would be an audit failure.
 
 ---
 
+## Sector and questionnaire overlays
+
+The six core frameworks answer the general market. Three markets ask more, and every vendor
+questionnaire asks in CSA CCM vocabulary. When the orchestrator's `SECTOR` is set (or a run must
+fill a questionnaire), findings **also** carry the overlay IDs of their theme, taken from this
+table. Overlays never replace the core columns.
+
+| Overlay | Activates | Frameworks |
+|---|---|---|
+| `questionnaire` | always available; `--format questionnaire` in the exporter | CSA CCM v4 domains (CAIQ v4 questions are grouped by them) |
+| `finance` | `SECTOR: finance` | PCI DSS 4.0.1 requirements (when card data is in scope), EU-DORA articles, FINMA-RS 2023/1 chapters |
+| `health` | `SECTOR: health` | HIPAA Security Rule sections (when PHI is in scope) |
+| `swiss` | `SECTOR: swiss` or a Swiss critical-infrastructure / public-sector target | ISG reporting duty, BWL ICT minimum standard, eCH-0059 (accessibility) |
+
+| # | CCM v4 | PCI DSS 4.0.1 | EU-DORA | FINMA-RS 2023/1 | HIPAA Security Rule | Swiss |
+|---|---|---|---|---|---|---|
+| T01 | IAM | Req.7 | Art.9 | ICT | 164.312(a)(1) | BWL:PR.AC |
+| T02 | IAM | Req.8 | Art.9 | Cyber | 164.312(d) | BWL:PR.AC |
+| T03 | IAM | Req.7, Req.8 | Art.9 | ICT | 164.308(a)(4) | BWL:PR.AC |
+| T04 | CEK, IAM | Req.8, Req.3 | Art.9 | Cyber | 164.312(a)(2)(iv) | BWL:PR.DS |
+| T05 | CEK | Req.3, Req.4 | Art.9 | CritData | 164.312(a)(2)(iv), 164.312(e)(1) | BWL:PR.DS |
+| T06 | TVM | Req.6, Req.11 | Art.9, Art.24 | Cyber | 164.308(a)(1) | BWL:ID.RA, BWL:PR.IP |
+| T07 | STA, CCC | Req.6 | Art.28 | ICT | 164.314(a) | BWL:ID.SC |
+| T08 | AIS, CCC | Req.6 | Art.9 | ICT | 164.308(a)(1) | BWL:PR.IP |
+| T09 | CCC | Req.6 | Art.9 | ICT | 164.308(a)(1) | BWL:PR.IP |
+| T10 | CCC, IVS | Req.2 | Art.9 | Cyber | 164.312(a)(1) | BWL:PR.PT |
+| T11 | TVM, SEF | Req.6, Req.12 | Art.19 | Cyber | — | ISG:Art.74a |
+| T12 | LOG | Req.10 | Art.10 | Cyber | 164.312(b) | BWL:DE.CM |
+| T13 | SEF | Req.12 | Art.17, Art.19 | Cyber | 164.308(a)(6), 164.400–414 | ISG:Art.74a–74h, BWL:RS.RP |
+| T14 | BCR | Req.12 | Art.11, Art.12 | BCM | 164.308(a)(7) | BWL:RC.RP |
+| T15 | BCR, IVS | — | Art.7, Art.11 | BCM | 164.308(a)(7) | BWL:PR.PT |
+| T16 | IVS | Req.1 | Art.9 | Cyber | 164.312(e)(1) | BWL:PR.AC |
+| T17 | UEM, TVM | Req.5 | Art.9 | Cyber | 164.308(a)(5) | BWL:PR.PT |
+| T18 | DSP, GRC | Req.12 | Art.8 | CritData | 164.308(a)(1) | BWL:ID.AM |
+| T19 | DSP | Req.3 | Art.8 | CritData | 164.310(d)(2) | BWL:PR.DS |
+| T20 | DSP, CEK | Req.3 | Art.9 | CritData | 164.312(a)(2)(iv) | BWL:PR.DS |
+| T21 | AIS, CCC | Req.6 | Art.9 | ICT | 164.308(a)(1) | BWL:PR.IP |
+| T22 | STA | Req.12 | Art.28, Art.30 | ICT | 164.314(a) | BWL:ID.SC |
+| T23 | DSP, GRC | — | — | CritData | 164.308(a)(1), 164.316 | BWL:ID.GV |
+| T24 | DSP | — | Art.28 | CritData | 164.314(a) | — |
+| T25 | GRC | Req.12 | Art.6, Art.8 | ICT | 164.308(a)(1) | BWL:ID.RA |
+| T26 | GRC, A&A | Req.12 | Art.6 | ICT | 164.316 | BWL:ID.GV |
+| T27 | GRC | — | Art.5 | ICT | — | BWL:ID.GV |
+| T28 | GRC | — | Art.8 | ICT | 164.308(a)(1) | BWL:ID.RA |
+| T29 | AIS, CCC | Req.6 | Art.9 | ICT | — | BWL:PR.IP |
+| T30 | DSP | — | Art.8 | CritData | — | BWL:ID.AM |
+| T31 | GRC | — | — | — | — | ECH0059:WCAG-AA |
+| T32 | LOG | Req.10 | Art.10 | Cyber | 164.312(b) | BWL:DE.CM |
+| T33 | AIS | Req.6 | Art.9 | Cyber | — | BWL:PR.IP |
+| T34 | STA | Req.12 | Art.28, Art.30 | ICT | 164.314(a) | BWL:ID.SC |
+
+Accessibility findings carry `WCAG:<SC>` (for example `WCAG:2.4.7`) so the exporter's ACR
+(VPAT 2.5 shape) can be built; in Switzerland eCH-0059 v3 references WCAG 2.1 AA, so an ACR that
+supports every WCAG 2.2 A/AA criterion also satisfies it.
+
+---
+
 ## Fine-exposure vocabulary
 
 The `fine_exposure` field uses one of these strings so exposure can be aggregated in the tracking
@@ -203,6 +270,11 @@ percentage is higher applies.
 | `"CRA Art. 64: up to EUR 15M / 2.5 % of global annual turnover"` | Non-compliance with the essential requirements of Annex I or the reporting duties of Art. 14 |
 | `"AI Act Art. 99: up to EUR 35M / 7 % (prohibited practices); up to EUR 15M / 3 % (other obligations)"` | Prohibited practices (Art. 5) vs provider/deployer obligations |
 | `"PCI DSS: card-brand penalties and loss of processing rights (contractual)"` | Card data in scope; penalties are contractual, not statutory |
+| `"EAA / ADA: national penalties and litigation risk (varies by member state; US private lawsuits)"` | Accessibility failures on products or services in scope of the EAA or the ADA |
+| `"EU-DORA Art. 50: administrative penalties set by the competent authority; CTPPs up to 1 % of average daily global turnover per day"` | Financial entities and critical ICT third-party providers |
+| `"HIPAA 45 CFR 160.404: civil penalties up to USD 2.1M per violation category per year (inflation-adjusted)"` | Covered entities and business associates handling PHI |
+| `"FINMA: enforcement (order, disgorgement, licence conditions), no fixed fine tier"` | FINMA-supervised institutions |
+| `"ISG Art. 74a–74h: reporting duty for cyber attacks on critical infrastructure (24 h to NCSC); fine up to CHF 100 000 for wilful non-reporting"` | Swiss critical-infrastructure operators |
 
 ---
 

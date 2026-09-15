@@ -10,8 +10,13 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 
 import {
+  CCM_DOMAINS,
+  WCAG22_A_AA,
   deriveControls,
+  findingCriteria,
   findingLocations,
+  toAcrCsv,
+  toQuestionnaireCsv,
   stableUuid,
   toEvidenceManifest,
   toExecutiveReport,
@@ -147,7 +152,7 @@ test("executive report renders the board sections in the run's language", () => 
     assert.ok(en.includes(h), `missing section ${h}`);
   }
   assert.ok(en.includes("**62.5 %**"));
-  assert.ok(en.includes("| Deal-blockers | 2 |"));
+  assert.ok(en.includes("| Deal-blockers | 3 |"));
   assert.ok(en.includes("GDPR Art. 83(5): up to EUR 20M / 4 % of global annual turnover | SEC-001"));
   assert.ok(en.includes("Estimated time to audit-ready: **3–6 person-days**"));
   assert.ok(en.includes("not a certificate"));
@@ -179,11 +184,52 @@ test("evidence manifest hashes cited artifacts that exist and lists the rest as 
   assert.ok(!JSON.stringify(manifest).includes("db.orders"), "no file content is copied into the manifest");
 });
 
+test("caiq-answers.csv pre-fills every CCM domain from control statuses, worst status first", () => {
+  const lines = toQuestionnaireCsv(fixture).trim().split("\n");
+  assert.equal(lines[0], "domain,domain_name,control_id,answer,finding_ids,evidence,notes");
+  // Domain names may contain commas (quoted), so key rows by the CCM: token instead of a naive split.
+  const rows = Object.fromEntries(lines.slice(1).map((l) => [l.match(/(CCM:[A-Z&]+(?:-\d+)?)/)[1], l]));
+  assert.ok(Object.keys(rows).length >= CCM_DOMAINS.length, "one row per domain at least");
+  assert.ok(rows["CCM:IAM"].startsWith("IAM,Identity & Access Management,CCM:IAM,No,SEC-001,"), "a P0 makes the domain a No");
+  assert.ok(rows["CCM:CEK"].includes(",Yes,,"), "implemented readiness control answers Yes");
+  assert.ok(rows["CCM:HRS"].includes("Not assessed by this run"), "untouched domain is honest");
+  // Every domain appears exactly once at domain level.
+  for (const [d] of CCM_DOMAINS) assert.ok(rows[`CCM:${d}`], `domain ${d} present`);
+});
+
+test("findingCriteria reads WCAG controls and the wcag field", () => {
+  assert.deepEqual(findingCriteria(fixture.findings[4]).sort(), ["1.1.1", "4.1.2"]);
+  assert.deepEqual(findingCriteria({ wcag: "SC 2.4.7 Focus Visible; 1.4.11" }).sort(), ["1.4.11", "2.4.7"]);
+  assert.deepEqual(findingCriteria(fixture.findings[0]), []);
+});
+
+test("acr-wcag22.csv has every A/AA criterion with a VPAT status", () => {
+  const lines = toAcrCsv(fixture).trim().split("\n");
+  assert.equal(lines[0], "criteria,name,level,conformance_level,finding_ids,remarks");
+  assert.equal(lines.length - 1, WCAG22_A_AA.length);
+  const byId = Object.fromEntries(lines.slice(1).map((l) => [l.split(",")[0], l]));
+  assert.ok(byId["4.1.2"].includes(",Does Not Support,X4-008,"), "P0 → Does Not Support");
+  assert.ok(byId["1.1.1"].includes(",Does Not Support,X4-008,"));
+  assert.ok(byId["2.4.7"].includes(",Supports,,"), "uncited criterion Supports when the accessibility audit ran");
+  const noA11y = clone();
+  noA11y.audits = ["security"];
+  noA11y.findings = noA11y.findings.filter((f) => f.id !== "X4-008");
+  const na = Object.fromEntries(toAcrCsv(noA11y).trim().split("\n").slice(1).map((l) => [l.split(",")[0], l]));
+  assert.ok(na["2.4.7"].includes(",Not Evaluated,,"), "no accessibility audit → Not Evaluated, never Supports");
+  // An AAA criterion cited by a finding is appended, not dropped.
+  const aaa = clone();
+  aaa.findings[4].controls = ["WCAG:1.4.6"];
+  aaa.findings[4].wcag = "SC 1.4.6";
+  const extra = toAcrCsv(aaa).trim().split("\n");
+  assert.equal(extra.length - 1, WCAG22_A_AA.length + 1);
+  assert.ok(extra.at(-1).startsWith("1.4.6,,AAA / other,Does Not Support,X4-008,"));
+});
+
 test("CLI: validates, writes every export, and rejects an invalid run", () => {
   const out = mkdtempSync(join(tmpdir(), "auditor-out-"));
   const stdout = execFileSync(process.execPath, [join(ROOT, "scripts", "export-findings.mjs"), join(here, "fixtures", "audit-run.example.json"), "--out", out], { encoding: "utf8" });
-  assert.match(stdout, /✓ audit-run.example.json valid — 4 finding\(s\)/);
-  for (const f of ["findings.sarif", "assessment-results.oscal.json", "gap-matrix.csv", "findings.csv", "EXECUTIVE-REPORT.md", "evidence-manifest.json"]) {
+  assert.match(stdout, /✓ audit-run.example.json valid — 5 finding\(s\)/);
+  for (const f of ["findings.sarif", "assessment-results.oscal.json", "gap-matrix.csv", "findings.csv", "EXECUTIVE-REPORT.md", "evidence-manifest.json", "caiq-answers.csv", "acr-wcag22.csv"]) {
     assert.ok(readFileSync(join(out, f), "utf8").length > 50, `${f} written`);
   }
   const badPath = join(out, "bad.json");

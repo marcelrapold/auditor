@@ -151,7 +151,9 @@ How it works: every finding of every audit carries three business fields — `co
 control (`implemented` · `partial` · `missing` · `not-assessable` · `n/a`), classifies
 nonconformities the way certification auditors do (Major / Minor / OFI), and computes a
 **technical control readiness** score with a time-to-audit-ready estimate. Swiss revDSG and GDPR
-are always mapped by the `compliance-privacy` audit.
+are always mapped by the `compliance-privacy` audit. Regulated sectors add an overlay via
+`SECTOR`: `finance` (PCI DSS 4.0.1, EU-DORA, FINMA-RS 2023/1), `health` (HIPAA Security Rule),
+`swiss` (ISG reporting duty, BWL ICT minimum standard, eCH-0059).
 
 > [!WARNING]
 > **Readiness is not certification.** ISO certificates come from accredited bodies, SOC 2 reports
@@ -180,6 +182,8 @@ node scripts/export-findings.mjs auditor-out/audit-run.json --out auditor-out --
 | `assessment-results.oscal.json` | GRC platforms | OSCAL 1.1.2 assessment results, one finding per finding × control |
 | `gap-matrix.csv`, `findings.csv` | Vanta / Drata / Secureframe, Jira import, spreadsheets | CSV |
 | `evidence-manifest.json` | external auditor | sha256 + size per cited artifact, no content copied |
+| `caiq-answers.csv` | security questionnaires (CAIQ v4, SIG) | one pre-filled answer per CSA CCM domain; "Not assessed" where the run is silent |
+| `acr-wcag22.csv` | procurement, accessibility statements | Accessibility Conformance Report, one row per WCAG 2.2 A/AA criterion (VPAT 2.5 vocabulary) |
 | Tracker issues | engineering | GitHub, Jira, Linear or ServiceNow via `ISSUE_TARGET` |
 
 The contract is [`REPORT-OUTPUT-STANDARD.md`](REPORT-OUTPUT-STANDARD.md). Output language is chosen

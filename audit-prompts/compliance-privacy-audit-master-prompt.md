@@ -47,7 +47,10 @@ real personal data into the report — cite location and redact.**
    HIPAA control. "Feels non-compliant" is rejected. Then fill `controls` from
    `CONTROL-CROSSWALK.md` (the revDSG/GDPR article IDs plus ISO 27001 A.5.34 / SOC 2 P-series),
    `deal_blocker`, and `fine_exposure` (GDPR Art. 83 tiers; revDSG Art. 60–63, which fine the
-   responsible **natural person** up to CHF 250 000).
+   responsible **natural person** up to CHF 250 000). With `SECTOR: health` add the HIPAA Security
+   Rule sections (`HIPAA:164.312(a)(1)` …) and the breach-notification rule; with `finance` the
+   EU-DORA / FINMA-RS 2023/1 critical-data chapter; with `swiss` the ISG reporting duty — all from
+   the crosswalk's overlay table.
 3. **Follow the data.** The spine of the audit is a verified **data-flow / RoPA map**: every
    category of personal data, its purpose, legal basis, recipients, location, and retention.
 4. **Severity is earned.** P0–P3; a P0 names a concrete legal/financial/individual harm

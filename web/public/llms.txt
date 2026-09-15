@@ -31,7 +31,10 @@ specialist prompts from the public GitHub repo below.
    validate it with `node scripts/export-findings.mjs auditor-out/audit-run.json --validate`, and
    export the business deliverables with the same script (executive report → DOCX/PDF, SARIF for
    GitHub Code Scanning, OSCAL for GRC tools, CSV for Vanta/Drata/Secureframe and Jira, evidence
-   manifest). `ISSUE_TARGET` may be GitHub, Jira, Linear or ServiceNow. See REPORT-OUTPUT-STANDARD.md.
+   manifest, CAIQ questionnaire pre-fill, WCAG 2.2 Accessibility Conformance Report).
+   `ISSUE_TARGET` may be GitHub, Jira, Linear or ServiceNow. `SECTOR` (finance | health | swiss)
+   adds overlay control IDs (PCI DSS, EU-DORA, FINMA, HIPAA, ISG, BWL, eCH-0059). See
+   REPORT-OUTPUT-STANDARD.md and CONTROL-CROSSWALK.md.
    Output language (`OUTPUT_LANG`: English or German) is chosen per run — ask, never assume.
 
 ## Certification readiness (optional readiness target)

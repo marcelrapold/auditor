@@ -46,7 +46,10 @@ ISSUE_TARGET:  <github:owner/repo | jira:KEY | linear:TEAM | servicenow:<url> �
    fills `controls` with the certification control IDs from `CONTROL-CROSSWALK.md` (ISO 27001 /
    SOC 2 / NIS2 / CRA), `deal_blocker` (would this fail a SOC 2 or ISO 27001 audit, or block
    enterprise procurement?), and `fine_exposure` (the crosswalk's vocabulary) — so every finding
-   doubles as gap-assessment evidence for the reader's next certification.
+   doubles as gap-assessment evidence for the reader's next certification. With `SECTOR: finance`
+   and card data in scope add the PCI DSS 4.0.1 requirement (`PCI:Req.6` …) and the EU-DORA
+   article; with `health` the HIPAA section; always the `CCM:` domain so a vendor questionnaire
+   (CAIQ) can be pre-filled from the run.
 3. **Severity is earned.** Use the P0–P3 scale below plus a CVSS v3.1 estimate; a P0 names the
    concrete exploitation/data-loss/exposure path.
 4. **Adversarial humility.** Every P0/P1 is attacked by independent skeptics in Phase 3. Write

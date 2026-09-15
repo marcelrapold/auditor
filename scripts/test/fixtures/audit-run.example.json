@@ -9,11 +9,12 @@
   },
   "output_lang": "en",
   "readiness_target": "iso27001",
-  "audits": ["security", "infrastructure"],
+  "audits": ["security", "infrastructure", "accessibility"],
   "not_applicable": [{ "audit": "data", "reason": "no database in scope" }],
   "scorecard": [
     { "audit": "security", "grade": "B", "score": 78 },
-    { "audit": "infrastructure", "grade": "A-", "score": 90 }
+    { "audit": "infrastructure", "grade": "A-", "score": 90 },
+    { "audit": "accessibility", "grade": "B+", "score": 84 }
   ],
   "findings": [
     {
@@ -26,7 +27,7 @@
       "effort": "M",
       "cvss": "8.1 (AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N)",
       "standard": "OWASP A01:2025 Broken Access Control; CWE-639",
-      "controls": ["ISO27001:A.8.3", "ISO27001:A.5.15", "SOC2:CC6.1", "GDPR:Art.32"],
+      "controls": ["ISO27001:A.8.3", "ISO27001:A.5.15", "SOC2:CC6.1", "GDPR:Art.32", "CCM:IAM", "PCI:Req.7"],
       "deal_blocker": true,
       "fine_exposure": "GDPR Art. 83(5): up to EUR 20M / 4 % of global annual turnover",
       "evidence": "handlers/orders.ts:42 runs db.orders.find({ id: req.params.id }) with no owner check; repro: user A retrieves user B's order by id.",
@@ -84,6 +85,23 @@
       "evidence": "SECURITY.md has a contact address but no acknowledgement window or disclosure timeline; see section 'Reporting' (lines 1-20 of the file).",
       "fix": "State an acknowledgement SLA (e.g. 3 business days) and a coordinated-disclosure window (90 days).",
       "expected_impact": "Reporters know what to expect; CRA Annex I Part II(5) readiness."
+    },
+    {
+      "id": "X4-008",
+      "audit": "accessibility",
+      "agent": "screen-reader",
+      "title": "Icon-only cart button has no accessible name",
+      "severity": "P0",
+      "confidence": 0.96,
+      "effort": "S",
+      "locations": [{ "path": "components/Header.tsx", "line": 54 }],
+      "wcag": "SC 4.1.2 Name, Role, Value (Level A); SC 1.1.1",
+      "controls": ["WCAG:4.1.2", "WCAG:1.1.1"],
+      "deal_blocker": true,
+      "fine_exposure": "EAA / ADA: national penalties and litigation risk (varies by member state; US private lawsuits)",
+      "evidence": "components/Header.tsx:54 <button><svg/></button> — computed accessible name is empty; screen reader announces 'button' with no label.",
+      "fix": "Add aria-label=\"Cart, {n} items\" (or visually-hidden text); keep the count in the name.",
+      "expected_impact": "Restores cart discovery for all AT users on every page; clears a Level A failure on the purchase path."
     }
   ],
   "readiness": {
@@ -97,7 +115,8 @@
       { "id": "ISO27001:A.8.24", "status": "implemented", "nc_class": "conform", "finding_ids": [], "evidence": "TLS 1.3 only, HSTS preload; secrets in AWS Secrets Manager" },
       { "id": "ISO27001:A.8.13", "status": "implemented", "nc_class": "conform", "finding_ids": [], "evidence": "nightly RDS snapshots, restore tested 2026-09-01" },
       { "id": "ISO27001:A.8.15", "status": "implemented", "nc_class": "conform", "finding_ids": [] },
-      { "id": "ISO27001:A.8.8", "status": "n/a", "finding_ids": [] }
+      { "id": "ISO27001:A.8.8", "status": "n/a", "finding_ids": [] },
+      { "id": "CCM:CEK", "status": "implemented", "nc_class": "conform", "finding_ids": [], "evidence": "TLS 1.3 only; keys in AWS KMS with annual rotation" }
     ],
     "not_assessable": ["ISO27001:A.5.1", "ISO27001:A.6.1", "ISO27001:A.7.1"],
     "time_to_ready_days": { "min": 3, "max": 6 }
