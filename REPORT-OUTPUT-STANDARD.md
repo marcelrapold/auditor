@@ -121,7 +121,7 @@ Markdown, not from memory.
 
 ## Machine-readable exports
 
-### SARIF 2.1.0 → GitHub Code Scanning, IDEs
+### SARIF 2.1.0 for GitHub Code Scanning and IDEs
 
 - One rule and one result per finding; `ruleId` = finding ID; `partialFingerprints["auditor/findingId"]`
   keeps alerts stable across runs.
@@ -133,7 +133,7 @@ Markdown, not from memory.
   gzip+base64-encoded and the commit SHA, or the `github/codeql-action/upload-sarif` action with
   `sarif_file: auditor-out/findings.sarif` and `category: auditor`.
 
-### OSCAL 1.1.2 assessment results → GRC platforms
+### OSCAL 1.1.2 assessment results for GRC platforms
 
 - Minimal profile: `metadata`, `import-ap` (placeholder pointing at the pinned prompt set),
   one `result` with `reviewed-controls` (every control cited by a finding or the readiness block),
@@ -146,7 +146,7 @@ Markdown, not from memory.
 - Validate with `oscal-cli` when the receiving tool is strict; the exporter guarantees structure,
   not every optional constraint of the schema.
 
-### CSV → Vanta, Drata, Secureframe, Jira, spreadsheets
+### CSV for Vanta, Drata, Secureframe, Jira and spreadsheets
 
 - `gap-matrix.csv`: `framework, control_id, status, nc_class, finding_ids, severity_max,
   effort_days, deal_blocker, evidence, owner` — one row per control, `not-assessable` rows included.
