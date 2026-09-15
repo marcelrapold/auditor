@@ -16,7 +16,9 @@ dance at call time, and no drift: the prompt you get is the prompt in the repo.
 | `list_audits` | – | The 13 specialist audits: `key`, one-line `description`, standards `mapsTo`, prompt `file`. |
 | `get_audit_prompt` | `audit` (a key from `list_audits`) | The full master prompt for that specialist, read from `audit-prompts/<key>-audit-master-prompt.md`. |
 | `get_orchestrator` | – | The full-repo orchestrator prompt — the interactive scoping protocol that picks and runs the right specialists and synthesizes one consolidated backlog. |
-| `get_standard` | `standard` (`issue-output` \| `documentation`) | The relevant standard file every audit conforms to. |
+| `get_standard` | `standard` (`issue-output` \| `documentation` \| `control-crosswalk` \| `report-output`) | The relevant standard file every audit conforms to. |
+| `get_readiness_checklist` | `target` (`soc2` \| `iso27001` \| `iso42001-ai-act` \| `nis2-cra`) | Every technically assessable control of the target grouped by crosswalk theme, the audits to run, and the controls that need organisational evidence — parsed live from `CONTROL-CROSSWALK.md`. |
+| `list_control_themes` | `audit` (optional key) | The 34 crosswalk themes with every framework's control IDs and owning audits — the lookup for a finding's `controls` field. |
 
 Unknown audit keys / standards return a clear MCP error that lists the valid values.
 
@@ -99,8 +101,8 @@ Add to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project):
 }
 ```
 
-After connecting, the agent sees `list_audits`, `get_audit_prompt`, `get_orchestrator`, and
-`get_standard` as native tools. A typical first move: *"List the available audits, then get the
+After connecting, the agent sees `list_audits`, `get_audit_prompt`, `get_orchestrator`,
+`get_standard`, `get_readiness_checklist`, and `list_control_themes` as native tools. A typical first move: *"List the available audits, then get the
 security audit prompt and run it on this repo."*
 
 ## How prompt paths are resolved

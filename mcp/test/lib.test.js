@@ -15,8 +15,11 @@ import {
   listAudits,
   getAuditPrompt,
   getOrchestrator,
+  getReadinessChecklist,
   getStandard,
   findRepoRoot,
+  listControlThemes,
+  parseCrosswalkThemes,
   AuditorError,
 } from "../dist/lib.js";
 
@@ -131,4 +134,52 @@ test("get_standard returns all four standards and rejects unknown ones", async (
       return true;
     },
   );
+});
+
+test("parseCrosswalkThemes reads all 34 themes with prefixed control IDs", async () => {
+  const themes = parseCrosswalkThemes(await getStandard(repoRoot, "control-crosswalk"));
+  assert.equal(themes.length, 34);
+  const t01 = themes.find((t) => t.id === "T01");
+  assert.deepEqual(t01.audits, ["security", "api", "data"]);
+  assert.deepEqual(t01.controls["ISO 27001"], ["ISO27001:A.5.15", "ISO27001:A.5.18", "ISO27001:A.8.3"]);
+  assert.deepEqual(t01.controls["SOC 2"], ["SOC2:CC6.1", "SOC2:CC6.3"]);
+  assert.deepEqual(t01.controls["NIS2 Art. 21(2)"], ["NIS2:Art.21(2)(i)"]);
+  assert.deepEqual(t01.controls["CRA Annex I"], ["CRA:AnnexI.I(2)(d)"]);
+  assert.deepEqual(t01.controls["revDSG / GDPR"], ["revDSG:Art.8", "VDSG:Art.3", "GDPR:Art.32"]);
+  const t13 = themes.find((t) => t.id === "T13");
+  assert.ok(t13.controls["NIS2 Art. 21(2)"].includes("NIS2:Art.23"));
+  assert.ok(t13.controls["CRA Annex I"].includes("CRA:Art.14"));
+  assert.ok(t13.controls["revDSG / GDPR"].includes("GDPR:Art.34"), "continuation 'Art. 33, 34' keeps the prefix");
+  const t29 = themes.find((t) => t.id === "T29");
+  assert.ok(t29.controls["ISO 42001"].includes("ISO42001:A.6.2.6"));
+  assert.ok(t29.controls["revDSG / GDPR / AI Act"].includes("AIAct:Art.15"));
+});
+
+test("get_readiness_checklist returns target-specific controls, audits and organisational list", async () => {
+  const soc2 = await getReadinessChecklist(repoRoot, "soc2");
+  assert.ok(soc2.controls.includes("SOC2:CC6.1"));
+  assert.ok(!soc2.controls.some((c) => c.startsWith("ISO27001:")), "only the target's framework");
+  assert.ok(soc2.audits_to_run.includes("security") && soc2.audits_to_run.includes("compliance-privacy"));
+  assert.ok(soc2.not_assessable.some((s) => s.startsWith("CC1.1")));
+  const iso = await getReadinessChecklist(repoRoot, "iso27001");
+  assert.ok(iso.controls.includes("ISO27001:A.8.3"));
+  assert.ok(iso.not_assessable.some((s) => s.includes("A.7.1")));
+  assert.ok(iso.audits_to_run.includes("documentation"));
+  const ai = await getReadinessChecklist(repoRoot, "iso42001-ai-act");
+  assert.ok(ai.controls.includes("ISO42001:A.5.2") && ai.controls.includes("AIAct:Art.13"));
+  assert.ok(!ai.controls.some((c) => c.startsWith("GDPR:")), "AI target does not pull GDPR articles");
+  const nis = await getReadinessChecklist(repoRoot, "nis2-cra");
+  assert.ok(nis.controls.includes("NIS2:Art.21(2)(e)") && nis.controls.includes("CRA:AnnexI.II(1)"));
+  assert.match(nis.note, /not certification/);
+  await assert.rejects(() => getReadinessChecklist(repoRoot, "pci"), (err) => err instanceof AuditorError && /Unknown readiness target/.test(err.message));
+});
+
+test("list_control_themes filters by audit and rejects unknown keys", async () => {
+  const all = await listControlThemes(repoRoot);
+  assert.equal(all.length, 34);
+  const content = await listControlThemes(repoRoot, "content");
+  assert.deepEqual(content.map((t) => t.id), ["T31"]);
+  const security = await listControlThemes(repoRoot, "security");
+  assert.ok(security.length >= 8);
+  await assert.rejects(() => listControlThemes(repoRoot, "nope"), /Unknown audit key/);
 });

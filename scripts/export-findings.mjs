@@ -11,6 +11,8 @@
 //   evidence-manifest.json     sha256 + timestamp per cited artifact
 //   caiq-answers.csv           vendor questionnaire pre-fill (CSA CCM v4 domains)
 //   acr-wcag22.csv             Accessibility Conformance Report (VPAT 2.5 vocabulary)
+//   trust-center.html          aggregate-only readiness page for prospects
+//   checks.json                the executable re-audit criteria (see verify-checks.mjs)
 //
 // Dependency-free on purpose (node:fs, node:crypto only), like every script in
 // this repo. Validation is a strict required-field / enum check of the schema's
@@ -760,6 +762,73 @@ export function toAcrCsv(run) {
   return csv(rows, ["criteria", "name", "level", "conformance_level", "finding_ids", "remarks"]);
 }
 
+// --- Trust center -------------------------------------------------------------
+
+function escapeHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+}
+
+/**
+ * trust-center.html — a self-contained page a vendor can publish (or hand to a
+ * prospect) that states readiness honestly: frameworks assessed, control status
+ * counts, deal-blockers, and the readiness-not-certification sentence. No
+ * finding details or evidence leave the audit pack; the page is aggregate only.
+ */
+export function toTrustCenterHtml(run) {
+  const t = L[run.output_lang] ?? L.en;
+  const counts = {};
+  for (const c of run.readiness?.controls ?? []) counts[c.status] = (counts[c.status] ?? 0) + 1;
+  const frameworks = [...new Set([
+    ...run.findings.flatMap((f) => (f.controls ?? []).map((c) => c.split(":")[0])),
+    ...(run.readiness?.controls ?? []).map((c) => c.id.split(":")[0]),
+  ])].sort();
+  const bySev = Object.fromEntries(SEVERITIES.map((s) => [s, run.findings.filter((f) => f.severity === s).length]));
+  const dealBlockers = run.findings.filter((f) => f.deal_blocker).length;
+  const score = run.readiness ? `${run.readiness.score_percent} %` : "—";
+  const lang = run.output_lang === "de" ? "de-CH" : "en";
+  const rows = Object.entries(counts).map(([k, v]) => `<tr><td>${escapeHtml(t.status[k] ?? k)}</td><td>${v}</td></tr>`).join("");
+  const notAssessable = run.readiness?.not_assessable?.length ?? 0;
+  return `<!doctype html>
+<html lang="${lang}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${escapeHtml(t.readiness)} — ${escapeHtml(run.target.name)}</title>
+<style>
+  :root { color-scheme: light dark; --fg: #111; --bg: #fff; --muted: #555; --line: #ddd; --accent: #10b981; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #111; --muted: #aaa; --line: #333; } }
+  body { margin: 0; padding: 2rem 1rem; font: 16px/1.5 system-ui, sans-serif; color: var(--fg); background: var(--bg); }
+  main { max-width: 52rem; margin: 0 auto; }
+  h1 { font-size: 1.75rem; margin: 0 0 .25rem; }
+  .meta { color: var(--muted); font-size: .9rem; }
+  .score { font-size: 3rem; font-weight: 700; color: var(--accent); margin: 1rem 0 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .card { border: 1px solid var(--line); border-radius: .75rem; padding: 1rem; }
+  .card b { display: block; font-size: 1.5rem; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { text-align: left; padding: .4rem .5rem; border-bottom: 1px solid var(--line); }
+  .note { border-left: 4px solid var(--accent); padding: .5rem 1rem; color: var(--muted); margin-top: 1.5rem; }
+  code { font-size: .9em; }
+</style>
+</head>
+<body>
+<main>
+  <h1>${escapeHtml(t.readiness)}: ${escapeHtml(run.target.name)}</h1>
+  <p class="meta">${escapeHtml(t.auditedAt)} ${escapeHtml(run.target.audited_at.slice(0, 10))} · ${escapeHtml(t.audits)}: ${escapeHtml(run.audits.join(", "))} · ${escapeHtml(t.produced)} ${escapeHtml(run.tool.version)}${run.readiness_target && run.readiness_target !== "none" ? ` · READINESS_TARGET <code>${escapeHtml(run.readiness_target)}</code>` : ""}</p>
+  <p class="score">${escapeHtml(score)}</p>
+  <div class="grid">
+    <div class="card"><b>${run.findings.length}</b>${escapeHtml(t.findings)} (P0 ${bySev.P0} · P1 ${bySev.P1} · P2 ${bySev.P2} · P3 ${bySev.P3})</div>
+    <div class="card"><b>${dealBlockers}</b>${escapeHtml(t.dealBlockers)}</div>
+    <div class="card"><b>${frameworks.length}</b>${run.output_lang === "de" ? "Frameworks abgebildet" : "frameworks mapped"}<br><small>${escapeHtml(frameworks.join(" · "))}</small></div>
+  </div>
+  ${rows ? `<table><thead><tr><th>${escapeHtml(t.cols.status)}</th><th>${escapeHtml(t.cols.count)}</th></tr></thead><tbody>${rows}${notAssessable ? `<tr><td>${escapeHtml(t.status["not-assessable"])}</td><td>${notAssessable}</td></tr>` : ""}</tbody></table>` : ""}
+  <p class="note">${escapeHtml(t.readinessNote)}</p>
+</main>
+</body>
+</html>
+`;
+}
+
 // --- CLI ----------------------------------------------------------------------
 
 function parseArgs(argv) {
@@ -786,7 +855,7 @@ function main() {
     process.exit(2);
   }
   if (!opts.input) {
-    console.error("Usage: node scripts/export-findings.mjs <audit-run.json> [--out <dir>] [--format all|sarif|oscal|csv|report|evidence|questionnaire|acr] [--repo <path>] [--docx] [--validate]");
+    console.error("Usage: node scripts/export-findings.mjs <audit-run.json> [--out <dir>] [--format all|sarif|oscal|csv|report|evidence|questionnaire|acr|trust-center|checks] [--repo <path>] [--docx] [--validate]");
     process.exit(2);
   }
   const run = JSON.parse(readFileSync(resolve(opts.input), "utf8"));
@@ -824,6 +893,8 @@ function main() {
   if (want("evidence")) write("evidence-manifest.json", toEvidenceManifest(run, opts.repo ? resolve(opts.repo) : null));
   if (want("questionnaire")) write("caiq-answers.csv", toQuestionnaireCsv(run));
   if (want("acr")) write("acr-wcag22.csv", toAcrCsv(run));
+  if (want("trust-center")) write("trust-center.html", toTrustCenterHtml(run));
+  if (want("checks")) write("checks.json", run.findings.filter((f) => f.check).map((f) => ({ finding_id: f.id, severity: f.severity, title: f.title, ...f.check })));
   for (const w of written) console.log(`  wrote ${join(opts.out, w)}`);
 }
 

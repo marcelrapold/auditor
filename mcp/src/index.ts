@@ -22,11 +22,14 @@ import { z } from "zod";
 import { AUDIT_KEYS, STANDARD_KEYS, STANDARDS } from "./catalogue.js";
 import {
   AuditorError,
+  READINESS_TARGET_KEYS,
   findRepoRoot,
   getAuditPrompt,
   getOrchestrator,
+  getReadinessChecklist,
   getStandard,
   listAudits,
+  listControlThemes,
 } from "./lib.js";
 
 /**
@@ -150,6 +153,50 @@ function createServer(repoRoot: string): McpServer {
     async ({ standard }) => {
       const text = await getStandard(repoRoot, standard);
       return { content: [{ type: "text", text }] };
+    },
+  );
+
+  server.registerTool(
+    "get_readiness_checklist",
+    {
+      title: "Get readiness checklist",
+      description:
+        "Return, for one certification readiness target (soc2, iso27001, iso42001-ai-act, " +
+        "nis2-cra), every technically assessable control grouped by crosswalk theme, the " +
+        "audits the orchestrator runs for it, and the controls that need organisational " +
+        "evidence. Parsed live from CONTROL-CROSSWALK.md. Use it to plan a readiness run or to " +
+        "build the gap matrix. This is a readiness assessment, never a certificate.",
+      inputSchema: {
+        target: z
+          .enum(READINESS_TARGET_KEYS)
+          .describe("The readiness target: soc2, iso27001, iso42001-ai-act or nis2-cra."),
+      },
+    },
+    async ({ target }) => {
+      const result = await getReadinessChecklist(repoRoot, target);
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    },
+  );
+
+  server.registerTool(
+    "list_control_themes",
+    {
+      title: "List control themes",
+      description:
+        "Return the crosswalk themes (T01–T34) with the control IDs of every framework " +
+        "(ISO 27001, SOC 2, ISO 42001, NIS2, CRA, revDSG/GDPR/AI Act) and the audits that own " +
+        "each theme — the lookup an agent uses to fill a finding's `controls` field. Optionally " +
+        "filter by audit key.",
+      inputSchema: {
+        audit: z
+          .enum(AUDIT_KEYS as [string, ...string[]])
+          .optional()
+          .describe("Optional audit key to filter themes by, e.g. \"security\"."),
+      },
+    },
+    async ({ audit }) => {
+      const result = await listControlThemes(repoRoot, audit);
+      return { content: [{ type: "text", text: JSON.stringify({ count: result.length, themes: result }, null, 2) }] };
     },
   );
 

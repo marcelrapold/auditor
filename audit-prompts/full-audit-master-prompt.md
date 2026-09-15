@@ -227,7 +227,17 @@ from it — never re-type a format from memory:
    Conformance Report; "Supports" is claimed only when the accessibility audit ran).
 4. Hand over `auditor-out/` as one evidence pack and name, in the report, what each file is for
    (SARIF → GitHub Code Scanning; OSCAL / CSV → the GRC tool; findings.csv → Jira import; manifest
-   → the external auditor).
+   → the external auditor; `trust-center.html` → prospects, aggregate only).
+5. **Make the audit continuous.** For every finding whose fix is machine-verifiable, add a
+   `check` (`{"run": "<shell command from the repo root>", "expect": "exit-zero", "description":
+   "..."}`) — the re-audit criterion as a command that passes once the finding is fixed; prefer
+   `grep` / `node -e` / `test -f` / the project's own test runner, never network calls, and say in
+   the report that checks run with the operator's privileges and must be reviewed first. Then
+   point the user at `scripts/verify-checks.mjs` (runs the checks), `scripts/diff-runs.mjs`
+   (better or worse than the last run, with `--fail-on`), and the GitHub Action
+   `marcelrapold/auditor/.github/actions/verify@<the release tag this prompt was fetched from>`
+   that does both on every PR and uploads the SARIF. When a previous `audit-run.json` exists, run the diff yourself and include
+   `AUDIT-DIFF.md` in the deliverables.
 
 ---
 
@@ -266,6 +276,7 @@ Base: `https://raw.githubusercontent.com/marcelrapold/auditor/v0.12.0/`
 - Specialists: `audit-prompts/{security,repo,frontend,api,performance,data,infrastructure,ai-llm,compliance-privacy,accessibility,documentation,content,lean}-audit-master-prompt.md`
 - Standards: `ISSUE-OUTPUT-STANDARD.md`, `DOCUMENTATION-STANDARD.md` (+ `.en.md`)
 - Readiness: `CONTROL-CROSSWALK.md` (control mapping for SOC 2, ISO 27001, ISO 42001 + AI Act, NIS2, CRA, revDSG/GDPR), `FRAMEWORK-VERSIONS.md` (editions in use)
-- Business output: `REPORT-OUTPUT-STANDARD.md` (deliverables, issue targets, language), `schemas/audit-run.schema.json` + `schemas/finding.schema.json` (the canonical run file), `scripts/export-findings.mjs` (SARIF / OSCAL / CSV / executive report / evidence manifest)
+- Business output: `REPORT-OUTPUT-STANDARD.md` (deliverables, issue targets, language), `schemas/audit-run.schema.json` + `schemas/finding.schema.json` (the canonical run file), `scripts/export-findings.mjs` (SARIF / OSCAL / CSV / executive report / evidence manifest / questionnaire / ACR / trust center)
+- Continuous compliance: `scripts/verify-checks.mjs` (executable re-audit checks), `scripts/diff-runs.mjs` (run-to-run diff with `--fail-on`), `.github/actions/verify/action.yml` (the GitHub Action)
 - This orchestrator: `audit-prompts/full-audit-master-prompt.md`
 - Human overview + language switcher: `https://auditor.rapold.io`

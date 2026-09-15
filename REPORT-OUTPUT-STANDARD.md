@@ -32,6 +32,7 @@ Version 1.0.0
 - [The canonical run file](#the-canonical-run-file)
 - [Executive report](#executive-report)
 - [Machine-readable exports](#machine-readable-exports)
+- [Continuous compliance](#continuous-compliance)
 - [Issue targets](#issue-targets)
 - [Language](#language)
 - [Evidence pack](#evidence-pack)
@@ -52,6 +53,9 @@ Version 1.0.0
 | `auditor-out/evidence-manifest.json` | external auditor | JSON, sha256 per cited artifact | `scripts/export-findings.mjs --repo <checkout>` |
 | `auditor-out/caiq-answers.csv` | sales engineering, security questionnaires (CAIQ v4, and SIG by domain) | CSV, one row per CSA CCM v4 domain (+ refined controls) | `scripts/export-findings.mjs --format questionnaire` |
 | `auditor-out/acr-wcag22.csv` | procurement (public sector, enterprise), accessibility statements | CSV, one row per WCAG 2.2 A/AA criterion in VPAT 2.5 vocabulary | `scripts/export-findings.mjs --format acr` |
+| `auditor-out/trust-center.html` | prospects, security reviews | self-contained, aggregate-only HTML page (no finding detail) | `scripts/export-findings.mjs --format trust-center` |
+| `auditor-out/checks.json`, `checks-report.json`, `CHECKS-REPORT.md` | engineering, CI | the executable re-audit criteria and their pass/fail results | `--format checks`; `scripts/verify-checks.mjs` |
+| `auditor-out/audit-diff.json`, `AUDIT-DIFF.md` | engineering, management | run-to-run delta: added / fixed / worsened, score and control deltas, CI conditions | `scripts/diff-runs.mjs` |
 | Tracker issues | engineering, project management | per [`ISSUE-OUTPUT-STANDARD.md`](ISSUE-OUTPUT-STANDARD.md), target per [Issue targets](#issue-targets) | the agent, preview-first, on approval |
 
 The agent writes the run file and the prose it contains. The script does the rest:
@@ -179,6 +183,72 @@ Markdown, not from memory.
 - Paste the rows into the WCAG 2.x table of the VPAT 2.5 template (the ITI template's
   "Conformance Level" and "Remarks and Explanations" columns); the `remarks` column carries the
   finding IDs. eCH-0059 v3 (Switzerland, WCAG 2.1 AA) is covered by the same table.
+
+---
+
+## Continuous compliance
+
+An audit that runs once decays. Three pieces keep the run file alive between audits.
+
+### Executable re-audit checks
+
+- A finding whose fix is machine-verifiable carries a `check`: `{ "run": "<shell command>",
+  "expect": "exit-zero" | "exit-nonzero", "description": "...", "timeout_seconds": 60 }`. The
+  command runs from the repository root and passes when the finding is **fixed** — it is the
+  re-audit criterion, executable.
+- `scripts/verify-checks.mjs auditor-out/audit-run.json --repo .` runs every check and writes
+  `checks-report.json` / `CHECKS-REPORT.md`; exit code 3 when a finding is still open;
+  `--strict` counts findings without a check as open.
+- Prefer checks that need only what a checkout has: `grep`, `node -e`, `test -f`, the project's
+  own test runner (`npm test -- --grep ...`), a linter rule. Avoid network calls.
+- **Safety.** Checks are shell commands stored in a JSON file and run with the caller's
+  privileges. The agent proposes them; a human reviews the run file before it is committed or
+  run in CI. Never run checks from a run file you did not produce or review.
+
+### Diff between runs
+
+- `scripts/diff-runs.mjs <baseline.json> <current.json>` matches findings by id (falling back
+  to audit + title when ids were renumbered) and writes `audit-diff.json` / `AUDIT-DIFF.md`:
+  added, fixed, persisting with severity changes, deal-blocker and readiness deltas, scorecard
+  deltas, control status changes.
+- `--fail-on new-p0p1,deal-blocker,regression,score-drop` turns it into a gate: exit code 2 when
+  a named condition is hit. `regression` = a severity got worse, a control regressed, or a new
+  P0/P1 appeared.
+
+### GitHub Action
+
+`marcelrapold/auditor/.github/actions/verify@<tag>` validates the run, exports every
+deliverable, writes the executive report into the job summary, diffs against a baseline, runs
+the checks, and uploads `findings.sarif` to Code Scanning — with no third-party action.
+
+```yaml
+name: auditor
+on: [pull_request]
+permissions:
+  contents: read
+  security-events: write   # SARIF upload
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<pinned-sha>
+      - uses: marcelrapold/auditor/.github/actions/verify@v1.0.0
+        with:
+          run-file: auditor-out/audit-run.json
+          baseline: auditor-out/baseline/audit-run.json   # optional
+          fail-on: new-p0p1,regression
+          run-checks: "true"      # only for a reviewed run file
+```
+
+Outputs: `readiness-score`, `deal-blockers`, `diff-conditions`. Commit the previous run as the
+baseline (or fetch it from the last release) so every PR answers "better or worse?".
+
+### Trust center
+
+`trust-center.html` is an aggregate-only page — readiness score, control status counts,
+frameworks mapped, deal-blocker count, and the readiness-not-certification sentence. No finding
+titles, evidence or paths leave the audit pack. Publish it behind a login or hand it to a prospect;
+it is what a security questionnaire's "attach your latest assessment" field wants.
 
 ---
 
