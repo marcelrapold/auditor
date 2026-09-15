@@ -7,6 +7,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/), die Versionier
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-09-16
+
 ### Added
 - **Vendor questionnaire pre-fill.** `scripts/export-findings.mjs --format questionnaire` writes
   `caiq-answers.csv`: one pre-filled answer per CSA CCM v4 domain (the grouping CAIQ v4 and SIG
